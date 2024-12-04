@@ -1,19 +1,18 @@
-/**************************************************************************/
-/*                                                                        */
-/*       Copyright (c) Microsoft Corporation. All rights reserved.        */
-/*                                                                        */
-/*       This software is licensed under the Microsoft Software License   */
-/*       Terms for Microsoft Azure RTOS. Full text of the license can be  */
-/*       found in the LICENSE file at https://aka.ms/AzureRTOS_EULA       */
-/*       and in the root directory of this software.                      */
-/*                                                                        */
-/**************************************************************************/
+/***************************************************************************
+ * Copyright (c) 2024 Microsoft Corporation 
+ * 
+ * This program and the accompanying materials are made available under the
+ * terms of the MIT License which is available at
+ * https://opensource.org/licenses/MIT.
+ * 
+ * SPDX-License-Identifier: MIT
+ **************************************************************************/
 
 
 /**************************************************************************/
 /**************************************************************************/
-/**                                                                       */ 
-/** ThreadX Component                                                     */ 
+/**                                                                       */
+/** ThreadX Component                                                     */
 /**                                                                       */
 /**   Byte Memory                                                         */
 /**                                                                       */
@@ -32,57 +31,59 @@
 #include "tx_byte_pool.h"
 
 
-/**************************************************************************/ 
-/*                                                                        */ 
-/*  FUNCTION                                               RELEASE        */ 
-/*                                                                        */ 
-/*    _txe_byte_allocate                                  PORTABLE C      */ 
+/**************************************************************************/
+/*                                                                        */
+/*  FUNCTION                                               RELEASE        */
+/*                                                                        */
+/*    _txe_byte_allocate                                  PORTABLE C      */
 /*                                                           6.1          */
 /*  AUTHOR                                                                */
 /*                                                                        */
 /*    William E. Lamie, Microsoft Corporation                             */
 /*                                                                        */
 /*  DESCRIPTION                                                           */
-/*                                                                        */ 
-/*    This function checks for errors in allocate bytes function call.    */ 
-/*                                                                        */ 
-/*  INPUT                                                                 */ 
-/*                                                                        */ 
-/*    pool_ptr                          Pointer to pool control block     */ 
-/*    memory_ptr                        Pointer to place allocated bytes  */ 
+/*                                                                        */
+/*    This function checks for errors in allocate bytes function call.    */
+/*                                                                        */
+/*  INPUT                                                                 */
+/*                                                                        */
+/*    pool_ptr                          Pointer to pool control block     */
+/*    memory_ptr                        Pointer to place allocated bytes  */
 /*                                        pointer                         */
-/*    memory_size                       Number of bytes to allocate       */ 
-/*    wait_option                       Suspension option                 */ 
-/*                                                                        */ 
-/*  OUTPUT                                                                */ 
-/*                                                                        */ 
-/*    TX_POOL_ERROR                     Invalid memory pool pointer       */ 
-/*    TX_PTR_ERROR                      Invalid destination pointer       */ 
-/*    TX_WAIT_ERROR                     Invalid wait option               */ 
-/*    TX_CALLER_ERROR                   Invalid caller of this function   */ 
-/*    TX_SIZE_ERROR                     Invalid size of memory request    */ 
-/*    status                            Actual completion status          */ 
-/*                                                                        */ 
-/*  CALLS                                                                 */ 
-/*                                                                        */ 
-/*    _tx_byte_allocate                 Actual byte allocate function     */ 
-/*                                                                        */ 
-/*  CALLED BY                                                             */ 
-/*                                                                        */ 
-/*    Application Code                                                    */ 
-/*                                                                        */ 
-/*  RELEASE HISTORY                                                       */ 
-/*                                                                        */ 
+/*    memory_size                       Number of bytes to allocate       */
+/*    wait_option                       Suspension option                 */
+/*                                                                        */
+/*  OUTPUT                                                                */
+/*                                                                        */
+/*    TX_POOL_ERROR                     Invalid memory pool pointer       */
+/*    TX_PTR_ERROR                      Invalid destination pointer       */
+/*    TX_WAIT_ERROR                     Invalid wait option               */
+/*    TX_CALLER_ERROR                   Invalid caller of this function   */
+/*    TX_SIZE_ERROR                     Invalid size of memory request    */
+/*    status                            Actual completion status          */
+/*                                                                        */
+/*  CALLS                                                                 */
+/*                                                                        */
+/*    _tx_byte_allocate                 Actual byte allocate function     */
+/*                                                                        */
+/*  CALLED BY                                                             */
+/*                                                                        */
+/*    Application Code                                                    */
+/*                                                                        */
+/*  RELEASE HISTORY                                                       */
+/*                                                                        */
 /*    DATE              NAME                      DESCRIPTION             */
 /*                                                                        */
-/*  09-30-2020     William E. Lamie         Initial Version 6.1           */
+/*  05-19-2020     William E. Lamie         Initial Version 6.0           */
+/*  09-30-2020     Yuxin Zhou               Modified comment(s),          */
+/*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT  _txe_byte_allocate(TX_BYTE_POOL *pool_ptr, VOID **memory_ptr, 
+UINT  _txe_byte_allocate(TX_BYTE_POOL *pool_ptr, VOID **memory_ptr,
                                     ULONG memory_size,  ULONG wait_option)
 {
 
-UINT            status;                 
+UINT            status;
 #ifndef TX_TIMER_PROCESS_IN_ISR
 TX_THREAD       *thread_ptr;
 #endif
@@ -94,15 +95,15 @@ TX_THREAD       *thread_ptr;
     /* Check for an invalid byte pool pointer.  */
     if (pool_ptr == TX_NULL)
     {
-        
+
         /* Byte pool pointer is invalid, return appropriate error code.  */
         status =  TX_POOL_ERROR;
     }
-    
+
     /* Now check for invalid pool ID.  */
     else if  (pool_ptr -> tx_byte_pool_id != TX_BYTE_POOL_ID)
     {
-        
+
         /* Byte pool pointer is invalid, return appropriate error code.  */
         status =  TX_POOL_ERROR;
     }
@@ -122,7 +123,7 @@ TX_THREAD       *thread_ptr;
         /* Error in size, return appropriate error.  */
         status =  TX_SIZE_ERROR;
     }
-    
+
     /* Determine if the size is greater than the pool size.  */
     else if (memory_size > pool_ptr -> tx_byte_pool_size)
     {
@@ -131,10 +132,10 @@ TX_THREAD       *thread_ptr;
         status =  TX_SIZE_ERROR;
     }
 
-    else 
+    else
     {
 
-        /* Check for a wait option error.  Only threads are allowed any form of 
+        /* Check for a wait option error.  Only threads are allowed any form of
            suspension.  */
         if (wait_option != TX_NO_WAIT)
         {
@@ -142,14 +143,14 @@ TX_THREAD       *thread_ptr;
             /* Is call from ISR or Initialization?  */
             if (TX_THREAD_GET_SYSTEM_STATE() != ((ULONG) 0))
             {
-        
+
                 /* A non-thread is trying to suspend, return appropriate error code.  */
                 status =  TX_WAIT_ERROR;
             }
         }
     }
 #ifndef TX_TIMER_PROCESS_IN_ISR
-    
+
     /* Check for timer execution.  */
     if (status == TX_SUCCESS)
     {
@@ -170,15 +171,15 @@ TX_THREAD       *thread_ptr;
     /* Is everything still okay?  */
     if (status == TX_SUCCESS)
     {
-    
+
         /* Check for interrupt call.  */
         if (TX_THREAD_GET_SYSTEM_STATE() != ((ULONG) 0))
         {
-    
+
             /* Now, make sure the call is from an interrupt and not initialization.  */
             if (TX_THREAD_GET_SYSTEM_STATE() < TX_INITIALIZE_IN_PROGRESS)
             {
-        
+
                 /* Invalid caller of this function, return appropriate error code.  */
                 status =  TX_CALLER_ERROR;
             }

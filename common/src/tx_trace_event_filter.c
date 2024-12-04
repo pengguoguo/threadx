@@ -1,13 +1,12 @@
-/**************************************************************************/
-/*                                                                        */
-/*       Copyright (c) Microsoft Corporation. All rights reserved.        */
-/*                                                                        */
-/*       This software is licensed under the Microsoft Software License   */
-/*       Terms for Microsoft Azure RTOS. Full text of the license can be  */
-/*       found in the LICENSE file at https://aka.ms/AzureRTOS_EULA       */
-/*       and in the root directory of this software.                      */
-/*                                                                        */
-/**************************************************************************/
+/***************************************************************************
+ * Copyright (c) 2024 Microsoft Corporation 
+ * 
+ * This program and the accompanying materials are made available under the
+ * terms of the MIT License which is available at
+ * https://opensource.org/licenses/MIT.
+ * 
+ * SPDX-License-Identifier: MIT
+ **************************************************************************/
 
 
 /**************************************************************************/
@@ -90,17 +89,17 @@ UINT        status;
     /* Access input arguments just for the sake of lint, MISRA, etc.  */
     if (event_filter_bits != ((ULONG) 0))
     {
-    
+
         /* Trace not enabled, return an error.  */
         status =  TX_FEATURE_NOT_ENABLED;
     }
     else
     {
-    
+
         /* Trace not enabled, return an error.  */
         status =  TX_FEATURE_NOT_ENABLED;
     }
-    
+
     /* Return completion status.  */
     return(status);
 #endif

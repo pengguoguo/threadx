@@ -1,19 +1,18 @@
-/**************************************************************************/
-/*                                                                        */
-/*       Copyright (c) Microsoft Corporation. All rights reserved.        */
-/*                                                                        */
-/*       This software is licensed under the Microsoft Software License   */
-/*       Terms for Microsoft Azure RTOS. Full text of the license can be  */
-/*       found in the LICENSE file at https://aka.ms/AzureRTOS_EULA       */
-/*       and in the root directory of this software.                      */
-/*                                                                        */
-/**************************************************************************/
+/***************************************************************************
+ * Copyright (c) 2024 Microsoft Corporation 
+ * 
+ * This program and the accompanying materials are made available under the
+ * terms of the MIT License which is available at
+ * https://opensource.org/licenses/MIT.
+ * 
+ * SPDX-License-Identifier: MIT
+ **************************************************************************/
 
 
 /**************************************************************************/
 /**************************************************************************/
-/**                                                                       */ 
-/** ThreadX Component                                                     */ 
+/**                                                                       */
+/** ThreadX Component                                                     */
 /**                                                                       */
 /**   Byte Pool                                                           */
 /**                                                                       */
@@ -32,51 +31,53 @@
 #include "tx_byte_pool.h"
 
 
-/**************************************************************************/ 
-/*                                                                        */ 
-/*  FUNCTION                                               RELEASE        */ 
-/*                                                                        */ 
-/*    _txe_byte_pool_create                               PORTABLE C      */ 
+/**************************************************************************/
+/*                                                                        */
+/*  FUNCTION                                               RELEASE        */
+/*                                                                        */
+/*    _txe_byte_pool_create                               PORTABLE C      */
 /*                                                           6.1          */
 /*  AUTHOR                                                                */
 /*                                                                        */
 /*    William E. Lamie, Microsoft Corporation                             */
 /*                                                                        */
 /*  DESCRIPTION                                                           */
-/*                                                                        */ 
-/*    This function checks for errors in the create byte pool memory      */ 
-/*    function.                                                           */ 
-/*                                                                        */ 
-/*  INPUT                                                                 */ 
-/*                                                                        */ 
-/*    pool_ptr                          Pointer to pool control block     */ 
-/*    name_ptr                          Pointer to byte pool name         */ 
-/*    pool_start                        Address of beginning of pool area */ 
-/*    pool_size                         Number of bytes in the byte pool  */ 
-/*    pool_control_block_size           Size of byte pool control block   */ 
-/*                                                                        */ 
-/*  OUTPUT                                                                */ 
-/*                                                                        */ 
-/*    TX_POOL_ERROR                     Invalid byte pool pointer         */ 
-/*    TX_PTR_ERROR                      Invalid pool starting address     */ 
-/*    TX_SIZE_ERROR                     Invalid pool size                 */ 
-/*    TX_CALLER_ERROR                   Invalid caller of this function   */ 
-/*    status                            Actual completion status          */ 
-/*                                                                        */ 
-/*  CALLS                                                                 */ 
-/*                                                                        */ 
-/*    _tx_byte_pool_create              Actual byte pool create function  */ 
-/*    _tx_thread_system_preempt_check   Check for preemption              */ 
-/*                                                                        */ 
-/*  CALLED BY                                                             */ 
-/*                                                                        */ 
-/*    Application Code                                                    */ 
-/*                                                                        */ 
-/*  RELEASE HISTORY                                                       */ 
-/*                                                                        */ 
+/*                                                                        */
+/*    This function checks for errors in the create byte pool memory      */
+/*    function.                                                           */
+/*                                                                        */
+/*  INPUT                                                                 */
+/*                                                                        */
+/*    pool_ptr                          Pointer to pool control block     */
+/*    name_ptr                          Pointer to byte pool name         */
+/*    pool_start                        Address of beginning of pool area */
+/*    pool_size                         Number of bytes in the byte pool  */
+/*    pool_control_block_size           Size of byte pool control block   */
+/*                                                                        */
+/*  OUTPUT                                                                */
+/*                                                                        */
+/*    TX_POOL_ERROR                     Invalid byte pool pointer         */
+/*    TX_PTR_ERROR                      Invalid pool starting address     */
+/*    TX_SIZE_ERROR                     Invalid pool size                 */
+/*    TX_CALLER_ERROR                   Invalid caller of this function   */
+/*    status                            Actual completion status          */
+/*                                                                        */
+/*  CALLS                                                                 */
+/*                                                                        */
+/*    _tx_byte_pool_create              Actual byte pool create function  */
+/*    _tx_thread_system_preempt_check   Check for preemption              */
+/*                                                                        */
+/*  CALLED BY                                                             */
+/*                                                                        */
+/*    Application Code                                                    */
+/*                                                                        */
+/*  RELEASE HISTORY                                                       */
+/*                                                                        */
 /*    DATE              NAME                      DESCRIPTION             */
 /*                                                                        */
-/*  09-30-2020     William E. Lamie         Initial Version 6.1           */
+/*  05-19-2020     William E. Lamie         Initial Version 6.0           */
+/*  09-30-2020     Yuxin Zhou               Modified comment(s),          */
+/*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
 UINT  _txe_byte_pool_create(TX_BYTE_POOL *pool_ptr, CHAR *name_ptr, VOID *pool_start, ULONG pool_size, UINT pool_control_block_size)
@@ -84,7 +85,7 @@ UINT  _txe_byte_pool_create(TX_BYTE_POOL *pool_ptr, CHAR *name_ptr, VOID *pool_s
 
 TX_INTERRUPT_SAVE_AREA
 
-UINT            status;                 
+UINT            status;
 ULONG           i;
 TX_BYTE_POOL    *next_pool;
 #ifndef TX_TIMER_PROCESS_IN_ISR
@@ -96,7 +97,7 @@ TX_THREAD       *thread_ptr;
     status =  TX_SUCCESS;
 
     /* Check for an invalid byte pool pointer.  */
-    if (pool_ptr == TX_NULL) 
+    if (pool_ptr == TX_NULL)
     {
 
         /* Byte pool pointer is invalid, return appropriate error code.  */
@@ -112,7 +113,7 @@ TX_THREAD       *thread_ptr;
     }
     else
     {
-    
+
         /* Disable interrupts.  */
         TX_DISABLE
 
@@ -146,7 +147,7 @@ TX_THREAD       *thread_ptr;
 
         /* Decrement the preempt disable flag.  */
         _tx_thread_preempt_disable--;
-    
+
         /* Restore interrupts.  */
         TX_RESTORE
 
@@ -164,7 +165,7 @@ TX_THREAD       *thread_ptr;
         /* Check for an invalid starting address.  */
         else if (pool_start == TX_NULL)
         {
-    
+
             /* Null starting address pointer, return appropriate error.  */
             status =  TX_PTR_ERROR;
         }
@@ -196,11 +197,11 @@ TX_THREAD       *thread_ptr;
             /* Check for interrupt call.  */
             if (TX_THREAD_GET_SYSTEM_STATE() != ((ULONG) 0))
             {
-    
+
                 /* Now, make sure the call is from an interrupt and not initialization.  */
                 if (TX_THREAD_GET_SYSTEM_STATE() < TX_INITIALIZE_IN_PROGRESS)
                 {
-        
+
                     /* Invalid caller of this function, return appropriate error code.  */
                     status =  TX_CALLER_ERROR;
                 }

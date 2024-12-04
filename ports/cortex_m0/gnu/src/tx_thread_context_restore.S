@@ -1,13 +1,12 @@
-@/**************************************************************************/
-@/*                                                                        */
-@/*       Copyright (c) Microsoft Corporation. All rights reserved.        */
-@/*                                                                        */
-@/*       This software is licensed under the Microsoft Software License   */
-@/*       Terms for Microsoft Azure RTOS. Full text of the license can be  */
-@/*       found in the LICENSE file at https://aka.ms/AzureRTOS_EULA       */
-@/*       and in the root directory of this software.                      */
-@/*                                                                        */
-@/**************************************************************************/
+@/***************************************************************************
+@ * Copyright (c) 2024 Microsoft Corporation 
+@ * 
+@ * This program and the accompanying materials are made available under the
+@ * terms of the MIT License which is available at
+@ * https://opensource.org/licenses/MIT.
+@ * 
+@ * SPDX-License-Identifier: MIT
+@ **************************************************************************/
 @
 @
 @/**************************************************************************/
@@ -20,6 +19,9 @@
 @/**************************************************************************/
 @/**************************************************************************/
 @
+#ifdef TX_INCLUDE_USER_DEFINE_FILE
+#include "tx_user.h"
+#endif
 @
     .global  _tx_thread_system_state
     .global  _tx_thread_current_ptr
@@ -29,6 +31,9 @@
     .global  _tx_thread_schedule
     .global  _tx_thread_preempt_disable
     .global _tx_execution_isr_exit
+#if (defined(TX_ENABLE_EXECUTION_CHANGE_NOTIFY) || defined(TX_EXECUTION_PROFILE_ENABLE))                                        
+    .global  _tx_execution_isr_exit
+#endif
 @
 @
     .text 32
@@ -39,7 +44,7 @@
 @/*  FUNCTION                                               RELEASE        */
 @/*                                                                        */
 @/*    _tx_thread_context_restore                        Cortex-M0/GNU     */
-@/*                                                           6.1          */
+@/*                                                           6.2.1        */
 @/*  AUTHOR                                                                */
 @/*                                                                        */
 @/*    William E. Lamie, Microsoft Corporation                             */
@@ -77,6 +82,8 @@
 @/*  09-30-2020     Scott Larson             Modified comment(s), and      */
 @/*                                            cleaned up whitespace,      */
 @/*                                            resulting in version 6.1    */
+@/*  03-08-2023      Scott Larson            Include tx_user.h,            */
+@/*                                            resulting in version 6.2.1  */
 @/*                                                                        */
 @/**************************************************************************/
 @VOID   _tx_thread_context_restore(VOID)
@@ -85,6 +92,11 @@
     .thumb_func
 _tx_thread_context_restore:
 @
-@ /* Not needed for this port - just return!  */
+#if (defined(TX_ENABLE_EXECUTION_CHANGE_NOTIFY) || defined(TX_EXECUTION_PROFILE_ENABLE))
+    /* Call the ISR exit function to indicate an ISR is complete.  */
+    PUSH    {r0, lr}                                // Save return address
+    BL      _tx_execution_isr_exit                  // Call the ISR exit function
+    POP     {r0, lr}                                // Recover return address
+#endif
     BX      lr
 @}

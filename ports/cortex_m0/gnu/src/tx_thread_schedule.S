@@ -1,13 +1,12 @@
-@/**************************************************************************/
-@/*                                                                        */
-@/*       Copyright (c) Microsoft Corporation. All rights reserved.        */
-@/*                                                                        */
-@/*       This software is licensed under the Microsoft Software License   */
-@/*       Terms for Microsoft Azure RTOS. Full text of the license can be  */
-@/*       found in the LICENSE file at https://aka.ms/AzureRTOS_EULA       */
-@/*       and in the root directory of this software.                      */
-@/*                                                                        */
-@/**************************************************************************/
+@/***************************************************************************
+@ * Copyright (c) 2024 Microsoft Corporation 
+@ * 
+@ * This program and the accompanying materials are made available under the
+@ * terms of the MIT License which is available at
+@ * https://opensource.org/licenses/MIT.
+@ * 
+@ * SPDX-License-Identifier: MIT
+@ **************************************************************************/
 @
 @
 @/**************************************************************************/
@@ -20,6 +19,9 @@
 @/**************************************************************************/
 @/**************************************************************************/
 @
+#ifdef TX_INCLUDE_USER_DEFINE_FILE
+#include "tx_user.h"
+#endif
 @
     .global  _tx_thread_current_ptr
     .global  _tx_thread_execute_ptr
@@ -27,6 +29,10 @@
     .global  _tx_thread_system_stack_ptr
     .global  _tx_execution_thread_enter
     .global  _tx_execution_thread_exit
+#ifdef TX_LOW_POWER
+    .global tx_low_power_enter
+    .global tx_low_power_exit
+#endif
 @
 @
     .text
@@ -37,7 +43,7 @@
 @/*  FUNCTION                                               RELEASE        */
 @/*                                                                        */
 @/*    _tx_thread_schedule                               Cortex-M0/GNU     */
-@/*                                                           6.1          */
+@/*                                                           6.2.1        */
 @/*  AUTHOR                                                                */
 @/*                                                                        */
 @/*    William E. Lamie, Microsoft Corporation                             */
@@ -70,9 +76,14 @@
 @/*                                                                        */
 @/*    DATE              NAME                      DESCRIPTION             */
 @/*                                                                        */
-@/*  05-19-2020     William E. Lamie         Initial Version 6.0           */
-@/*  09-30-2020     William E. Lamie         Modified comment(s),          */
+@/*  05-19-2020     William E. Lamie        Initial Version 6.0            */
+@/*  09-30-2020     William E. Lamie        Modified comment(s),           */
 @/*                                            resulting in version 6.1    */
+@/*  03-02-2021     Scott Larson            Modified comment(s), add       */
+@/*                                           low power code,              */
+@/*                                           resulting in version 6.1.5   */
+@/*  03-08-2023      Scott Larson            Include tx_user.h,            */
+@/*                                            resulting in version 6.2.1  */
 @/*                                                                        */
 @/**************************************************************************/
 @VOID   _tx_thread_schedule(VOID)
@@ -128,7 +139,7 @@ __tx_SVCallHandler:
     .thumb_func
 __tx_ts_handler:
 
-#ifdef TX_ENABLE_EXECUTION_CHANGE_NOTIFY
+#if (defined(TX_ENABLE_EXECUTION_CHANGE_NOTIFY) || defined(TX_EXECUTION_PROFILE_ENABLE))  
 @
 @    /* Call the thread exit function to indicate the thread is no longer executing.  */
 @
@@ -211,7 +222,7 @@ __tx_ts_restore:
 @
     STR     r5, [r4]                                @ Setup global time-slice
 
-#ifdef TX_ENABLE_EXECUTION_CHANGE_NOTIFY
+#if (defined(TX_ENABLE_EXECUTION_CHANGE_NOTIFY) || defined(TX_EXECUTION_PROFILE_ENABLE))     
 @
 @    /* Call the thread entry function to indicate the thread is executing.  */
 @
@@ -248,11 +259,25 @@ __tx_ts_wait:
     STR     r1, [r0]                                @ Store it in the current pointer
     CMP     r1, #0                                  @ If non-NULL, a new thread is ready!
     BNE     __tx_ts_ready                           @
+
+#ifdef TX_LOW_POWER
+    PUSH    {r0-r3}
+    BL      tx_low_power_enter                      @ Possibly enter low power mode
+    POP     {r0-r3}
+#endif
+
 #ifdef TX_ENABLE_WFI
     DSB                                             @ Ensure no outstanding memory transactions
     WFI                                             @ Wait for interrupt
     ISB                                             @ Ensure pipeline is flushed
 #endif
+
+#ifdef TX_LOW_POWER
+    PUSH    {r0-r3}
+    BL      tx_low_power_exit                       @ Exit low power mode
+    POP     {r0-r3}
+#endif
+
     CPSIE   i                                       @ Enable interrupts
     B       __tx_ts_wait                            @ Loop to continue waiting
 @

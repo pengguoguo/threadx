@@ -1,15 +1,30 @@
 
+    .syntax unified
+#if defined(THUMB_MODE)
+    .thumb
+#else
+    .arm
+#endif
+
 /* .text is used instead of .section .text so it works with arm-aout too.  */
     .text
-    .code 32
     .align  0
 
+#if defined(THUMB_MODE)
+    .thumb_func
+#endif
     .global _mainCRTStartup
+_mainCRTStartup:
+#if defined(THUMB_MODE)
+    .thumb_func
+#endif
     .global _start
+_start:
+#if defined(THUMB_MODE)
+    .thumb_func
+#endif
     .global start
 start:
-_start:
-_mainCRTStartup:
 
 /* Start by setting up a stack */
     /*  Set up the stack pointer to a fixed value */
@@ -26,13 +41,13 @@ _mainCRTStartup:
     mov     a2, #0          /* Second arg: fill value */
     mov fp, a2          /* Null frame pointer */
     mov r7, a2          /* Null frame pointer for Thumb */
-    
-    ldr a1, .LC1        /* First arg: start of memory block */
-    ldr a3, .LC2    
-    sub a3, a3, a1      /* Third arg: length of block */
-    
 
-    
+    ldr a1, .LC1        /* First arg: start of memory block */
+    ldr a3, .LC2
+    sub a3, a3, a1      /* Third arg: length of block */
+
+
+
         bl      memset
     mov r0, #0      /*  no arguments  */
     mov r1, #0      /*  no argv either */
@@ -48,15 +63,15 @@ _mainCRTStartup:
 /*        bl      init */
     mov r0, r4
     mov r1, r5
-#endif  
+#endif
         bl      main
 
         bl      exit         /* Should not return.  */
 
-    
-    /* For Thumb, constants must be after the code since only 
+
+    /* For Thumb, constants must be after the code since only
        positive offsets are supported for PC relative addresses.  */
-    
+
     .align 0
 .LC0:
 .LC1:
@@ -69,16 +84,12 @@ _mainCRTStartup:
     .word   _fini
 #endif  */
     /* Return ...  */
-#ifdef __APCS_26__
-    movs    pc, lr
-#else
-#ifdef __THUMB_INTERWORK
     bx  lr
-#else
-    mov pc, lr
-#endif
-#endif
 
+    .global  _fini
+    .type    _fini,function
+_fini:
+    BX      lr                                  // Return to caller
 
 /*  Workspace for Angel calls.  */
     .data

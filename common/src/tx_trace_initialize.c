@@ -1,13 +1,12 @@
-/**************************************************************************/
-/*                                                                        */
-/*       Copyright (c) Microsoft Corporation. All rights reserved.        */
-/*                                                                        */
-/*       This software is licensed under the Microsoft Software License   */
-/*       Terms for Microsoft Azure RTOS. Full text of the license can be  */
-/*       found in the LICENSE file at https://aka.ms/AzureRTOS_EULA       */
-/*       and in the root directory of this software.                      */
-/*                                                                        */
-/**************************************************************************/
+/***************************************************************************
+ * Copyright (c) 2024 Microsoft Corporation 
+ * 
+ * This program and the accompanying materials are made available under the
+ * terms of the MIT License which is available at
+ * https://opensource.org/licenses/MIT.
+ * 
+ * SPDX-License-Identifier: MIT
+ **************************************************************************/
 
 
 /**************************************************************************/
@@ -60,7 +59,7 @@ TX_TRACE_BUFFER_ENTRY             *_tx_trace_buffer_end_ptr;
 TX_TRACE_BUFFER_ENTRY             *_tx_trace_buffer_current_ptr;
 
 
-/* Define the trace event enable bits, where each bit represents a type of event that can be enabled 
+/* Define the trace event enable bits, where each bit represents a type of event that can be enabled
    or disabled dynamically by the application.  */
 
 ULONG                            _tx_trace_event_enable_bits;
@@ -72,9 +71,9 @@ ULONG                            _tx_trace_event_enable_bits;
 ULONG                             _tx_trace_simulated_time;
 
 
-/* Define the function pointer used to call the application when the trace buffer wraps. If NULL, 
+/* Define the function pointer used to call the application when the trace buffer wraps. If NULL,
    the application has not registered a callback function.  */
-   
+
 VOID                             (*_tx_trace_full_notify_function)(VOID *buffer);
 
 

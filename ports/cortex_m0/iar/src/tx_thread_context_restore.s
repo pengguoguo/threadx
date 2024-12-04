@@ -1,13 +1,12 @@
-;/**************************************************************************/
-;/*                                                                        */
-;/*       Copyright (c) Microsoft Corporation. All rights reserved.        */
-;/*                                                                        */
-;/*       This software is licensed under the Microsoft Software License   */
-;/*       Terms for Microsoft Azure RTOS. Full text of the license can be  */
-;/*       found in the LICENSE file at https://aka.ms/AzureRTOS_EULA       */
-;/*       and in the root directory of this software.                      */
-;/*                                                                        */
-;/**************************************************************************/
+;/***************************************************************************
+; * Copyright (c) 2024 Microsoft Corporation 
+; * 
+; * This program and the accompanying materials are made available under the
+; * terms of the MIT License which is available at
+; * https://opensource.org/licenses/MIT.
+; * 
+; * SPDX-License-Identifier: MIT
+; **************************************************************************/
 ;
 ;
 ;/**************************************************************************/
@@ -80,7 +79,7 @@
     PUBLIC  _tx_thread_context_restore
 _tx_thread_context_restore:
 
-#ifdef TX_ENABLE_EXECUTION_CHANGE_NOTIFY
+#if (defined(TX_ENABLE_EXECUTION_CHANGE_NOTIFY) || defined(TX_EXECUTION_PROFILE_ENABLE))    
 ;
 ;    /* Call the ISR exit function to indicate an ISR is complete.  */
 ;

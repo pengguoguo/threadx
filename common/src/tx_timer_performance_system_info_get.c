@@ -1,13 +1,12 @@
-/**************************************************************************/
-/*                                                                        */
-/*       Copyright (c) Microsoft Corporation. All rights reserved.        */
-/*                                                                        */
-/*       This software is licensed under the Microsoft Software License   */
-/*       Terms for Microsoft Azure RTOS. Full text of the license can be  */
-/*       found in the LICENSE file at https://aka.ms/AzureRTOS_EULA       */
-/*       and in the root directory of this software.                      */
-/*                                                                        */
-/**************************************************************************/
+/***************************************************************************
+ * Copyright (c) 2024 Microsoft Corporation 
+ * 
+ * This program and the accompanying materials are made available under the
+ * terms of the MIT License which is available at
+ * https://opensource.org/licenses/MIT.
+ * 
+ * SPDX-License-Identifier: MIT
+ **************************************************************************/
 
 
 /**************************************************************************/
@@ -101,35 +100,35 @@ TX_INTERRUPT_SAVE_AREA
     /* Retrieve the total number of timer activations.  */
     if (activates != TX_NULL)
     {
-    
+
         *activates =  _tx_timer_performance_activate_count;
     }
 
     /* Retrieve the total number of timer reactivations.  */
     if (reactivates != TX_NULL)
     {
-    
+
         *reactivates =  _tx_timer_performance_reactivate_count;
     }
 
     /* Retrieve the total number of timer deactivations.  */
     if (deactivates != TX_NULL)
     {
-    
+
         *deactivates =  _tx_timer_performance_deactivate_count;
     }
 
     /* Retrieve the total number of timer expirations.  */
     if (expirations != TX_NULL)
     {
-    
+
         *expirations =  _tx_timer_performance_expiration_count;
     }
 
     /* Retrieve the total number of timer expiration adjustments.  */
     if (expiration_adjusts != TX_NULL)
     {
-    
+
         *expiration_adjusts =  _tx_timer_performance__expiration_adjust_count;
     }
 
@@ -138,7 +137,7 @@ TX_INTERRUPT_SAVE_AREA
 
     /* Return completion status.  */
     return(TX_SUCCESS);
-    
+
 #else
 
 UINT        status;
@@ -147,37 +146,37 @@ UINT        status;
     /* Access input arguments just for the sake of lint, MISRA, etc.  */
     if (activates != TX_NULL)
     {
-    
+
         /* Not enabled, return error.  */
         status =  TX_FEATURE_NOT_ENABLED;
     }
     else if (reactivates != TX_NULL)
     {
-    
+
         /* Not enabled, return error.  */
         status =  TX_FEATURE_NOT_ENABLED;
     }
     else if (deactivates != TX_NULL)
     {
-    
+
         /* Not enabled, return error.  */
         status =  TX_FEATURE_NOT_ENABLED;
     }
     else if (expirations != TX_NULL)
     {
-    
+
         /* Not enabled, return error.  */
         status =  TX_FEATURE_NOT_ENABLED;
     }
     else if (expiration_adjusts != TX_NULL)
     {
-    
+
         /* Not enabled, return error.  */
         status =  TX_FEATURE_NOT_ENABLED;
     }
     else
     {
-    
+
         /* Not enabled, return error.  */
         status =  TX_FEATURE_NOT_ENABLED;
     }

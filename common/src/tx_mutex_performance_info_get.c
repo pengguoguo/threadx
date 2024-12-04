@@ -1,13 +1,12 @@
-/**************************************************************************/
-/*                                                                        */
-/*       Copyright (c) Microsoft Corporation. All rights reserved.        */
-/*                                                                        */
-/*       This software is licensed under the Microsoft Software License   */
-/*       Terms for Microsoft Azure RTOS. Full text of the license can be  */
-/*       found in the LICENSE file at https://aka.ms/AzureRTOS_EULA       */
-/*       and in the root directory of this software.                      */
-/*                                                                        */
-/**************************************************************************/
+/***************************************************************************
+ * Copyright (c) 2024 Microsoft Corporation 
+ * 
+ * This program and the accompanying materials are made available under the
+ * terms of the MIT License which is available at
+ * https://opensource.org/licenses/MIT.
+ * 
+ * SPDX-License-Identifier: MIT
+ **************************************************************************/
 
 
 /**************************************************************************/
@@ -99,15 +98,15 @@ UINT                    status;
     /* Determine if this is a legal request.  */
     if (mutex_ptr == TX_NULL)
     {
-        
+
         /* Mutex pointer is illegal, return error.  */
         status =  TX_PTR_ERROR;
     }
-    
+
     /* Determine if the mutex ID is invalid.  */
     else if (mutex_ptr -> tx_mutex_id != TX_MUTEX_ID)
     {
-        
+
         /* Mutex pointer is illegal, return error.  */
         status =  TX_PTR_ERROR;
     }
@@ -129,45 +128,45 @@ UINT                    status;
         /* Retrieve the number of puts on this mutex.  */
         if (puts != TX_NULL)
         {
-    
+
             *puts =  mutex_ptr -> tx_mutex_performance_put_count;
         }
-    
+
         /* Retrieve the number of gets on this mutex.  */
         if (gets != TX_NULL)
         {
-    
+
             *gets =  mutex_ptr -> tx_mutex_performance_get_count;
         }
-    
+
         /* Retrieve the number of suspensions on this mutex.  */
         if (suspensions != TX_NULL)
         {
-    
+
             *suspensions =  mutex_ptr -> tx_mutex_performance_suspension_count;
         }
-    
+
         /* Retrieve the number of timeouts on this mutex.  */
         if (timeouts != TX_NULL)
         {
-    
+
             *timeouts =  mutex_ptr -> tx_mutex_performance_timeout_count;
         }
-    
+
         /* Retrieve the number of priority inversions on this mutex.  */
         if (inversions != TX_NULL)
         {
-    
+
             *inversions =  mutex_ptr -> tx_mutex_performance_priority_inversion_count;
         }
-    
+
         /* Retrieve the number of priority inheritances on this mutex.  */
         if (inheritances != TX_NULL)
         {
-    
+
             *inheritances =  mutex_ptr -> tx_mutex_performance__priority_inheritance_count;
         }
-    
+
         /* Restore interrupts.  */
         TX_RESTORE
     }
@@ -225,7 +224,7 @@ UINT                    status;
         status =  TX_FEATURE_NOT_ENABLED;
     }
 #endif
-    
+
     /* Return completion status.  */
     return(status);
 }

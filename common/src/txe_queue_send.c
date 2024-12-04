@@ -1,13 +1,12 @@
-/**************************************************************************/
-/*                                                                        */
-/*       Copyright (c) Microsoft Corporation. All rights reserved.        */
-/*                                                                        */
-/*       This software is licensed under the Microsoft Software License   */
-/*       Terms for Microsoft Azure RTOS. Full text of the license can be  */
-/*       found in the LICENSE file at https://aka.ms/AzureRTOS_EULA       */
-/*       and in the root directory of this software.                      */
-/*                                                                        */
-/**************************************************************************/
+/***************************************************************************
+ * Copyright (c) 2024 Microsoft Corporation 
+ * 
+ * This program and the accompanying materials are made available under the
+ * terms of the MIT License which is available at
+ * https://opensource.org/licenses/MIT.
+ * 
+ * SPDX-License-Identifier: MIT
+ **************************************************************************/
 
 
 /**************************************************************************/
@@ -95,7 +94,7 @@ TX_THREAD   *current_thread;
         /* Queue pointer is invalid, return appropriate error code.  */
         status =  TX_QUEUE_ERROR;
     }
-    
+
     /* Now check for invalid queue ID.  */
     else if (queue_ptr -> tx_queue_id != TX_QUEUE_ID)
     {
@@ -114,7 +113,7 @@ TX_THREAD   *current_thread;
     else
     {
 
-        /* Check for a wait option error.  Only threads are allowed any form of 
+        /* Check for a wait option error.  Only threads are allowed any form of
            suspension.  */
         if (wait_option != TX_NO_WAIT)
         {
@@ -126,11 +125,11 @@ TX_THREAD   *current_thread;
                 /* A non-thread is trying to suspend, return appropriate error code.  */
                 status =  TX_WAIT_ERROR;
             }
-       
+
 #ifndef TX_TIMER_PROCESS_IN_ISR
             else
             {
-    
+
                 /* Pickup thread pointer.  */
                 TX_THREAD_GET_CURRENT(current_thread)
 

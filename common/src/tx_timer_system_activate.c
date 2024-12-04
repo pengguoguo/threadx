@@ -1,13 +1,12 @@
-/**************************************************************************/
-/*                                                                        */
-/*       Copyright (c) Microsoft Corporation. All rights reserved.        */
-/*                                                                        */
-/*       This software is licensed under the Microsoft Software License   */
-/*       Terms for Microsoft Azure RTOS. Full text of the license can be  */
-/*       found in the LICENSE file at https://aka.ms/AzureRTOS_EULA       */
-/*       and in the root directory of this software.                      */
-/*                                                                        */
-/**************************************************************************/
+/***************************************************************************
+ * Copyright (c) 2024 Microsoft Corporation 
+ * 
+ * This program and the accompanying materials are made available under the
+ * terms of the MIT License which is available at
+ * https://opensource.org/licenses/MIT.
+ * 
+ * SPDX-License-Identifier: MIT
+ **************************************************************************/
 
 
 /**************************************************************************/
@@ -93,11 +92,11 @@ ULONG                       expiration_time;
     /* Determine if there is a timer to activate.  */
     if (remaining_ticks != ((ULONG) 0))
     {
-    
+
         /* Determine if the timer is set to wait forever.  */
         if (remaining_ticks != TX_WAIT_FOREVER)
         {
-    
+
             /* Valid timer activate request.  */
 
             /* Determine if the timer still needs activation.  */
@@ -124,7 +123,7 @@ ULONG                       expiration_time;
 
                 /* At this point, we are ready to put the timer on one of
                    the timer lists.  */
-    
+
                 /* Calculate the proper place for the timer.  */
                 timer_list =  TX_TIMER_POINTER_ADD(_tx_timer_current_ptr, expiration_time);
                 if (TX_TIMER_INDIRECT_TO_VOID_POINTER_CONVERT(timer_list) >= TX_TIMER_INDIRECT_TO_VOID_POINTER_CONVERT(_tx_timer_list_end))
@@ -134,11 +133,11 @@ ULONG                       expiration_time;
                     delta =  TX_TIMER_POINTER_DIF(timer_list, _tx_timer_list_end);
                     timer_list =  TX_TIMER_POINTER_ADD(_tx_timer_list_start, delta);
                 }
-    
+
                 /* Now put the timer on this list.  */
                 if ((*timer_list) == TX_NULL)
                 {
-                
+
                     /* This list is NULL, just put the new timer on it.  */
 
                     /* Setup the links in this timer.  */

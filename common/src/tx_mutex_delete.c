@@ -1,13 +1,12 @@
-/**************************************************************************/
-/*                                                                        */
-/*       Copyright (c) Microsoft Corporation. All rights reserved.        */
-/*                                                                        */
-/*       This software is licensed under the Microsoft Software License   */
-/*       Terms for Microsoft Azure RTOS. Full text of the license can be  */
-/*       found in the LICENSE file at https://aka.ms/AzureRTOS_EULA       */
-/*       and in the root directory of this software.                      */
-/*                                                                        */
-/**************************************************************************/
+/***************************************************************************
+ * Copyright (c) 2024 Microsoft Corporation 
+ * 
+ * This program and the accompanying materials are made available under the
+ * terms of the MIT License which is available at
+ * https://opensource.org/licenses/MIT.
+ * 
+ * SPDX-License-Identifier: MIT
+ **************************************************************************/
 
 
 /**************************************************************************/
@@ -110,7 +109,7 @@ UINT            status;
 
     /* Decrement the created count.  */
     _tx_mutex_created_count--;
-    
+
     /* See if the mutex is the only one on the list.  */
     if (_tx_mutex_created_count == TX_EMPTY)
     {
@@ -130,7 +129,7 @@ UINT            status;
         /* See if we have to update the created list head pointer.  */
         if (_tx_mutex_created_ptr == mutex_ptr)
         {
-        
+
             /* Yes, move the head pointer to the next link. */
             _tx_mutex_created_ptr =  next_mutex;
         }
@@ -156,7 +155,7 @@ UINT            status;
     {
 
         /* Yes, remove this mutex from the owned list.  */
-        
+
         /* Set the ownership count to 1.  */
         mutex_ptr -> tx_mutex_ownership_count =  ((UINT) 1);
 
@@ -184,14 +183,14 @@ UINT            status;
        on this mutex.  */
     while (suspended_count != ((ULONG) 0))
     {
-      
+
         /* Decrement the suspension count.  */
         suspended_count--;
-      
+
         /* Lockout interrupts.  */
         TX_DISABLE
 
-        /* Clear the cleanup pointer, this prevents the timeout from doing 
+        /* Clear the cleanup pointer, this prevents the timeout from doing
            anything.  */
         thread_ptr -> tx_thread_suspend_cleanup =  TX_NULL;
 
@@ -215,7 +214,7 @@ UINT            status;
 
         /* Restore interrupts.  */
         TX_RESTORE
-    
+
         /* Resume the thread.  */
         _tx_thread_system_resume(thread_ptr);
 #endif

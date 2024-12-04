@@ -1,80 +1,81 @@
-;/**************************************************************************/
-;/*                                                                        */
-;/*       Copyright (c) Microsoft Corporation. All rights reserved.        */
-;/*                                                                        */
-;/*       This software is licensed under the Microsoft Software License   */
-;/*       Terms for Microsoft Azure RTOS. Full text of the license can be  */
-;/*       found in the LICENSE file at https://aka.ms/AzureRTOS_EULA       */
-;/*       and in the root directory of this software.                      */
-;/*                                                                        */
-;/**************************************************************************/
-;
-;
+;/***************************************************************************
+; * Copyright (c) 2024 Microsoft Corporation 
+; * 
+; * This program and the accompanying materials are made available under the
+; * terms of the MIT License which is available at
+; * https://opensource.org/licenses/MIT.
+; * 
+; * SPDX-License-Identifier: MIT
+; **************************************************************************/
+
 ;/**************************************************************************/
 ;/**************************************************************************/
-;/**                                                                       */ 
-;/** ThreadX Component                                                     */ 
+;/**                                                                       */
+;/** ThreadX Component                                                     */
 ;/**                                                                       */
 ;/**   Thread                                                              */
 ;/**                                                                       */
 ;/**************************************************************************/
 ;/**************************************************************************/
-;
-;
-;#define TX_SOURCE_CODE
-;
-;
+#ifdef TX_INCLUDE_USER_DEFINE_FILE
+#include "tx_user.h"
+#endif
+
     .equ    BTA, 0x412
     .equ    KSTACK_TOP,     0x264
     .equ    KSTACK_BASE,    0x265
     .equ    STATUS32_SC,    0x4000
-;
-;/* Include necessary system files.  */
-;
-;#include "tx_api.h"
-;#include "tx_thread.h"
-;#include "tx_timer.h"
-;
-;
-;/**************************************************************************/ 
-;/*                                                                        */ 
-;/*  FUNCTION                                               RELEASE        */ 
-;/*                                                                        */ 
+
+;/**************************************************************************/
+;/*                                                                        */
+;/*  FUNCTION                                               RELEASE        */
+;/*                                                                        */
 ;/*    _tx_thread_schedule                             ARCv2_EM/MetaWare   */
-;/*                                                           6.1          */
+;/*                                                           6.2.1        */
 ;/*  AUTHOR                                                                */
 ;/*                                                                        */
 ;/*    William E. Lamie, Microsoft Corporation                             */
 ;/*                                                                        */
 ;/*  DESCRIPTION                                                           */
-;/*                                                                        */ 
-;/*    This function waits for a thread control block pointer to appear in */ 
-;/*    the _tx_thread_execute_ptr variable.  Once a thread pointer appears */ 
-;/*    in the variable, the corresponding thread is resumed.               */ 
-;/*                                                                        */ 
-;/*  INPUT                                                                 */ 
-;/*                                                                        */ 
-;/*    None                                                                */ 
-;/*                                                                        */ 
-;/*  OUTPUT                                                                */ 
-;/*                                                                        */ 
+;/*                                                                        */
+;/*    This function waits for a thread control block pointer to appear in */
+;/*    the _tx_thread_execute_ptr variable.  Once a thread pointer appears */
+;/*    in the variable, the corresponding thread is resumed.               */
+;/*                                                                        */
+;/*  INPUT                                                                 */
+;/*                                                                        */
 ;/*    None                                                                */
-;/*                                                                        */ 
-;/*  CALLS                                                                 */ 
-;/*                                                                        */ 
+;/*                                                                        */
+;/*  OUTPUT                                                                */
+;/*                                                                        */
 ;/*    None                                                                */
-;/*                                                                        */ 
-;/*  CALLED BY                                                             */ 
-;/*                                                                        */ 
-;/*    _tx_initialize_kernel_enter          ThreadX entry function         */ 
-;/*    _tx_thread_system_return             Return to system from thread   */ 
-;/*    _tx_thread_context_restore           Restore thread's context       */ 
-;/*                                                                        */ 
-;/*  RELEASE HISTORY                                                       */ 
-;/*                                                                        */ 
+;/*                                                                        */
+;/*  CALLS                                                                 */
+;/*                                                                        */
+;/*    None                                                                */
+;/*                                                                        */
+;/*  CALLED BY                                                             */
+;/*                                                                        */
+;/*    _tx_initialize_kernel_enter          ThreadX entry function         */
+;/*    _tx_thread_system_return             Return to system from thread   */
+;/*    _tx_thread_context_restore           Restore thread's context       */
+;/*                                                                        */
+;/*  RELEASE HISTORY                                                       */
+;/*                                                                        */
 ;/*    DATE              NAME                      DESCRIPTION             */
 ;/*                                                                        */
 ;/*  09-30-2020     William E. Lamie         Initial Version 6.1           */
+;/*  04-02-2021     Andres Mlinar              Modified comment(s), and    */
+;/*                                            fixed interrupt priority    */
+;/*                                            overwritting bug, and       */
+;/*                                            fixed hardware stack checker*/
+;/*                                            disable and reenable logic, */
+;/*                                            resulting in version 6.1.6  */
+;/*  10-15-2021     Andres Mlinar            Modified comment(s), added    */
+;/*                                            support for disabling the   */
+;/*                                            loop control feature,       */
+;/*                                            improved internal logic,    */
+;/*                                            resulting in version 6.1.9  */
 ;/*                                                                        */
 ;/**************************************************************************/
 ;VOID   _tx_thread_schedule(VOID)
@@ -82,11 +83,18 @@
     .global _tx_thread_schedule
     .type   _tx_thread_schedule, @function
 _tx_thread_schedule:
+
+    mov     sp, _estack
+
+    .global _tx_thread_schedule_reenter
+    .type   _tx_thread_schedule_reenter, @function
+_tx_thread_schedule_reenter:
+
 ;
 ;    /* Enable interrupts.  */
 ;
-    mov     r0, 0x1F                                    ; Build enable interrupt value
-    seti    r0                                          ; Enable interrupts
+    seti    0                                           ; Enable interrupts without changing threshold level
+
 ;
 ;    /* Wait for a thread to execute.  */
 ;    do
@@ -99,7 +107,7 @@ __tx_thread_schedule_loop:
 ;
 ;    }
 ;    while(_tx_thread_execute_ptr == TX_NULL);
-;    
+;
 ;    /* Yes! We have a thread to execute.  Lockout interrupts and
 ;       transfer control to it.  */
 ;
@@ -118,31 +126,11 @@ __tx_thread_schedule_loop:
     ld      r4, [r0, 24]                                ; Pickup time-slice for this thread
     add     r3, r3, 1                                   ; Increment run counter
     st      r3, [r0, 4]                                 ; Store the new run counter
-
-    .ifdef  TX_ENABLE_HW_STACK_CHECKING
-    lr      r2, [status32]                              ; Pickup current STATUS32
-    and     r2, r2, ~STATUS32_SC                        ; Clear the hardware stack checking enable bit (SC)
-    kflag   r2                                          ; Disable hardware stack checking
-    ld      r3, [r0, 12]                                ; Pickup the top of the thread's stack (lowest address)
-    sr		r3, [KSTACK_TOP]                            ; Setup KSTACK_TOP
-    ld      r3, [r0, 16]                                ; Pickup the base of the thread's stack (highest address)
-    sr      r3, [KSTACK_BASE]                           ; Setup KSTACK_BASE
-    .endif
 ;
 ;    /* Setup time-slice, if present.  */
 ;    _tx_timer_time_slice =  _tx_thread_current_ptr -> tx_thread_time_slice;
 ;
-    ld      sp, [r0, 8]                                 ; Switch to thread's stack
-
-    .ifdef  TX_ENABLE_HW_STACK_CHECKING
-    or      r2, r2, STATUS32_SC                         ; Or in hardware stack checking enable bit (SC)
-    kflag   r2                                          ; Enable hardware stack checking
-    .endif
-
     st      r4, [gp, _tx_timer_time_slice@sda]          ; Setup time-slice
-;
-;    /* Switch to the thread's stack.  */
-;    sp =  _tx_thread_execute_ptr -> tx_thread_stack_ptr;
 ;
     .ifdef TX_ENABLE_EXECUTION_CHANGE_NOTIFY
 ;
@@ -153,6 +141,26 @@ __tx_thread_schedule_loop:
     add     sp, sp, 16                                  ; Recover the stack space
     .endif
 ;
+;    /* Switch to the thread's stack.  */
+;    sp =  _tx_thread_execute_ptr -> tx_thread_stack_ptr;
+;
+    .ifdef  TX_ENABLE_HW_STACK_CHECKING
+    lr      r2, [status32]                              ; Pickup current STATUS32
+    and     r2, r2, ~STATUS32_SC                        ; Clear the hardware stack checking enable bit (SC)
+    kflag   r2                                          ; Disable hardware stack checking
+    .endif
+
+    ld      sp, [r0, 8]                                 ; Switch to thread's stack
+
+    .ifdef  TX_ENABLE_HW_STACK_CHECKING
+    ld      r3, [r0, 12]                                ; Pickup the top of the thread's stack (lowest address)
+    sr      r3, [KSTACK_TOP]                            ; Setup KSTACK_TOP
+    ld      r3, [r0, 16]                                ; Pickup the base of the thread's stack (highest address)
+    sr      r3, [KSTACK_BASE]                           ; Setup KSTACK_BASE
+    or      r2, r2, STATUS32_SC                         ; Or in hardware stack checking enable bit (SC)
+    kflag   r2                                          ; Enable hardware stack checking
+    .endif
+
 ;    /* Determine if an interrupt frame or a synchronous task suspension frame
 ;       is present.  */
 ;
@@ -174,23 +182,26 @@ __tx_thread_schedule_loop:
     ld      r15, [sp, 56]                               ; Recover r15
     ld      r14, [sp, 60]                               ; Recover r14
     ld      r13, [sp, 64]                               ; Recover r13
-    ld      r1,  [sp, 68]                               ; Pickup status32
+    ld      r1,  [sp, 68]                               ; Pickup STATUS32
     ld      r30, [sp, 72]                               ; Recover r30
-    add     sp, sp, 76                                  ; Recover solicited stack frame 
-    j_s.d   [blink]                                     ; Return to thread and restore flags 
+    add     sp, sp, 76                                  ; Recover solicited stack frame
+    j_s.d   [blink]                                     ; Return to thread and restore flags
     seti    r1                                          ; Recover STATUS32
 ;
 __tx_thread_schedule_int_ret:
 ;
-    mov     r0, 0x2 									; Pretend level 1 interrupt is returning
-    sr      r0, [AUX_IRQ_ACT]							;
+    mov     r0, 0x2                                     ; Pretend level 1 interrupt is returning
+    sr      r0, [AUX_IRQ_ACT]                           ;
 
+    .ifndef  TX_DISABLE_LP
     ld      r0, [sp, 4]                                 ; Recover LP_START
     sr      r0, [LP_START]                              ; Restore LP_START
     ld      r1, [sp, 8]                                 ; Recover LP_END
     sr      r1, [LP_END]                                ; Restore LP_END
-    ld      r2, [sp, 12]                                ; Recover LP_COUNT      
+    ld      r2, [sp, 12]                                ; Recover LP_COUNT
     mov     LP_COUNT, r2
+    .endif
+
     ld      r0, [sp, 156]                               ; Pickup saved BTA
     sr      r0, [BTA]                                   ; Recover BTA
     ld      blink, [sp, 16]                             ; Recover blink
@@ -230,7 +241,6 @@ __tx_thread_schedule_int_ret:
     .endif
     add     sp, sp, 160                                 ; Recover interrupt stack frame
     rtie                                                ; Return to point of interrupt
-   
 ;
 ;}
 ;

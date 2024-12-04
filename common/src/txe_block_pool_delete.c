@@ -1,13 +1,12 @@
-/**************************************************************************/
-/*                                                                        */
-/*       Copyright (c) Microsoft Corporation. All rights reserved.        */
-/*                                                                        */
-/*       This software is licensed under the Microsoft Software License   */
-/*       Terms for Microsoft Azure RTOS. Full text of the license can be  */
-/*       found in the LICENSE file at https://aka.ms/AzureRTOS_EULA       */
-/*       and in the root directory of this software.                      */
-/*                                                                        */
-/**************************************************************************/
+/***************************************************************************
+ * Copyright (c) 2024 Microsoft Corporation 
+ * 
+ * This program and the accompanying materials are made available under the
+ * terms of the MIT License which is available at
+ * https://opensource.org/licenses/MIT.
+ * 
+ * SPDX-License-Identifier: MIT
+ **************************************************************************/
 
 
 /**************************************************************************/
@@ -87,7 +86,7 @@ TX_THREAD   *thread_ptr;
     /* Default status to success.  */
     status =  TX_SUCCESS;
 #endif
-    
+
     /* Check for an invalid pool pointer.  */
     if (pool_ptr == TX_NULL)
     {
@@ -99,7 +98,7 @@ TX_THREAD   *thread_ptr;
     /* Now check the pool ID.  */
     else if (pool_ptr -> tx_block_pool_id != TX_BLOCK_POOL_ID)
     {
-    
+
         /* Pool pointer is invalid, return appropriate error code.  */
         status =  TX_POOL_ERROR;
     }
@@ -109,7 +108,7 @@ TX_THREAD   *thread_ptr;
     /* Is the call from an ISR or initialization?  */
     else if (TX_THREAD_GET_SYSTEM_STATE() != ((ULONG) 0))
     {
-    
+
         /* Invalid caller of this function, return appropriate error code.  */
         status =  TX_CALLER_ERROR;
     }
@@ -136,7 +135,7 @@ TX_THREAD   *thread_ptr;
 
             /* Call actual block pool delete function.  */
             status =  _tx_block_pool_delete(pool_ptr);
-            
+
 #ifndef TX_TIMER_PROCESS_IN_ISR
         }
 #endif

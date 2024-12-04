@@ -1,13 +1,12 @@
-/**************************************************************************/
-/*                                                                        */
-/*       Copyright (c) Microsoft Corporation. All rights reserved.        */
-/*                                                                        */
-/*       This software is licensed under the Microsoft Software License   */
-/*       Terms for Microsoft Azure RTOS. Full text of the license can be  */
-/*       found in the LICENSE file at https://aka.ms/AzureRTOS_EULA       */
-/*       and in the root directory of this software.                      */
-/*                                                                        */
-/**************************************************************************/
+/***************************************************************************
+ * Copyright (c) 2024 Microsoft Corporation 
+ * 
+ * This program and the accompanying materials are made available under the
+ * terms of the MIT License which is available at
+ * https://opensource.org/licenses/MIT.
+ * 
+ * SPDX-License-Identifier: MIT
+ **************************************************************************/
 
 
 /**************************************************************************/
@@ -87,7 +86,7 @@ UINT                suspended_count;
 TX_THREAD           *next_thread;
 TX_THREAD           *previous_thread;
 
-    
+
 #ifndef TX_NOT_INTERRUPTABLE
 
     /* Disable interrupts to remove the suspended thread from the block pool.  */
@@ -96,7 +95,7 @@ TX_THREAD           *previous_thread;
     /* Determine if the cleanup is still required.  */
     if (thread_ptr -> tx_thread_suspend_cleanup == &(_tx_block_pool_cleanup))
     {
-    
+
         /* Check for valid suspension sequence.  */
         if (suspension_sequence == thread_ptr -> tx_thread_suspension_sequence)
         {
@@ -107,7 +106,7 @@ TX_THREAD           *previous_thread;
             /* Check for a NULL byte pool pointer.  */
             if (pool_ptr != TX_NULL)
             {
-            
+
                 /* Check for valid pool ID.  */
                 if (pool_ptr -> tx_block_pool_id == TX_BLOCK_POOL_ID)
                 {
@@ -133,13 +132,13 @@ TX_THREAD           *previous_thread;
                         suspended_count =  pool_ptr -> tx_block_pool_suspended_count;
 
                         /* Remove the suspended thread from the list.  */
-    
+
                         /* See if this is the only suspended thread on the list.  */
                         if (suspended_count == TX_NO_SUSPENSIONS)
                         {
 
                             /* Yes, the only suspended thread.  */
-    
+
                             /* Update the head pointer.  */
                             pool_ptr -> tx_block_pool_suspension_list =  TX_NULL;
                         }
@@ -157,7 +156,7 @@ TX_THREAD           *previous_thread;
                             /* Determine if we need to update the head pointer.  */
                             if (pool_ptr -> tx_block_pool_suspension_list == thread_ptr)
                             {
-            
+
                                 /* Update the list head pointer.  */
                                 pool_ptr -> tx_block_pool_suspension_list =     next_thread;
                             }
@@ -168,7 +167,7 @@ TX_THREAD           *previous_thread;
                         if (thread_ptr -> tx_thread_state == TX_BLOCK_MEMORY)
                         {
 
-                            /* Timeout condition and the thread still suspended on the block pool.  
+                            /* Timeout condition and the thread still suspended on the block pool.
                                Setup return error status and resume the thread.  */
 
 #ifdef TX_BLOCK_POOL_ENABLE_PERFORMANCE_INFO

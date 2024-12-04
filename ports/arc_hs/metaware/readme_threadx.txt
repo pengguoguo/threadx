@@ -107,8 +107,8 @@ associated thread control block TX_THREAD.
      0x80                   r1
      0x84                   r0
      0x88                   r30
-     0x8C                   reserved
-     0x90                   reserved
+     0x8C                   r58 (if TX_ENABLE_ACC defined)
+     0x90                   r59 (if TX_ENABLE_ACC defined)
      0x94                   reserved
      0x98                   reserved
      0x9C                   bta
@@ -241,10 +241,13 @@ For generic code revision information, please refer to the readme_threadx_generi
 file, which is included in your distribution. The following details the revision
 information associated with this specific port of ThreadX:
 
+04-02-2021  Release 6.1.6 changes:
+            tx_port.h                           Updated macro definition
+
 09-30-2020  Initial ThreadX 6.1 for ARC HS using MetaWare tools.
 
 
-Copyright(c) 1996-2020 Microsoft Corporation
+Copyright(c) 1996-2021 Microsoft Corporation
 
 
 https://azure.com/rtos

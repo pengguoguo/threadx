@@ -1,13 +1,12 @@
-/**************************************************************************/
-/*                                                                        */
-/*       Copyright (c) Microsoft Corporation. All rights reserved.        */
-/*                                                                        */
-/*       This software is licensed under the Microsoft Software License   */
-/*       Terms for Microsoft Azure RTOS. Full text of the license can be  */
-/*       found in the LICENSE file at https://aka.ms/AzureRTOS_EULA       */
-/*       and in the root directory of this software.                      */
-/*                                                                        */
-/**************************************************************************/
+/***************************************************************************
+ * Copyright (c) 2024 Microsoft Corporation 
+ * 
+ * This program and the accompanying materials are made available under the
+ * terms of the MIT License which is available at
+ * https://opensource.org/licenses/MIT.
+ * 
+ * SPDX-License-Identifier: MIT
+ **************************************************************************/
 
 
 /**************************************************************************/
@@ -82,7 +81,7 @@
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT  _txe_timer_create(TX_TIMER *timer_ptr, CHAR *name_ptr, 
+UINT  _txe_timer_create(TX_TIMER *timer_ptr, CHAR *name_ptr,
             VOID (*expiration_function)(ULONG id), ULONG expiration_input,
             ULONG initial_ticks, ULONG reschedule_ticks, UINT auto_activate, UINT timer_control_block_size)
 {
@@ -107,7 +106,7 @@ TX_THREAD       *thread_ptr;
         /* Timer pointer is invalid, return appropriate error code.  */
         status =  TX_TIMER_ERROR;
     }
-    
+
     /* Now check for invalid control block size.  */
     else if (timer_control_block_size != (sizeof(TX_TIMER)))
     {
@@ -135,12 +134,12 @@ TX_THREAD       *thread_ptr;
             /* Determine if this timer matches the current timer in the list.  */
             if (timer_ptr == next_timer)
             {
-        
+
                 break;
             }
             else
             {
-        
+
                 /* Move to next timer.  */
                 next_timer =  next_timer -> tx_timer_created_next;
             }
@@ -151,7 +150,7 @@ TX_THREAD       *thread_ptr;
 
         /* Decrement the preempt disable flag.  */
         _tx_thread_preempt_disable--;
-    
+
         /* Restore interrupts.  */
         TX_RESTORE
 
@@ -179,11 +178,11 @@ TX_THREAD       *thread_ptr;
             /* Check for an illegal activation.  */
             if (auto_activate != TX_AUTO_ACTIVATE)
             {
-    
+
                 /* And activation is not the other value.  */
                 if (auto_activate != TX_NO_ACTIVATE)
                 {
-        
+
                     /* Invalid activation selected, return appropriate error code.  */
                     status =  TX_ACTIVATE_ERROR;
                 }
@@ -212,11 +211,11 @@ TX_THREAD       *thread_ptr;
         /* Check for interrupt call.  */
         if (TX_THREAD_GET_SYSTEM_STATE() != ((ULONG) 0))
         {
-    
+
             /* Now, make sure the call is from an interrupt and not initialization.  */
             if (TX_THREAD_GET_SYSTEM_STATE() < TX_INITIALIZE_IN_PROGRESS)
             {
-        
+
                 /* Invalid caller of this function, return appropriate error code.  */
                 status =  TX_CALLER_ERROR;
             }

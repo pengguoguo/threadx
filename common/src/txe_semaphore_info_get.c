@@ -1,13 +1,12 @@
-/**************************************************************************/
-/*                                                                        */
-/*       Copyright (c) Microsoft Corporation. All rights reserved.        */
-/*                                                                        */
-/*       This software is licensed under the Microsoft Software License   */
-/*       Terms for Microsoft Azure RTOS. Full text of the license can be  */
-/*       found in the LICENSE file at https://aka.ms/AzureRTOS_EULA       */
-/*       and in the root directory of this software.                      */
-/*                                                                        */
-/**************************************************************************/
+/***************************************************************************
+ * Copyright (c) 2024 Microsoft Corporation 
+ * 
+ * This program and the accompanying materials are made available under the
+ * terms of the MIT License which is available at
+ * https://opensource.org/licenses/MIT.
+ * 
+ * SPDX-License-Identifier: MIT
+ **************************************************************************/
 
 
 /**************************************************************************/
@@ -78,8 +77,8 @@
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT  _txe_semaphore_info_get(TX_SEMAPHORE *semaphore_ptr, CHAR **name, ULONG *current_value, 
-                    TX_THREAD **first_suspended, ULONG *suspended_count, 
+UINT  _txe_semaphore_info_get(TX_SEMAPHORE *semaphore_ptr, CHAR **name, ULONG *current_value,
+                    TX_THREAD **first_suspended, ULONG *suspended_count,
                     TX_SEMAPHORE **next_semaphore)
 {
 
@@ -93,7 +92,7 @@ UINT        status;
         /* Semaphore pointer is invalid, return appropriate error code.  */
         status =  TX_SEMAPHORE_ERROR;
     }
-    
+
     /* Now check for a valid semaphore ID.  */
     else if (semaphore_ptr -> tx_semaphore_id != TX_SEMAPHORE_ID)
     {
@@ -105,7 +104,7 @@ UINT        status;
     {
 
         /* Otherwise, call the actual semaphore information get service.  */
-        status =  _tx_semaphore_info_get(semaphore_ptr, name, current_value, first_suspended, 
+        status =  _tx_semaphore_info_get(semaphore_ptr, name, current_value, first_suspended,
                                                                 suspended_count, next_semaphore);
     }
 

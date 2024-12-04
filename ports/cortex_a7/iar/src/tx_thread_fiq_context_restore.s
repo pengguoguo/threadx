@@ -1,13 +1,12 @@
-;/**************************************************************************/
-;/*                                                                        */
-;/*       Copyright (c) Microsoft Corporation. All rights reserved.        */
-;/*                                                                        */
-;/*       This software is licensed under the Microsoft Software License   */
-;/*       Terms for Microsoft Azure RTOS. Full text of the license can be  */
-;/*       found in the LICENSE file at https://aka.ms/AzureRTOS_EULA       */
-;/*       and in the root directory of this software.                      */
-;/*                                                                        */
-;/**************************************************************************/
+;/***************************************************************************
+; * Copyright (c) 2024 Microsoft Corporation 
+; * 
+; * This program and the accompanying materials are made available under the
+; * terms of the MIT License which is available at
+; * https://opensource.org/licenses/MIT.
+; * 
+; * SPDX-License-Identifier: MIT
+; **************************************************************************/
 ;
 ;
 ;/**************************************************************************/
@@ -58,7 +57,7 @@ SVC_MODE_BITS   DEFINE  0x13                    ; SVC mode value
 ;/*  FUNCTION                                               RELEASE        */ 
 ;/*                                                                        */ 
 ;/*    _tx_thread_fiq_context_restore                     Cortex-A7/IAR    */ 
-;/*                                                           6.1          */
+;/*                                                           6.1.9        */
 ;/*  AUTHOR                                                                */
 ;/*                                                                        */
 ;/*    William E. Lamie, Microsoft Corporation                             */
@@ -91,6 +90,9 @@ SVC_MODE_BITS   DEFINE  0x13                    ; SVC mode value
 ;/*    DATE              NAME                      DESCRIPTION             */
 ;/*                                                                        */
 ;/*  09-30-2020     William E. Lamie         Initial Version 6.1           */
+;/*  10-15-2021     William E. Lamie         Modified comment(s), added    */
+;/*                                            execution profile support,  */
+;/*                                            resulting in version 6.1.9  */
 ;/*                                                                        */
 ;/**************************************************************************/
 ;VOID   _tx_thread_fiq_context_restore(VOID)
@@ -106,7 +108,7 @@ _tx_thread_fiq_context_restore
     ORR     r0, r3, #DISABLE_INTS               ; Build interrupt disable value
     MSR     CPSR_cxsf, r0                       ; Lockout interrupts
 
-#ifdef TX_ENABLE_EXECUTION_CHANGE_NOTIFY
+#if (defined(TX_ENABLE_EXECUTION_CHANGE_NOTIFY) || defined(TX_EXECUTION_PROFILE_ENABLE))
 ;
 ;    /* Call the ISR exit function to indicate an ISR is complete.  */
 ;
@@ -138,7 +140,7 @@ _tx_thread_fiq_context_restore
 __tx_thread_fiq_not_nested_restore
 ;
 ;    /* Determine if a thread was interrupted and no preemption is required.  */
-;    else if (((_tx_thread_current_ptr) && (_tx_thread_current_ptr == _tx_thread_execute_ptr) 
+;    else if (((_tx_thread_current_ptr) && (_tx_thread_current_ptr == _tx_thread_execute_ptr))
 ;               || (_tx_thread_preempt_disable))
 ;    {
 ;

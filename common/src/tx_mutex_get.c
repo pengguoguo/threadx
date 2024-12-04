@@ -1,13 +1,12 @@
-/**************************************************************************/
-/*                                                                        */
-/*       Copyright (c) Microsoft Corporation. All rights reserved.        */
-/*                                                                        */
-/*       This software is licensed under the Microsoft Software License   */
-/*       Terms for Microsoft Azure RTOS. Full text of the license can be  */
-/*       found in the LICENSE file at https://aka.ms/AzureRTOS_EULA       */
-/*       and in the root directory of this software.                      */
-/*                                                                        */
-/**************************************************************************/
+/***************************************************************************
+ * Copyright (c) 2024 Microsoft Corporation 
+ * 
+ * This program and the accompanying materials are made available under the
+ * terms of the MIT License which is available at
+ * https://opensource.org/licenses/MIT.
+ * 
+ * SPDX-License-Identifier: MIT
+ **************************************************************************/
 
 
 /**************************************************************************/
@@ -126,7 +125,7 @@ UINT            status;
             /* Determine if priority inheritance is required.  */
             if (mutex_ptr -> tx_mutex_inherit == TX_TRUE)
             {
-         
+
                 /* Remember the current priority of thread.  */
                 mutex_ptr -> tx_mutex_original_priority =   thread_ptr -> tx_thread_priority;
 
@@ -178,7 +177,7 @@ UINT            status;
     else if (mutex_ptr -> tx_mutex_owner == thread_ptr)
     {
 
-        /* The owning thread is requesting the mutex again, just 
+        /* The owning thread is requesting the mutex again, just
            increment the ownership count.  */
         mutex_ptr -> tx_mutex_ownership_count++;
 
@@ -279,7 +278,7 @@ UINT            status;
                     previous_thread -> tx_thread_suspended_next =   thread_ptr;
                     next_thread -> tx_thread_suspended_previous =   thread_ptr;
                 }
-            
+
                 /* Increment the suspension count.  */
                 mutex_ptr -> tx_mutex_suspended_count++;
 
@@ -288,7 +287,7 @@ UINT            status;
 
 #ifdef TX_NOT_INTERRUPTABLE
 
-                /* Determine if we need to raise the priority of the thread 
+                /* Determine if we need to raise the priority of the thread
                    owning the mutex.  */
                 if (mutex_ptr -> tx_mutex_inherit == TX_TRUE)
                 {
@@ -304,7 +303,7 @@ UINT            status;
                     /* Determine if we have to update inherit priority level of the mutex owner.  */
                     if (thread_ptr -> tx_thread_priority < mutex_owner -> tx_thread_inherit_priority)
                     {
-                    
+
                         /* Remember the new priority inheritance priority.  */
                         mutex_owner -> tx_thread_inherit_priority =  thread_ptr -> tx_thread_priority;
                     }
@@ -347,7 +346,7 @@ UINT            status;
                 /* Restore interrupts.  */
                 TX_RESTORE
 
-                /* Determine if we need to raise the priority of the thread 
+                /* Determine if we need to raise the priority of the thread
                    owning the mutex.  */
                 if (mutex_ptr -> tx_mutex_inherit == TX_TRUE)
                 {
@@ -363,7 +362,7 @@ UINT            status;
                     /* Determine if we have to update inherit priority level of the mutex owner.  */
                     if (thread_ptr -> tx_thread_priority < mutex_owner -> tx_thread_inherit_priority)
                     {
-                    
+
                         /* Remember the new priority inheritance priority.  */
                         mutex_owner -> tx_thread_inherit_priority =  thread_ptr -> tx_thread_priority;
                     }

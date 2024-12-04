@@ -8,9 +8,6 @@ In order to build the ThreadX SMP library and the ThreadX SMP demonstration, fir
 the 'tx' and 'sample_threadx' projects (located in the "example_build" directory) 
 into your DS workspace.
 
-Note: the projects were made using DS-5, so DS will prompt you to migrate the projects.
-This is expected, so please do so.
-
 
 2.  Building the ThreadX SMP run-time Library
 
@@ -246,6 +243,9 @@ void    tx_thread_fp_disable(void);
 For generic code revision information, please refer to the readme_threadx_generic.txt
 file, which is included in your distribution. The following details the revision
 information associated with this specific port of ThreadX SMP:
+
+04-02-2021  Release 6.1.6 changes:
+            tx_port.h                           Updated macro definition
 
 09-30-2020  Initial ThreadX 6.1 version for Cortex-A5x using ARM GCC and DS-5 tools.
 

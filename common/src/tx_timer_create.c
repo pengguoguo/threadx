@@ -1,13 +1,12 @@
-/**************************************************************************/
-/*                                                                        */
-/*       Copyright (c) Microsoft Corporation. All rights reserved.        */
-/*                                                                        */
-/*       This software is licensed under the Microsoft Software License   */
-/*       Terms for Microsoft Azure RTOS. Full text of the license can be  */
-/*       found in the LICENSE file at https://aka.ms/AzureRTOS_EULA       */
-/*       and in the root directory of this software.                      */
-/*                                                                        */
-/**************************************************************************/
+/***************************************************************************
+ * Copyright (c) 2024 Microsoft Corporation 
+ * 
+ * This program and the accompanying materials are made available under the
+ * terms of the MIT License which is available at
+ * https://opensource.org/licenses/MIT.
+ * 
+ * SPDX-License-Identifier: MIT
+ **************************************************************************/
 
 
 /**************************************************************************/
@@ -75,7 +74,7 @@
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT  _tx_timer_create(TX_TIMER *timer_ptr, CHAR *name_ptr, 
+UINT  _tx_timer_create(TX_TIMER *timer_ptr, CHAR *name_ptr,
             VOID (*expiration_function)(ULONG id), ULONG expiration_input,
             ULONG initial_ticks, ULONG reschedule_ticks, UINT auto_activate)
 {
@@ -95,7 +94,7 @@ TX_TIMER        *previous_timer;
     timer_ptr -> tx_timer_internal.tx_timer_internal_re_initialize_ticks =  reschedule_ticks;
     timer_ptr -> tx_timer_internal.tx_timer_internal_timeout_function =     expiration_function;
     timer_ptr -> tx_timer_internal.tx_timer_internal_timeout_param =        expiration_input;
-    
+
     /* Disable interrupts to put the timer on the created list.  */
     TX_DISABLE
 
@@ -130,7 +129,7 @@ TX_TIMER        *previous_timer;
 
     /* Increment the number of created timers.  */
     _tx_timer_created_count++;
-    
+
     /* Optional timer create extended processing.  */
     TX_TIMER_CREATE_EXTENSION(timer_ptr)
 

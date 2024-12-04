@@ -1,13 +1,12 @@
-/**************************************************************************/
-/*                                                                        */
-/*       Copyright (c) Microsoft Corporation. All rights reserved.        */
-/*                                                                        */
-/*       This software is licensed under the Microsoft Software License   */
-/*       Terms for Microsoft Azure RTOS. Full text of the license can be  */
-/*       found in the LICENSE file at https://aka.ms/AzureRTOS_EULA       */
-/*       and in the root directory of this software.                      */
-/*                                                                        */
-/**************************************************************************/
+/***************************************************************************
+ * Copyright (c) 2024 Microsoft Corporation 
+ * 
+ * This program and the accompanying materials are made available under the
+ * terms of the MIT License which is available at
+ * https://opensource.org/licenses/MIT.
+ * 
+ * SPDX-License-Identifier: MIT
+ **************************************************************************/
 
 
 /**************************************************************************/
@@ -26,7 +25,7 @@
 /*  PORT SPECIFIC C INFORMATION                            RELEASE        */
 /*                                                                        */
 /*    tx_port.h                                         SMP/Linux/GCC     */
-/*                                                           6.1          */
+/*                                                           6.1.9        */
 /*                                                                        */
 /*  AUTHOR                                                                */
 /*                                                                        */
@@ -48,6 +47,12 @@
 /*    DATE              NAME                      DESCRIPTION             */
 /*                                                                        */
 /*  09-30-2020     William E. Lamie         Initial Version 6.1           */
+/*  04-02-2021     Bhupendra Naphade        Modified comment(s),updated   */
+/*                                            macro definition,           */
+/*                                            resulting in version 6.1.6  */
+/*  10-15-2021     William E. Lamie         Modified comment(s), added    */
+/*                                            symbol ULONG64_DEFINED,     */
+/*                                            resulting in version 6.1.9  */
 /*                                                                        */
 /**************************************************************************/
 
@@ -165,7 +170,7 @@ typedef unsigned long                           ULONG;
 typedef short                                   SHORT;
 typedef unsigned short                          USHORT;
 typedef uint64_t                                ULONG64;
-
+#define ULONG64_DEFINED
 
 
 /* Define automated coverage test extensions...  These are required for the 
@@ -600,7 +605,7 @@ void                        _tx_thread_smp_debug_entry_insert(ULONG id, ULONG su
    is used to define a local function save area for the disable and restore
    macros.  */
 
-#define TX_INTERRUPT_SAVE_AREA                  unsigned int tx_interrupt_save;
+#define TX_INTERRUPT_SAVE_AREA                  UINT tx_interrupt_save;
 
 #define TX_DISABLE                              tx_interrupt_save =  _tx_thread_smp_protect();
 #define TX_RESTORE                              _tx_thread_smp_unprotect(tx_interrupt_save);
@@ -628,7 +633,7 @@ void                        _tx_thread_smp_debug_entry_insert(ULONG id, ULONG su
 
 #ifdef TX_THREAD_INIT
 CHAR                            _tx_version_id[] =
-                                    "Copyright (c) Microsoft Corporation. All rights reserved.  *  ThreadX SMP/Linux/gcc Version 6.1 *";
+                                    "Copyright (c) 2024 Microsoft Corporation.  *  ThreadX SMP/Linux/gcc Version 6.4.1 *";
 #else
 extern  CHAR                    _tx_version_id[];
 #endif

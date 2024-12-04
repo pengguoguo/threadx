@@ -1,13 +1,12 @@
-/**************************************************************************/
-/*                                                                        */
-/*       Copyright (c) Microsoft Corporation. All rights reserved.        */
-/*                                                                        */
-/*       This software is licensed under the Microsoft Software License   */
-/*       Terms for Microsoft Azure RTOS. Full text of the license can be  */
-/*       found in the LICENSE file at https://aka.ms/AzureRTOS_EULA       */
-/*       and in the root directory of this software.                      */
-/*                                                                        */
-/**************************************************************************/
+/***************************************************************************
+ * Copyright (c) 2024 Microsoft Corporation 
+ * 
+ * This program and the accompanying materials are made available under the
+ * terms of the MIT License which is available at
+ * https://opensource.org/licenses/MIT.
+ * 
+ * SPDX-License-Identifier: MIT
+ **************************************************************************/
 
 
 /**************************************************************************/
@@ -56,10 +55,10 @@
 #define TX_SEMAPHORE_ID                         ((ULONG) 0x53454D41)
 
 
-/* Determine if in-line component initialization is supported by the 
+/* Determine if in-line component initialization is supported by the
    caller.  */
 #ifdef TX_INVOKE_INLINE_INITIALIZATION
-            /* Yes, in-line initialization is supported, remap the 
+            /* Yes, in-line initialization is supported, remap the
                semaphore initialization function.  */
 #ifndef TX_SEMAPHORE_ENABLE_PERFORMANCE_INFO
 #define _tx_semaphore_initialize() \
@@ -76,7 +75,7 @@
 #endif
 #define TX_SEMAPHORE_INIT
 #else
-            /* No in-line initialization is supported, use standard 
+            /* No in-line initialization is supported, use standard
                function call.  */
 VOID        _tx_semaphore_initialize(VOID);
 #endif

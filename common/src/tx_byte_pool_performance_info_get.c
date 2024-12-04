@@ -1,13 +1,12 @@
-/**************************************************************************/
-/*                                                                        */
-/*       Copyright (c) Microsoft Corporation. All rights reserved.        */
-/*                                                                        */
-/*       This software is licensed under the Microsoft Software License   */
-/*       Terms for Microsoft Azure RTOS. Full text of the license can be  */
-/*       found in the LICENSE file at https://aka.ms/AzureRTOS_EULA       */
-/*       and in the root directory of this software.                      */
-/*                                                                        */
-/**************************************************************************/
+/***************************************************************************
+ * Copyright (c) 2024 Microsoft Corporation 
+ * 
+ * This program and the accompanying materials are made available under the
+ * terms of the MIT License which is available at
+ * https://opensource.org/licenses/MIT.
+ * 
+ * SPDX-License-Identifier: MIT
+ **************************************************************************/
 
 
 /**************************************************************************/
@@ -102,15 +101,15 @@ UINT        status;
     /* Determine if this is a legal request.  */
     if (pool_ptr == TX_NULL)
     {
-        
+
         /* Byte pool pointer is illegal, return error.  */
         status =  TX_PTR_ERROR;
     }
-    
+
     /* Determine if the pool ID is invalid.  */
     else if (pool_ptr -> tx_byte_pool_id != TX_BYTE_POOL_ID)
     {
-        
+
         /* Byte pool pointer is illegal, return error.  */
         status =  TX_PTR_ERROR;
     }
@@ -132,7 +131,7 @@ UINT        status;
         /* Retrieve the number of allocates on this byte pool.  */
         if (allocates != TX_NULL)
         {
-    
+
             *allocates =  pool_ptr -> tx_byte_pool_performance_allocate_count;
         }
 
@@ -146,35 +145,35 @@ UINT        status;
         /* Retrieve the number of fragments searched in this byte pool.  */
         if (fragments_searched != TX_NULL)
         {
-    
+
             *fragments_searched =  pool_ptr -> tx_byte_pool_performance_search_count;
         }
-    
+
         /* Retrieve the number of fragments merged on this byte pool.  */
         if (merges != TX_NULL)
         {
 
             *merges =  pool_ptr -> tx_byte_pool_performance_merge_count;
         }
-    
+
         /* Retrieve the number of fragment splits on this byte pool.  */
         if (splits != TX_NULL)
         {
-    
+
             *splits =  pool_ptr -> tx_byte_pool_performance_split_count;
         }
 
         /* Retrieve the number of suspensions on this byte pool.  */
         if (suspensions != TX_NULL)
         {
-    
+
             *suspensions =  pool_ptr -> tx_byte_pool_performance_suspension_count;
         }
 
         /* Retrieve the number of timeouts on this byte pool.  */
         if (timeouts != TX_NULL)
         {
-    
+
             *timeouts =  pool_ptr -> tx_byte_pool_performance_timeout_count;
         }
 
@@ -184,7 +183,7 @@ UINT        status;
         /* Return completion status.  */
         status =  TX_SUCCESS;
     }
-    
+
     /* Return completion status.  */
     return(status);
 #else
@@ -195,55 +194,55 @@ UINT        status;
     /* Access input arguments just for the sake of lint, MISRA, etc.  */
     if (pool_ptr != TX_NULL)
     {
-    
+
         /* Not enabled, return error.  */
         status =  TX_FEATURE_NOT_ENABLED;
     }
     else if (allocates != TX_NULL)
     {
-    
+
         /* Not enabled, return error.  */
         status =  TX_FEATURE_NOT_ENABLED;
     }
     else if (releases != TX_NULL)
     {
-    
+
         /* Not enabled, return error.  */
         status =  TX_FEATURE_NOT_ENABLED;
     }
     else if (fragments_searched != TX_NULL)
     {
-    
+
         /* Not enabled, return error.  */
         status =  TX_FEATURE_NOT_ENABLED;
     }
     else if (merges != TX_NULL)
     {
-    
+
         /* Not enabled, return error.  */
         status =  TX_FEATURE_NOT_ENABLED;
     }
     else if (splits != TX_NULL)
     {
-    
+
         /* Not enabled, return error.  */
         status =  TX_FEATURE_NOT_ENABLED;
     }
     else if (suspensions != TX_NULL)
     {
-    
+
         /* Not enabled, return error.  */
         status =  TX_FEATURE_NOT_ENABLED;
     }
     else if (timeouts != TX_NULL)
     {
-    
+
         /* Not enabled, return error.  */
         status =  TX_FEATURE_NOT_ENABLED;
     }
     else
     {
-    
+
         /* Not enabled, return error.  */
         status =  TX_FEATURE_NOT_ENABLED;
     }

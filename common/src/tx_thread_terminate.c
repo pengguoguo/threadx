@@ -1,13 +1,12 @@
-/**************************************************************************/
-/*                                                                        */
-/*       Copyright (c) Microsoft Corporation. All rights reserved.        */
-/*                                                                        */
-/*       This software is licensed under the Microsoft Software License   */
-/*       Terms for Microsoft Azure RTOS. Full text of the license can be  */
-/*       found in the LICENSE file at https://aka.ms/AzureRTOS_EULA       */
-/*       and in the root directory of this software.                      */
-/*                                                                        */
-/**************************************************************************/
+/***************************************************************************
+ * Copyright (c) 2024 Microsoft Corporation 
+ * 
+ * This program and the accompanying materials are made available under the
+ * terms of the MIT License which is available at
+ * https://opensource.org/licenses/MIT.
+ * 
+ * SPDX-License-Identifier: MIT
+ **************************************************************************/
 
 
 /**************************************************************************/
@@ -201,7 +200,7 @@ ULONG       suspension_sequence;
             /* Thread state change.  */
             TX_THREAD_STATE_CHANGE(thread_ptr, TX_TERMINATED)
 
-            /* Set the suspending flag.  This prevents the thread from being 
+            /* Set the suspending flag.  This prevents the thread from being
                resumed before the cleanup routine is executed.  */
             thread_ptr -> tx_thread_suspending =  TX_TRUE;
 
@@ -279,7 +278,7 @@ ULONG       suspension_sequence;
         if (_tx_thread_mutex_release != TX_NULL)
         {
 
-            /* Yes, call the mutex release function via a function pointer that 
+            /* Yes, call the mutex release function via a function pointer that
                is setup during initialization.  */
             (_tx_thread_mutex_release)(thread_ptr);
         }

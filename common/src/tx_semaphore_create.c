@@ -1,13 +1,12 @@
-/**************************************************************************/
-/*                                                                        */
-/*       Copyright (c) Microsoft Corporation. All rights reserved.        */
-/*                                                                        */
-/*       This software is licensed under the Microsoft Software License   */
-/*       Terms for Microsoft Azure RTOS. Full text of the license can be  */
-/*       found in the LICENSE file at https://aka.ms/AzureRTOS_EULA       */
-/*       and in the root directory of this software.                      */
-/*                                                                        */
-/**************************************************************************/
+/***************************************************************************
+ * Copyright (c) 2024 Microsoft Corporation 
+ * 
+ * This program and the accompanying materials are made available under the
+ * terms of the MIT License which is available at
+ * https://opensource.org/licenses/MIT.
+ * 
+ * SPDX-License-Identifier: MIT
+ **************************************************************************/
 
 
 /**************************************************************************/
@@ -87,7 +86,7 @@ TX_SEMAPHORE    *previous_semaphore;
     /* Setup the basic semaphore fields.  */
     semaphore_ptr -> tx_semaphore_name =             name_ptr;
     semaphore_ptr -> tx_semaphore_count =            initial_count;
-    
+
     /* Disable interrupts to place the semaphore on the created list.  */
     TX_DISABLE
 
@@ -119,7 +118,7 @@ TX_SEMAPHORE    *previous_semaphore;
         semaphore_ptr -> tx_semaphore_created_previous =  previous_semaphore;
         semaphore_ptr -> tx_semaphore_created_next =      next_semaphore;
     }
-    
+
     /* Increment the created count.  */
     _tx_semaphore_created_count++;
 

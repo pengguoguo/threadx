@@ -1,19 +1,18 @@
-/**************************************************************************/
-/*                                                                        */
-/*       Copyright (c) Microsoft Corporation. All rights reserved.        */
-/*                                                                        */
-/*       This software is licensed under the Microsoft Software License   */
-/*       Terms for Microsoft Azure RTOS. Full text of the license can be  */
-/*       found in the LICENSE file at https://aka.ms/AzureRTOS_EULA       */
-/*       and in the root directory of this software.                      */
-/*                                                                        */
-/**************************************************************************/
+/***************************************************************************
+ * Copyright (c) 2024 Microsoft Corporation 
+ * 
+ * This program and the accompanying materials are made available under the
+ * terms of the MIT License which is available at
+ * https://opensource.org/licenses/MIT.
+ * 
+ * SPDX-License-Identifier: MIT
+ **************************************************************************/
 
 
 /**************************************************************************/
 /**************************************************************************/
-/**                                                                       */ 
-/** ThreadX Component                                                     */ 
+/**                                                                       */
+/** ThreadX Component                                                     */
 /**                                                                       */
 /**   Thread - High Level SMP Support                                     */
 /**                                                                       */
@@ -32,44 +31,44 @@
 #include "tx_thread.h"
 
 
-/**************************************************************************/ 
-/*                                                                        */ 
-/*  FUNCTION                                               RELEASE        */ 
-/*                                                                        */ 
-/*    _tx_thread_smp_core_exclude                        PORTABLE SMP     */ 
+/**************************************************************************/
+/*                                                                        */
+/*  FUNCTION                                               RELEASE        */
+/*                                                                        */
+/*    _tx_thread_smp_core_exclude                        PORTABLE SMP     */
 /*                                                           6.1          */
 /*  AUTHOR                                                                */
 /*                                                                        */
 /*    William E. Lamie, Microsoft Corporation                             */
 /*                                                                        */
 /*  DESCRIPTION                                                           */
-/*                                                                        */ 
-/*    This function allows the application to exclude one or more cores   */ 
-/*    from executing the specified thread.                                */ 
-/*                                                                        */ 
-/*  INPUT                                                                 */ 
-/*                                                                        */ 
-/*    thread_ptr                            Pointer to the thread         */ 
-/*    exclusion_map                         Bit map of exclusion list,    */ 
-/*                                            where bit 0 set means that  */ 
-/*                                            this thread cannot run on   */ 
-/*                                            core0, etc.                 */ 
-/*                                                                        */ 
-/*  OUTPUT                                                                */ 
-/*                                                                        */ 
-/*    Status                                                              */ 
-/*                                                                        */ 
-/*  CALLS                                                                 */ 
-/*                                                                        */ 
-/*    _tx_thread_smp_rebalance_execute_list Build execution list          */ 
-/*    _tx_thread_system_return              System return                 */ 
-/*                                                                        */ 
-/*  CALLED BY                                                             */ 
-/*                                                                        */ 
-/*    Application Code                                                    */ 
-/*                                                                        */ 
-/*  RELEASE HISTORY                                                       */ 
-/*                                                                        */ 
+/*                                                                        */
+/*    This function allows the application to exclude one or more cores   */
+/*    from executing the specified thread.                                */
+/*                                                                        */
+/*  INPUT                                                                 */
+/*                                                                        */
+/*    thread_ptr                            Pointer to the thread         */
+/*    exclusion_map                         Bit map of exclusion list,    */
+/*                                            where bit 0 set means that  */
+/*                                            this thread cannot run on   */
+/*                                            core0, etc.                 */
+/*                                                                        */
+/*  OUTPUT                                                                */
+/*                                                                        */
+/*    Status                                                              */
+/*                                                                        */
+/*  CALLS                                                                 */
+/*                                                                        */
+/*    _tx_thread_smp_rebalance_execute_list Build execution list          */
+/*    _tx_thread_system_return              System return                 */
+/*                                                                        */
+/*  CALLED BY                                                             */
+/*                                                                        */
+/*    Application Code                                                    */
+/*                                                                        */
+/*  RELEASE HISTORY                                                       */
+/*                                                                        */
 /*    DATE              NAME                      DESCRIPTION             */
 /*                                                                        */
 /*  09-30-2020     William E. Lamie         Initial Version 6.1           */
@@ -94,7 +93,7 @@ UINT            status;
     /* First, make sure the thread pointer is valid.  */
     if (thread_ptr == TX_NULL)
     {
-    
+
         /* Return pointer error.  */
         status =  TX_THREAD_ERROR;
     }
@@ -102,7 +101,7 @@ UINT            status;
     /* Check for valid ID.  */
     else if (thread_ptr -> tx_thread_id != TX_THREAD_ID)
     {
-    
+
         /* Return pointer error.  */
         status =  TX_THREAD_ERROR;
     }
@@ -120,7 +119,7 @@ UINT            status;
         /* Debug entry.  */
         _tx_thread_smp_debug_entry_insert(2, 0, thread_ptr);
 #endif
-    
+
         /* Build the bitmap for the last mapped core.  */
         mapped_core =  (((ULONG) 1) << thread_ptr -> tx_thread_smp_core_mapped);
 
@@ -134,14 +133,14 @@ UINT            status;
         /* Determine if this is within the now available cores.  */
         if ((mapped_core & available_cores) == ((ULONG) 0))
         {
-    
+
             /* Determine if there are any cores available.  */
             if (available_cores == ((ULONG) 0))
             {
-            
+
                 /* No cores are available, simply set the last running core to 0.  */
                 thread_ptr -> tx_thread_smp_core_mapped =  ((UINT) 0);
-            } 
+            }
             else
             {
 
@@ -168,8 +167,8 @@ UINT            status;
 
         /* Determine if the thread is ready.  */
         if (thread_ptr -> tx_thread_state == TX_READY)
-        {      
-    
+        {
+
             /* Pickup the index.  */
             core_index =  TX_SMP_CORE_ID;
 
@@ -181,17 +180,17 @@ UINT            status;
             /* Debug entry.  */
             _tx_thread_smp_debug_entry_insert(3, 0, thread_ptr);
 #endif
-    
+
             /* Determine if this thread needs to return to the system.  */
-            
+
             /* Is there a difference between the current and execute thread pointers?  */
-            if (_tx_thread_execute_ptr[core_index] != _tx_thread_current_ptr[core_index]) 
+            if (_tx_thread_execute_ptr[core_index] != _tx_thread_current_ptr[core_index])
             {
-            
+
                 /* Yes, check to see if we are at the thread level.  */
                 if (_tx_thread_system_state[core_index] == ((ULONG) 0))
                 {
-                
+
                     /* At the thread level, check for the preempt disable flag being set.  */
                     if (_tx_thread_preempt_disable == ((UINT) 0))
                     {
@@ -200,7 +199,7 @@ UINT            status;
 
                         /* Increment the preempt disable flag in order to keep the protection.  */
                         _tx_thread_preempt_disable++;
-        
+
                         /* Restore interrupts.  */
                         TX_RESTORE
 #endif
@@ -221,16 +220,16 @@ UINT            status;
                 }
             }
         }
-        
+
         /* Determine if the protection still needs to be restored.  */
         if (restore_needed == TX_TRUE)
         {
-    
+
             /* Restore interrupts.  */
             TX_RESTORE
         }
     }
-    
+
     /* Return status.  */
     return(status);
 }

@@ -1,19 +1,18 @@
-/**************************************************************************/
-/*                                                                        */
-/*       Copyright (c) Microsoft Corporation. All rights reserved.        */
-/*                                                                        */
-/*       This software is licensed under the Microsoft Software License   */
-/*       Terms for Microsoft Azure RTOS. Full text of the license can be  */
-/*       found in the LICENSE file at https://aka.ms/AzureRTOS_EULA       */
-/*       and in the root directory of this software.                      */
-/*                                                                        */
-/**************************************************************************/
+/***************************************************************************
+ * Copyright (c) 2024 Microsoft Corporation 
+ * 
+ * This program and the accompanying materials are made available under the
+ * terms of the MIT License which is available at
+ * https://opensource.org/licenses/MIT.
+ * 
+ * SPDX-License-Identifier: MIT
+ **************************************************************************/
 
 
 /**************************************************************************/
 /**************************************************************************/
-/**                                                                       */ 
-/** ThreadX Component                                                     */ 
+/**                                                                       */
+/** ThreadX Component                                                     */
 /**                                                                       */
 /**   Byte Memory                                                         */
 /**                                                                       */
@@ -30,47 +29,49 @@
 #include "tx_byte_pool.h"
 
 
-/**************************************************************************/ 
-/*                                                                        */ 
-/*  FUNCTION                                               RELEASE        */ 
-/*                                                                        */ 
-/*    _tx_byte_pool_cleanup                               PORTABLE C      */ 
+/**************************************************************************/
+/*                                                                        */
+/*  FUNCTION                                               RELEASE        */
+/*                                                                        */
+/*    _tx_byte_pool_cleanup                               PORTABLE C      */
 /*                                                           6.1          */
 /*  AUTHOR                                                                */
 /*                                                                        */
 /*    William E. Lamie, Microsoft Corporation                             */
 /*                                                                        */
 /*  DESCRIPTION                                                           */
-/*                                                                        */ 
-/*    This function processes byte allocate timeout and thread terminate  */ 
-/*    actions that require the byte pool data structures to be cleaned    */ 
-/*    up.                                                                 */ 
-/*                                                                        */ 
-/*  INPUT                                                                 */ 
-/*                                                                        */ 
-/*    thread_ptr                        Pointer to suspended thread's     */ 
-/*                                        control block                   */ 
-/*                                                                        */ 
-/*  OUTPUT                                                                */ 
-/*                                                                        */ 
-/*    None                                                                */ 
-/*                                                                        */ 
-/*  CALLS                                                                 */ 
-/*                                                                        */ 
-/*    _tx_thread_system_resume          Resume thread service             */ 
-/*    _tx_thread_system_ni_resume       Non-interruptable resume thread   */ 
-/*                                                                        */ 
-/*  CALLED BY                                                             */ 
-/*                                                                        */ 
-/*    _tx_thread_timeout                Thread timeout processing         */ 
-/*    _tx_thread_terminate              Thread terminate processing       */ 
-/*    _tx_thread_wait_abort             Thread wait abort processing      */ 
-/*                                                                        */ 
-/*  RELEASE HISTORY                                                       */ 
-/*                                                                        */ 
+/*                                                                        */
+/*    This function processes byte allocate timeout and thread terminate  */
+/*    actions that require the byte pool data structures to be cleaned    */
+/*    up.                                                                 */
+/*                                                                        */
+/*  INPUT                                                                 */
+/*                                                                        */
+/*    thread_ptr                        Pointer to suspended thread's     */
+/*                                        control block                   */
+/*                                                                        */
+/*  OUTPUT                                                                */
+/*                                                                        */
+/*    None                                                                */
+/*                                                                        */
+/*  CALLS                                                                 */
+/*                                                                        */
+/*    _tx_thread_system_resume          Resume thread service             */
+/*    _tx_thread_system_ni_resume       Non-interruptable resume thread   */
+/*                                                                        */
+/*  CALLED BY                                                             */
+/*                                                                        */
+/*    _tx_thread_timeout                Thread timeout processing         */
+/*    _tx_thread_terminate              Thread terminate processing       */
+/*    _tx_thread_wait_abort             Thread wait abort processing      */
+/*                                                                        */
+/*  RELEASE HISTORY                                                       */
+/*                                                                        */
 /*    DATE              NAME                      DESCRIPTION             */
 /*                                                                        */
-/*  09-30-2020     William E. Lamie         Initial Version 6.1           */
+/*  05-19-2020     William E. Lamie         Initial Version 6.0           */
+/*  09-30-2020     Yuxin Zhou               Modified comment(s),          */
+/*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
 VOID  _tx_byte_pool_cleanup(TX_THREAD *thread_ptr, ULONG suspension_sequence)
@@ -80,12 +81,12 @@ VOID  _tx_byte_pool_cleanup(TX_THREAD *thread_ptr, ULONG suspension_sequence)
 TX_INTERRUPT_SAVE_AREA
 #endif
 
-TX_BYTE_POOL        *pool_ptr;            
+TX_BYTE_POOL        *pool_ptr;
 UINT                suspended_count;
 TX_THREAD           *next_thread;
 TX_THREAD           *previous_thread;
 
-    
+
 #ifndef TX_NOT_INTERRUPTABLE
 
     /* Disable interrupts to remove the suspended thread from the byte pool.  */
@@ -94,7 +95,7 @@ TX_THREAD           *previous_thread;
     /* Determine if the cleanup is still required.  */
     if (thread_ptr -> tx_thread_suspend_cleanup == &(_tx_byte_pool_cleanup))
     {
-    
+
         /* Check for valid suspension sequence.  */
         if (suspension_sequence == thread_ptr -> tx_thread_suspension_sequence)
         {
@@ -105,7 +106,7 @@ TX_THREAD           *previous_thread;
             /* Check for a NULL byte pool pointer.  */
             if (pool_ptr != TX_NULL)
             {
-            
+
                 /* Check for valid pool ID.  */
                 if (pool_ptr -> tx_byte_pool_id == TX_BYTE_POOL_ID)
                 {
@@ -124,18 +125,18 @@ TX_THREAD           *previous_thread;
 
                         /* Decrement the suspension count.  */
                         pool_ptr -> tx_byte_pool_suspended_count--;
-            
+
                         /* Pickup the suspended count.  */
                         suspended_count =  pool_ptr -> tx_byte_pool_suspended_count;
 
                         /* Remove the suspended thread from the list.  */
-    
+
                         /* See if this is the only suspended thread on the list.  */
                         if (suspended_count == TX_NO_SUSPENSIONS)
                         {
 
                             /* Yes, the only suspended thread.  */
-    
+
                             /* Update the head pointer.  */
                             pool_ptr -> tx_byte_pool_suspension_list =  TX_NULL;
                         }
@@ -153,18 +154,18 @@ TX_THREAD           *previous_thread;
                             /* Determine if we need to update the head pointer.  */
                             if (pool_ptr -> tx_byte_pool_suspension_list == thread_ptr)
                             {
-            
+
                                 /* Update the list head pointer.  */
                                 pool_ptr -> tx_byte_pool_suspension_list =      next_thread;
                             }
-                        } 
- 
+                        }
+
                         /* Now we need to determine if this cleanup is from a terminate, timeout,
                            or from a wait abort.  */
                         if (thread_ptr -> tx_thread_state == TX_BYTE_MEMORY)
                         {
 
-                            /* Timeout condition and the thread still suspended on the byte pool.  
+                            /* Timeout condition and the thread still suspended on the byte pool.
                                Setup return error status and resume the thread.  */
 
 #ifdef TX_BYTE_POOL_ENABLE_PERFORMANCE_INFO
@@ -199,7 +200,7 @@ TX_THREAD           *previous_thread;
 #endif
                         }
 #ifndef TX_NOT_INTERRUPTABLE
-                    }                        
+                    }
                 }
             }
         }

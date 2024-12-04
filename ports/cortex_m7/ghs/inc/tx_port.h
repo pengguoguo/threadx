@@ -1,13 +1,12 @@
-/**************************************************************************/
-/*                                                                        */
-/*       Copyright (c) Microsoft Corporation. All rights reserved.        */
-/*                                                                        */
-/*       This software is licensed under the Microsoft Software License   */
-/*       Terms for Microsoft Azure RTOS. Full text of the license can be  */
-/*       found in the LICENSE file at https://aka.ms/AzureRTOS_EULA       */
-/*       and in the root directory of this software.                      */
-/*                                                                        */
-/**************************************************************************/
+/***************************************************************************
+ * Copyright (c) 2024 Microsoft Corporation 
+ * 
+ * This program and the accompanying materials are made available under the
+ * terms of the MIT License which is available at
+ * https://opensource.org/licenses/MIT.
+ * 
+ * SPDX-License-Identifier: MIT
+ **************************************************************************/
 
 
 /**************************************************************************/
@@ -26,7 +25,7 @@
 /*  PORT SPECIFIC C INFORMATION                            RELEASE        */
 /*                                                                        */
 /*    tx_port.h                                         Cortex-M7/GHS     */
-/*                                                           6.1          */
+/*                                                           6.1.6        */
 /*                                                                        */
 /*  AUTHOR                                                                */
 /*                                                                        */
@@ -48,6 +47,9 @@
 /*    DATE              NAME                      DESCRIPTION             */
 /*                                                                        */
 /*  09-30-2020     William E. Lamie         Initial Version 6.1           */
+/*  04-02-2021     Bhupendra Naphade        Modified comment(s),updated   */
+/*                                            macro definition,           */
+/*                                            resulting in version 6.1.6  */
 /*                                                                        */
 /**************************************************************************/
 
@@ -324,7 +326,7 @@ typedef unsigned short                          USHORT;
 UINT                                            _tx_thread_interrupt_disable(VOID);
 VOID                                            _tx_thread_interrupt_restore(UINT previous_posture);
 
-#define TX_INTERRUPT_SAVE_AREA                  register int interrupt_save;
+#define TX_INTERRUPT_SAVE_AREA                  register INT interrupt_save;
 
 #define TX_DISABLE                              interrupt_save = _tx_thread_interrupt_control(TX_INT_DISABLE);
 
@@ -332,7 +334,7 @@ VOID                                            _tx_thread_interrupt_restore(UIN
 
 #else
 
-#define TX_INTERRUPT_SAVE_AREA                  register int interrupt_save;
+#define TX_INTERRUPT_SAVE_AREA                  register INT interrupt_save;
 
 /* Define ThreadX interrupt lockout and restore macros using
    asm macros.  */
@@ -383,8 +385,8 @@ void    tx_thread_fpu_disable(void);
 /* Define the version ID of ThreadX.  This may be utilized by the application.  */
 
 #ifdef TX_THREAD_INIT
-CHAR                            _tx_version_id[] = 
-                                    "Copyright (c) Microsoft Corporation. All rights reserved.  *  ThreadX Cortex-M7/GHS Version 6.1 *";
+CHAR                            _tx_version_id[] =
+                                    "Copyright (c) 2024 Microsoft Corporation.  *  ThreadX Cortex-M7/GHS Version 6.4.1 *";
 #else
 extern  CHAR                    _tx_version_id[];
 #endif

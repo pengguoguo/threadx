@@ -1,13 +1,12 @@
-/**************************************************************************/
-/*                                                                        */
-/*       Copyright (c) Microsoft Corporation. All rights reserved.        */
-/*                                                                        */
-/*       This software is licensed under the Microsoft Software License   */
-/*       Terms for Microsoft Azure RTOS. Full text of the license can be  */
-/*       found in the LICENSE file at https://aka.ms/AzureRTOS_EULA       */
-/*       and in the root directory of this software.                      */
-/*                                                                        */
-/**************************************************************************/
+/***************************************************************************
+ * Copyright (c) 2024 Microsoft Corporation 
+ * 
+ * This program and the accompanying materials are made available under the
+ * terms of the MIT License which is available at
+ * https://opensource.org/licenses/MIT.
+ * 
+ * SPDX-License-Identifier: MIT
+ **************************************************************************/
 
 
 /**************************************************************************/
@@ -51,7 +50,7 @@
 /*  OUTPUT                                                                */
 /*                                                                        */
 /*    TX_THREAD_ERROR                       Invalid thread pointer        */
-/*    TX_CALLER_ERROR                       Invalid caller of function    */  
+/*    TX_CALLER_ERROR                       Invalid caller of function    */
 /*    status                                Service return status         */
 /*                                                                        */
 /*  CALLS                                                                 */
@@ -90,7 +89,7 @@ TX_THREAD   *current_thread;
         /* Thread pointer is invalid, return appropriate error code.  */
         status =  TX_THREAD_ERROR;
     }
-    
+
     /* Now check for an invalid thread ID.  */
     else if (thread_ptr -> tx_thread_id != TX_THREAD_ID)
     {
@@ -118,12 +117,12 @@ TX_THREAD   *current_thread;
         /* Check for interrupt or initialization call.  */
         if (TX_THREAD_GET_SYSTEM_STATE() != ((ULONG) 0))
         {
-    
+
             /* Invalid caller of this function, return appropriate error code.  */
             status =  TX_CALLER_ERROR;
         }
     }
-    
+
     /* Determine if everything is okay.  */
     if (status == TX_SUCCESS)
     {

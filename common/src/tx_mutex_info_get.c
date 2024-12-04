@@ -1,13 +1,12 @@
-/**************************************************************************/
-/*                                                                        */
-/*       Copyright (c) Microsoft Corporation. All rights reserved.        */
-/*                                                                        */
-/*       This software is licensed under the Microsoft Software License   */
-/*       Terms for Microsoft Azure RTOS. Full text of the license can be  */
-/*       found in the LICENSE file at https://aka.ms/AzureRTOS_EULA       */
-/*       and in the root directory of this software.                      */
-/*                                                                        */
-/**************************************************************************/
+/***************************************************************************
+ * Copyright (c) 2024 Microsoft Corporation 
+ * 
+ * This program and the accompanying materials are made available under the
+ * terms of the MIT License which is available at
+ * https://opensource.org/licenses/MIT.
+ * 
+ * SPDX-License-Identifier: MIT
+ **************************************************************************/
 
 
 /**************************************************************************/
@@ -79,7 +78,7 @@
 /*                                                                        */
 /**************************************************************************/
 UINT  _tx_mutex_info_get(TX_MUTEX *mutex_ptr, CHAR **name, ULONG *count, TX_THREAD **owner,
-                    TX_THREAD **first_suspended, ULONG *suspended_count, 
+                    TX_THREAD **first_suspended, ULONG *suspended_count,
                     TX_MUTEX **next_mutex)
 {
 
@@ -101,45 +100,45 @@ TX_INTERRUPT_SAVE_AREA
     /* Retrieve the name of the mutex.  */
     if (name != TX_NULL)
     {
-    
+
         *name =  mutex_ptr -> tx_mutex_name;
     }
-    
+
     /* Retrieve the current ownership count of the mutex.  */
     if (count != TX_NULL)
     {
-    
+
         *count =  ((ULONG) mutex_ptr -> tx_mutex_ownership_count);
     }
-    
+
     /* Retrieve the current owner of the mutex.  */
     if (owner != TX_NULL)
     {
-    
+
         *owner =  mutex_ptr -> tx_mutex_owner;
     }
-    
+
     /* Retrieve the first thread suspended on this mutex.  */
     if (first_suspended != TX_NULL)
     {
-    
+
         *first_suspended =  mutex_ptr -> tx_mutex_suspension_list;
     }
-    
+
     /* Retrieve the number of threads suspended on this mutex.  */
     if (suspended_count != TX_NULL)
     {
-    
+
         *suspended_count =  (ULONG) mutex_ptr -> tx_mutex_suspended_count;
     }
-    
+
     /* Retrieve the pointer to the next mutex created.  */
     if (next_mutex != TX_NULL)
     {
-    
+
         *next_mutex =  mutex_ptr -> tx_mutex_created_next;
     }
-    
+
     /* Restore interrupts.  */
     TX_RESTORE
 

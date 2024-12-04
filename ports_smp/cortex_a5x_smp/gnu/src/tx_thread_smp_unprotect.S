@@ -1,19 +1,18 @@
-/**************************************************************************/
-/*                                                                        */
-/*       Copyright (c) Microsoft Corporation. All rights reserved.        */
-/*                                                                        */
-/*       This software is licensed under the Microsoft Software License   */
-/*       Terms for Microsoft Azure RTOS. Full text of the license can be  */
-/*       found in the LICENSE file at https://aka.ms/AzureRTOS_EULA       */
-/*       and in the root directory of this software.                      */
-/*                                                                        */
-/**************************************************************************/
+/***************************************************************************
+ * Copyright (c) 2024 Microsoft Corporation 
+ * 
+ * This program and the accompanying materials are made available under the
+ * terms of the MIT License which is available at
+ * https://opensource.org/licenses/MIT.
+ * 
+ * SPDX-License-Identifier: MIT
+ **************************************************************************/
 
 
 /**************************************************************************/
 /**************************************************************************/
-/**                                                                       */ 
-/** ThreadX Component                                                     */ 
+/**                                                                       */
+/** ThreadX Component                                                     */
 /**                                                                       */
 /**   Thread - Low Level SMP Support                                      */
 /**                                                                       */
@@ -21,59 +20,51 @@
 /**************************************************************************/
 
 
-/*
-#define TX_SOURCE_CODE
-#define TX_THREAD_SMP_SOURCE_CODE
-*/
-
-/* Include necessary system files.  */
-
-/*
-#include "tx_api.h"
-#include "tx_thread.h"
-#include "tx_timer.h"
-*/
-
     .text
     .align 3
-/**************************************************************************/ 
-/*                                                                        */ 
-/*  FUNCTION                                               RELEASE        */ 
-/*                                                                        */ 
-/*    _tx_thread_smp_unprotect                         Cortex-A5x-SMP/GNU */ 
-/*                                                           6.1          */
+/**************************************************************************/
+/*                                                                        */
+/*  FUNCTION                                               RELEASE        */
+/*                                                                        */
+/*    _tx_thread_smp_unprotect                         Cortex-A5x-SMP/GCC */
+/*                                                           6.1.11       */
 /*  AUTHOR                                                                */
 /*                                                                        */
 /*    William E. Lamie, Microsoft Corporation                             */
 /*                                                                        */
-/*  DESCRIPTION                                                           */ 
-/*                                                                        */ 
-/*    This function releases previously obtained protection. The supplied */ 
-/*    previous SR is restored. If the value of _tx_thread_system_state    */ 
-/*    and _tx_thread_preempt_disable are both zero, then multithreading   */ 
-/*    is enabled as well.                                                 */ 
-/*                                                                        */ 
-/*  INPUT                                                                 */ 
-/*                                                                        */ 
-/*    Previous Status Register                                            */ 
-/*                                                                        */ 
-/*  OUTPUT                                                                */ 
-/*                                                                        */ 
+/*  DESCRIPTION                                                           */
+/*                                                                        */
+/*    This function releases previously obtained protection. The supplied */
+/*    previous SR is restored. If the value of _tx_thread_system_state    */
+/*    and _tx_thread_preempt_disable are both zero, then multithreading   */
+/*    is enabled as well.                                                 */
+/*                                                                        */
+/*  INPUT                                                                 */
+/*                                                                        */
+/*    Previous Status Register                                            */
+/*                                                                        */
+/*  OUTPUT                                                                */
+/*                                                                        */
 /*    None                                                                */
-/*                                                                        */ 
-/*  CALLS                                                                 */ 
-/*                                                                        */ 
+/*                                                                        */
+/*  CALLS                                                                 */
+/*                                                                        */
 /*    None                                                                */
-/*                                                                        */ 
-/*  CALLED BY                                                             */ 
-/*                                                                        */ 
+/*                                                                        */
+/*  CALLED BY                                                             */
+/*                                                                        */
 /*    ThreadX Source                                                      */
-/*                                                                        */ 
-/*  RELEASE HISTORY                                                       */ 
-/*                                                                        */ 
+/*                                                                        */
+/*  RELEASE HISTORY                                                       */
+/*                                                                        */
 /*    DATE              NAME                      DESCRIPTION             */
 /*                                                                        */
-/*  09-30-2020     William E. Lamie         Initial Version 6.1           */
+/*  09-30-2020      William E. Lamie        Initial Version 6.1           */
+/*  10-15-2021      Andres Mlinar           Updated comments,             */
+/*                                            resulting in version 6.1.9  */
+/*  04-25-2022      William E. Lamie        Modified comments, removed    */
+/*                                            FIFO queueing,              */
+/*                                            resulting in version 6.1.11 */
 /*                                                                        */
 /**************************************************************************/
     .global  _tx_thread_smp_unprotect
@@ -115,11 +106,6 @@ _tx_thread_smp_unprotect:
     CMP     w3, #0                              // Is the preempt disable flag set?
     BNE     _still_protected                    // Yes, skip the protection release
 
-    LDR     x2,=_tx_thread_smp_protect_wait_counts // Build build address of wait counts
-    LDR     w3, [x2, x1, LSL #2]                // Pickup wait list value
-    CMP     w3, #0                              // Are any entities on this core waiting?
-    BNE     _still_protected                    // Yes, skip the protection release
-
     LDR     x2,=_tx_thread_smp_protection       // Build address of protection structure
     MOV     w3, #0xFFFFFFFF                     // Build invalid value
     STR     w3, [x2, #4]                        // Mark the protected core as invalid
@@ -134,4 +120,3 @@ _still_protected:
 #endif
     MSR     DAIF, x0                            // Restore interrupt posture
     RET
-

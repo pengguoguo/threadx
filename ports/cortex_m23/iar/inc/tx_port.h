@@ -1,13 +1,12 @@
-/**************************************************************************/
-/*                                                                        */
-/*       Copyright (c) Microsoft Corporation. All rights reserved.        */
-/*                                                                        */
-/*       This software is licensed under the Microsoft Software License   */
-/*       Terms for Microsoft Azure RTOS. Full text of the license can be  */
-/*       found in the LICENSE file at https://aka.ms/AzureRTOS_EULA       */
-/*       and in the root directory of this software.                      */
-/*                                                                        */
-/**************************************************************************/
+/***************************************************************************
+ * Copyright (c) 2024 Microsoft Corporation 
+ * 
+ * This program and the accompanying materials are made available under the
+ * terms of the MIT License which is available at
+ * https://opensource.org/licenses/MIT.
+ * 
+ * SPDX-License-Identifier: MIT
+ **************************************************************************/
 
 
 /**************************************************************************/
@@ -26,7 +25,7 @@
 /*  PORT SPECIFIC C INFORMATION                            RELEASE        */
 /*                                                                        */
 /*    tx_port.h                                         Cortex-M23/IAR    */
-/*                                                           6.1          */
+/*                                                           6.1.12       */
 /*                                                                        */
 /*  AUTHOR                                                                */
 /*                                                                        */
@@ -47,7 +46,24 @@
 /*                                                                        */
 /*    DATE              NAME                      DESCRIPTION             */
 /*                                                                        */
-/*  09-30-2020     Scott Larson             Initial Version 6.1           */
+/*  09-30-2020      Scott Larson            Initial Version 6.1           */
+/*  03-02-2021      Scott Larson            Modified comment(s), added    */
+/*                                            ULONG64_DEFINED,            */
+/*                                            resulting in version 6.1.5  */
+/*  06-02-2021      Yuxin Zhou              Modified comment(s), added    */
+/*                                            conditional compilation     */
+/*                                            for ARMv8-M (Cortex M23/33) */
+/*                                            resulting in version 6.1.7  */
+/*  10-15-2021      Scott Larson            Modified comment(s), improved */
+/*                                            stack check error handling, */
+/*                                            resulting in version 6.1.9  */
+/*  04-25-2022      Scott Larson            Modified comments and added   */
+/*                                            volatile to registers,      */
+/*                                            resulting in version 6.1.11 */
+/*  07-29-2022      Scott Larson            Modified comments and changed */
+/*                                            secure stack initialization */
+/*                                            macro to port-specific,     */
+/*                                            resulting in version 6.1.12 */
 /*                                                                        */
 /**************************************************************************/
 
@@ -85,6 +101,7 @@ typedef unsigned long                           ULONG;
 typedef unsigned long long                      ULONG64;
 typedef short                                   SHORT;
 typedef unsigned short                          USHORT;
+#define ULONG64_DEFINED
 
 /* Function prototypes for this port. */
 struct  TX_THREAD_STRUCT;
@@ -93,17 +110,9 @@ UINT    _txe_thread_secure_stack_free(struct TX_THREAD_STRUCT *thread_ptr);
 UINT    _tx_thread_secure_stack_allocate(struct TX_THREAD_STRUCT *tx_thread, ULONG stack_size);
 UINT    _tx_thread_secure_stack_free(struct TX_THREAD_STRUCT *tx_thread);
 
-/* This hardware has stack checking that we take advantage of - do NOT define. */
-#ifdef TX_ENABLE_STACK_CHECKING
-    #error "Do not define TX_ENABLE_STACK_CHECKING"
-#endif
+/* This port handles stack errors. */
+#define TX_PORT_THREAD_STACK_ERROR_HANDLING
 
-/* If user does not want to terminate thread on stack overflow, 
-   #define the TX_THREAD_NO_TERMINATE_STACK_ERROR symbol.
-   The thread will be rescheduled and continue to cause the exception.
-   It is suggested user code handle this by registering a notification with the
-   tx_thread_stack_error_notify function. */
-/*#define TX_THREAD_NO_TERMINATE_STACK_ERROR */
 
 /* Define the system API mappings based on the error checking 
    selected by the user.  Note: this section is only applicable to 
@@ -175,14 +184,14 @@ UINT    _tx_thread_secure_stack_free(struct TX_THREAD_STRUCT *tx_thread);
    For example, if the time source is at the address 0x0a800024 and is 16-bits in size, the clock 
    source constants would be:
 
-#define TX_TRACE_TIME_SOURCE                    *((ULONG *) 0x0a800024)
+#define TX_TRACE_TIME_SOURCE                    *((volatile ULONG *) 0x0a800024)
 #define TX_TRACE_TIME_MASK                      0x0000FFFFUL
 
 */
 
 #ifndef TX_MISRA_ENABLE
 #ifndef TX_TRACE_TIME_SOURCE
-#define TX_TRACE_TIME_SOURCE                    *((ULONG *) 0xE0001004)
+#define TX_TRACE_TIME_SOURCE                    *((volatile ULONG *) 0xE0001004)
 #endif
 #else
 ULONG   _tx_misra_time_stamp_get(VOID);
@@ -254,13 +263,7 @@ ULONG   _tx_misra_time_stamp_get(VOID);
 
 #endif
 
-
-#ifndef TX_ENABLE_EXECUTION_CHANGE_NOTIFY
 #define TX_THREAD_EXTENSION_3
-#else
-#define TX_THREAD_EXTENSION_3           unsigned long long  tx_thread_execution_time_total; \
-                                        unsigned long long  tx_thread_execution_time_last_start; 
-#endif
 
 
 /* Define the port extensions of the remaining ThreadX objects.  */
@@ -366,7 +369,7 @@ ULONG   _tx_misra_ipsr_get(VOID);
 #if !defined(TX_SINGLE_MODE_SECURE) && !defined(TX_SINGLE_MODE_NON_SECURE)
 /* Initialize secure stacks for threads calling secure functions. */
 extern void    _tx_thread_secure_stack_initialize(void);
-#define TX_INITIALIZE_KERNEL_ENTER_EXTENSION            _tx_thread_secure_stack_initialize();
+#define TX_PORT_SPECIFIC_PRE_INITIALIZATION             _tx_thread_secure_stack_initialize();
 #endif
 
 /* Define the macro to ensure _tx_thread_preempt_disable is set early in initialization in order to 
@@ -381,7 +384,7 @@ extern void    _tx_thread_secure_stack_initialize(void);
 
 #ifndef TX_DISABLE_INLINE
 
-#define TX_LOWEST_SET_BIT_CALCULATE(m, b)       (b) = (UINT)__CLZ(__RBIT((m)));
+#define TX_LOWEST_SET_BIT_CALCULATE(m, b)       (b) = (UINT) __CLZ(__RBIT((m)));
 
 #endif
 
@@ -417,7 +420,7 @@ static void _tx_thread_system_return_inline(void)
 __istate_t interrupt_save;
 
     /* Set PendSV to invoke ThreadX scheduler.  */
-    *((ULONG *) 0xE000ED04) = ((ULONG) 0x10000000);
+    *((volatile ULONG *) 0xE000ED04) = ((ULONG) 0x10000000);
     if (__get_IPSR() == 0)
     {
         interrupt_save = __get_interrupt_state();
@@ -429,21 +432,11 @@ __istate_t interrupt_save;
 #endif
 
 
-/* Define the interrupt lockout macros for each ThreadX object.  */
-
-#define TX_BLOCK_POOL_DISABLE                   TX_DISABLE
-#define TX_BYTE_POOL_DISABLE                    TX_DISABLE
-#define TX_EVENT_FLAGS_GROUP_DISABLE            TX_DISABLE
-#define TX_MUTEX_DISABLE                        TX_DISABLE
-#define TX_QUEUE_DISABLE                        TX_DISABLE
-#define TX_SEMAPHORE_DISABLE                    TX_DISABLE
-
-
 /* Define the version ID of ThreadX.  This may be utilized by the application.  */
 
 #ifdef TX_THREAD_INIT
 CHAR                            _tx_version_id[] = 
-                                    "Copyright (c) Microsoft Corporation. All rights reserved.  *  ThreadX Cortex-M23/IAR Version 6.1 *";
+                                    "Copyright (c) 2024 Microsoft Corporation.  *  ThreadX Cortex-M23/IAR Version 6.4.1 *";
 #else
 #ifdef TX_MISRA_ENABLE
 extern  CHAR                    _tx_version_id[100];

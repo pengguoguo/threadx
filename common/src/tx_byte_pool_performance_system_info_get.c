@@ -1,13 +1,12 @@
-/**************************************************************************/
-/*                                                                        */
-/*       Copyright (c) Microsoft Corporation. All rights reserved.        */
-/*                                                                        */
-/*       This software is licensed under the Microsoft Software License   */
-/*       Terms for Microsoft Azure RTOS. Full text of the license can be  */
-/*       found in the LICENSE file at https://aka.ms/AzureRTOS_EULA       */
-/*       and in the root directory of this software.                      */
-/*                                                                        */
-/**************************************************************************/
+/***************************************************************************
+ * Copyright (c) 2024 Microsoft Corporation 
+ * 
+ * This program and the accompanying materials are made available under the
+ * terms of the MIT License which is available at
+ * https://opensource.org/licenses/MIT.
+ * 
+ * SPDX-License-Identifier: MIT
+ **************************************************************************/
 
 
 /**************************************************************************/
@@ -109,58 +108,58 @@ TX_INTERRUPT_SAVE_AREA
     /* Retrieve the total number of byte pool allocates.  */
     if (allocates != TX_NULL)
     {
-    
+
         *allocates =  _tx_byte_pool_performance_allocate_count;
     }
 
     /* Retrieve the total number of byte pool releases.  */
     if (releases != TX_NULL)
     {
-    
+
         *releases =  _tx_byte_pool_performance_release_count;
     }
 
     /* Retrieve the total number of byte pool fragments searched.  */
     if (fragments_searched != TX_NULL)
     {
-    
+
         *fragments_searched =  _tx_byte_pool_performance_search_count;
     }
 
     /* Retrieve the total number of byte pool fragments merged.  */
     if (merges != TX_NULL)
     {
-    
+
         *merges =  _tx_byte_pool_performance_merge_count;
     }
 
     /* Retrieve the total number of byte pool fragment splits.  */
     if (splits != TX_NULL)
     {
-    
+
         *splits =  _tx_byte_pool_performance_split_count;
     }
 
     /* Retrieve the total number of byte pool suspensions.  */
     if (suspensions != TX_NULL)
     {
-    
+
         *suspensions =  _tx_byte_pool_performance_suspension_count;
     }
-    
+
     /* Retrieve the total number of byte pool timeouts.  */
     if (timeouts != TX_NULL)
     {
-    
+
         *timeouts =  _tx_byte_pool_performance_timeout_count;
     }
-    
+
     /* Restore interrupts.  */
     TX_RESTORE
 
     /* Return completion status.  */
     return(TX_SUCCESS);
-    
+
 #else
 
 UINT        status;
@@ -215,7 +214,7 @@ UINT        status;
         /* Not enabled, return error.  */
         status =  TX_FEATURE_NOT_ENABLED;
     }
-    
+
     /* Return completion status.  */
     return(status);
 #endif

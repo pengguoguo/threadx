@@ -1,13 +1,12 @@
-/**************************************************************************/
-/*                                                                        */
-/*       Copyright (c) Microsoft Corporation. All rights reserved.        */
-/*                                                                        */
-/*       This software is licensed under the Microsoft Software License   */
-/*       Terms for Microsoft Azure RTOS. Full text of the license can be  */
-/*       found in the LICENSE file at https://aka.ms/AzureRTOS_EULA       */
-/*       and in the root directory of this software.                      */
-/*                                                                        */
-/**************************************************************************/
+/***************************************************************************
+ * Copyright (c) 2024 Microsoft Corporation 
+ * 
+ * This program and the accompanying materials are made available under the
+ * terms of the MIT License which is available at
+ * https://opensource.org/licenses/MIT.
+ * 
+ * SPDX-License-Identifier: MIT
+ **************************************************************************/
 
 
 /**************************************************************************/
@@ -87,7 +86,7 @@ UINT                suspended_count;
 TX_THREAD           *next_thread;
 TX_THREAD           *previous_thread;
 
-    
+
 #ifndef TX_NOT_INTERRUPTABLE
 
     /* Disable interrupts to remove the suspended thread from the queue.  */
@@ -96,7 +95,7 @@ TX_THREAD           *previous_thread;
     /* Determine if the cleanup is still required.  */
     if (thread_ptr -> tx_thread_suspend_cleanup == &(_tx_queue_cleanup))
     {
-    
+
         /* Check for valid suspension sequence.  */
         if (suspension_sequence == thread_ptr -> tx_thread_suspension_sequence)
         {
@@ -122,7 +121,7 @@ TX_THREAD           *previous_thread;
 #endif
 
                         /* Yes, we still have thread suspension!  */
-    
+
                         /* Clear the suspension cleanup flag.  */
                         thread_ptr -> tx_thread_suspend_cleanup =  TX_NULL;
 
@@ -168,7 +167,7 @@ TX_THREAD           *previous_thread;
                         if (thread_ptr -> tx_thread_state == TX_QUEUE_SUSP)
                         {
 
-                            /* Timeout condition and the thread still suspended on the queue.  
+                            /* Timeout condition and the thread still suspended on the queue.
                                Setup return error status and resume the thread.  */
 
 #ifdef TX_QUEUE_ENABLE_PERFORMANCE_INFO
@@ -183,17 +182,17 @@ TX_THREAD           *previous_thread;
                             /* Setup return status.  */
                             if (queue_ptr -> tx_queue_enqueued != TX_NO_MESSAGES)
                             {
-            
+
                                 /* Queue full timeout!  */
                                 thread_ptr -> tx_thread_suspend_status =  TX_QUEUE_FULL;
                             }
                             else
                             {
-            
+
                                 /* Queue empty timeout!  */
                                 thread_ptr -> tx_thread_suspend_status =  TX_QUEUE_EMPTY;
                             }
-            
+
 #ifdef TX_NOT_INTERRUPTABLE
 
                             /* Resume the thread!  */

@@ -1,13 +1,12 @@
-/**************************************************************************/
-/*                                                                        */
-/*       Copyright (c) Microsoft Corporation. All rights reserved.        */
-/*                                                                        */
-/*       This software is licensed under the Microsoft Software License   */
-/*       Terms for Microsoft Azure RTOS. Full text of the license can be  */
-/*       found in the LICENSE file at https://aka.ms/AzureRTOS_EULA       */
-/*       and in the root directory of this software.                      */
-/*                                                                        */
-/**************************************************************************/
+/***************************************************************************
+ * Copyright (c) 2024 Microsoft Corporation 
+ * 
+ * This program and the accompanying materials are made available under the
+ * terms of the MIT License which is available at
+ * https://opensource.org/licenses/MIT.
+ * 
+ * SPDX-License-Identifier: MIT
+ **************************************************************************/
 
 
 /**************************************************************************/
@@ -28,7 +27,7 @@
 /*                                                                        */
 /*  FUNCTION                                               RELEASE        */
 /*                                                                        */
-/*    _txm_module_manager_object_allocate                 PORTABLE C      */ 
+/*    _txm_module_manager_object_allocate                 PORTABLE C      */
 /*                                                           6.1          */
 /*  AUTHOR                                                                */
 /*                                                                        */
@@ -36,16 +35,16 @@
 /*                                                                        */
 /*  DESCRIPTION                                                           */
 /*                                                                        */
-/*    This function allocates memory for an object from the memory pool   */ 
-/*    supplied to txm_module_manager_initialize.                          */ 
+/*    This function allocates memory for an object from the memory pool   */
+/*    supplied to txm_module_manager_initialize.                          */
 /*                                                                        */
 /*  INPUT                                                                 */
 /*                                                                        */
-/*    object_ptr                        Destination of object pointer on  */ 
-/*                                        successful allocation           */ 
-/*    object_size                       Size in bytes of the object to be */ 
-/*                                        allocated                       */ 
-/*    module_instance                   The module instance that the      */ 
+/*    object_ptr                        Destination of object pointer on  */
+/*                                        successful allocation           */
+/*    object_size                       Size in bytes of the object to be */
+/*                                        allocated                       */
+/*    module_instance                   The module instance that the      */
 /*                                        object belongs to               */
 /*                                                                        */
 /*  OUTPUT                                                                */
@@ -66,7 +65,7 @@
 /*                                                                        */
 /*    DATE              NAME                      DESCRIPTION             */
 /*                                                                        */
-/*  09-30-2020     Scott Larson             Initial Version 6.1           */
+/*  09-30-2020      Scott Larson            Initial Version 6.1           */
 /*                                                                        */
 /**************************************************************************/
 UINT _txm_module_manager_object_allocate(VOID **object_ptr_ptr, ULONG object_size, TXM_MODULE_INSTANCE *module_instance)
@@ -98,7 +97,7 @@ UINT                        return_value;
 
         /* Allocate the object requested by the module - adding an extra ULONG in order to
            store the module instance pointer.  */
-        return_value =  (ULONG)  _txe_byte_allocate(&_txm_module_manager_object_pool, (VOID **) &object_ptr, 
+        return_value =  (ULONG)  _txe_byte_allocate(&_txm_module_manager_object_pool, (VOID **) &object_ptr,
             (ULONG) (object_size + sizeof(TXM_MODULE_ALLOCATED_OBJECT)), TX_NO_WAIT);
 
         /* Determine if the request was successful.  */

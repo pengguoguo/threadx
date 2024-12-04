@@ -1,13 +1,12 @@
-/**************************************************************************/
-/*                                                                        */
-/*       Copyright (c) Microsoft Corporation. All rights reserved.        */
-/*                                                                        */
-/*       This software is licensed under the Microsoft Software License   */
-/*       Terms for Microsoft Azure RTOS. Full text of the license can be  */
-/*       found in the LICENSE file at https://aka.ms/AzureRTOS_EULA       */
-/*       and in the root directory of this software.                      */
-/*                                                                        */
-/**************************************************************************/
+/***************************************************************************
+ * Copyright (c) 2024 Microsoft Corporation 
+ * 
+ * This program and the accompanying materials are made available under the
+ * terms of the MIT License which is available at
+ * https://opensource.org/licenses/MIT.
+ * 
+ * SPDX-License-Identifier: MIT
+ **************************************************************************/
 
 
 /**************************************************************************/
@@ -26,7 +25,7 @@
 /*  PORT SPECIFIC C INFORMATION                            RELEASE        */ 
 /*                                                                        */ 
 /*    tx_port.h                                        Cortex-A5x-SMP/GHS */ 
-/*                                                           6.1          */
+/*                                                           6.1.9        */
 /*                                                                        */
 /*  AUTHOR                                                                */
 /*                                                                        */
@@ -48,6 +47,12 @@
 /*    DATE              NAME                      DESCRIPTION             */
 /*                                                                        */
 /*  09-30-2020     William E. Lamie         Initial Version 6.1           */
+/*  04-02-2021     Bhupendra Naphade        Modified comment(s),updated   */
+/*                                            macro definition,           */
+/*                                            resulting in version 6.1.6  */
+/*  10-15-2021     William E. Lamie         Modified comment(s), added    */
+/*                                            symbol ULONG64_DEFINED,     */
+/*                                            resulting in version 6.1.9  */
 /*                                                                        */
 /**************************************************************************/
 
@@ -161,7 +166,7 @@ typedef unsigned long long                      ULONG64;
 typedef short                                   SHORT;
 typedef unsigned short                          USHORT;
 typedef unsigned long long                      ULONG_PTR;
-
+#define ULONG64_DEFINED
 
 /* Override the alignment type to use 64-bit alignment and storage for pointers.  */
 
@@ -404,7 +409,7 @@ typedef struct TX_THREAD_SMP_PROTECT_STRUCT
    is used to define a local function save area for the disable and restore
    macros.  */
 
-#define TX_INTERRUPT_SAVE_AREA                  unsigned int interrupt_save;
+#define TX_INTERRUPT_SAVE_AREA                  UINT interrupt_save;
 
 #define TX_DISABLE                              interrupt_save =  _tx_thread_smp_protect();
 #define TX_RESTORE                              _tx_thread_smp_unprotect(interrupt_save);
@@ -438,7 +443,7 @@ VOID    tx_thread_fp_disable(VOID);
 
 #ifdef TX_THREAD_INIT
 CHAR                            _tx_version_id[] = 
-                                    "Copyright (c) Microsoft Corporation. All rights reserved.  *  ThreadX Cortex-A5x-SMP/GHS Version 6.1 *";
+                                    "Copyright (c) 2024 Microsoft Corporation.  *  ThreadX Cortex-A5x-SMP/GHS Version 6.4.1 *";
 #else
 extern  CHAR                    _tx_version_id[];
 #endif

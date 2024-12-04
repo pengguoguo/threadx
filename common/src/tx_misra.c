@@ -1,13 +1,12 @@
-/**************************************************************************/
-/*                                                                        */
-/*       Copyright (c) Microsoft Corporation. All rights reserved.        */
-/*                                                                        */
-/*       This software is licensed under the Microsoft Software License   */
-/*       Terms for Microsoft Azure RTOS. Full text of the license can be  */
-/*       found in the LICENSE file at https://aka.ms/AzureRTOS_EULA       */
-/*       and in the root directory of this software.                      */
-/*                                                                        */
-/**************************************************************************/
+/***************************************************************************
+ * Copyright (c) 2024 Microsoft Corporation 
+ * 
+ * This program and the accompanying materials are made available under the
+ * terms of the MIT License which is available at
+ * https://opensource.org/licenses/MIT.
+ * 
+ * SPDX-License-Identifier: MIT
+ **************************************************************************/
 
 
 /**************************************************************************/
@@ -33,7 +32,7 @@
 #include "tx_api.h"
 #else
 #define TX_THREAD_INIT
-//CHAR  _tx_version_id[100] =  "Copyright (c) Microsoft Corporation. All rights reserved.  * ThreadX 6.1       MISRA C Compliant *";
+//CHAR  _tx_version_id[100] =  "Copyright (c) 2024 Microsoft Corporation.  * ThreadX 6.1       MISRA C Compliant *";
 
 #include "tx_api.h"
 #include "tx_thread.h"
@@ -92,7 +91,7 @@ ULONG  _tx_misra_uchar_pointer_dif(UCHAR *ptr1, UCHAR *ptr2)
 {
 
 ULONG   value;
-    
+
     value =  (ULONG)(ptr1 - ptr2);
     return(value);
 }
@@ -150,7 +149,7 @@ ULONG  *_tx_misra_ulong_pointer_sub(ULONG *ptr, ULONG amount)
 ULONG   _tx_misra_ulong_pointer_dif(ULONG *ptr1, ULONG *ptr2)
 {
 ULONG   value;
-    
+
     value =  (ULONG)(ptr1 - ptr2);
     return(value);
 }
@@ -362,7 +361,7 @@ TX_THREAD                 *trace_thread_ptr;
 #endif
         trace_event_ptr++;
         if (trace_event_ptr >= _tx_trace_buffer_end_ptr)
-        { 
+        {
             trace_event_ptr =  _tx_trace_buffer_start_ptr;
             _tx_trace_buffer_current_ptr =  trace_event_ptr;
             _tx_trace_header_ptr -> tx_trace_header_buffer_current_pointer =  (ULONG) trace_event_ptr;
@@ -813,7 +812,7 @@ UCHAR  *_tx_misra_entry_to_uchar_pointer_convert(TX_TRACE_BUFFER_ENTRY *pointer)
     /* Return a UCHAR pointer.  */
     return((UCHAR *) ((VOID *) pointer));
 }
-               
+
 #endif
 
 

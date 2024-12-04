@@ -1,13 +1,12 @@
-/**************************************************************************/
-/*                                                                        */
-/*       Copyright (c) Microsoft Corporation. All rights reserved.        */
-/*                                                                        */
-/*       This software is licensed under the Microsoft Software License   */
-/*       Terms for Microsoft Azure RTOS. Full text of the license can be  */
-/*       found in the LICENSE file at https://aka.ms/AzureRTOS_EULA       */
-/*       and in the root directory of this software.                      */
-/*                                                                        */
-/**************************************************************************/
+/***************************************************************************
+ * Copyright (c) 2024 Microsoft Corporation 
+ * 
+ * This program and the accompanying materials are made available under the
+ * terms of the MIT License which is available at
+ * https://opensource.org/licenses/MIT.
+ * 
+ * SPDX-License-Identifier: MIT
+ **************************************************************************/
 
 
 /**************************************************************************/
@@ -26,7 +25,7 @@
 /*  PORT SPECIFIC C INFORMATION                            RELEASE        */ 
 /*                                                                        */ 
 /*    tx_port.h                                           C667x/TI        */
-/*                                                           6.1          */
+/*                                                           6.1.11       */
 /*                                                                        */
 /*  AUTHOR                                                                */
 /*                                                                        */
@@ -48,6 +47,13 @@
 /*    DATE              NAME                      DESCRIPTION             */
 /*                                                                        */
 /*  09-30-2020     William E. Lamie         Initial Version 6.1           */
+/*  04-02-2021     Bhupendra Naphade        Modified comment(s),updated   */
+/*                                            macro definition,           */
+/*                                            resulting in version 6.1.6  */
+/*  04-25-2022     Wenhui Xie               Modified comment(s),          */
+/*                                            optimized the definition of */
+/*                                            TX_TIMER_TICKS_PER_SECOND,  */
+/*                                            resulting in version 6.1.11 */
 /*                                                                        */
 /**************************************************************************/
 
@@ -122,7 +128,7 @@ typedef unsigned short                          USHORT;
 
 
 #ifndef TX_TIMER_TICKS_PER_SECOND
-#define TX_TIMER_TICKS_PER_SECOND               ((ULONG) 100)
+#define TX_TIMER_TICKS_PER_SECOND               (100UL)
 #endif
 
 
@@ -237,7 +243,7 @@ typedef unsigned short                          USHORT;
    is used to define a local function save area for the disable and restore
    macros.  */
 
-#define TX_INTERRUPT_SAVE_AREA      unsigned int interrupt_save;
+#define TX_INTERRUPT_SAVE_AREA     UINT interrupt_save;
 
 #ifdef TX_SKIP_INTRINSICS
 unsigned int  _tx_thread_interrupt_control(unsigned int);
@@ -264,7 +270,7 @@ unsigned int  _tx_thread_interrupt_control(unsigned int);
 
 #ifdef TX_THREAD_INIT
 CHAR                            _tx_version_id[] = 
-                                    "Copyright (c) Microsoft Corporation. All rights reserved.  *  ThreadX C667x/TI Version 6.1 *";
+                                    "Copyright (c) 2024 Microsoft Corporation.  *  ThreadX C667x/TI Version 6.4.1 *";
 #else
 extern  CHAR                    _tx_version_id[];
 #endif

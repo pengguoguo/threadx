@@ -1,13 +1,12 @@
-/**************************************************************************/
-/*                                                                        */
-/*       Copyright (c) Microsoft Corporation. All rights reserved.        */
-/*                                                                        */
-/*       This software is licensed under the Microsoft Software License   */
-/*       Terms for Microsoft Azure RTOS. Full text of the license can be  */
-/*       found in the LICENSE file at https://aka.ms/AzureRTOS_EULA       */
-/*       and in the root directory of this software.                      */
-/*                                                                        */
-/**************************************************************************/
+/***************************************************************************
+ * Copyright (c) 2024 Microsoft Corporation 
+ * 
+ * This program and the accompanying materials are made available under the
+ * terms of the MIT License which is available at
+ * https://opensource.org/licenses/MIT.
+ * 
+ * SPDX-License-Identifier: MIT
+ **************************************************************************/
 
 
 /**************************************************************************/
@@ -106,7 +105,7 @@ TX_TIMER        *previous_timer;
 
     /* Decrement the number of created timers.  */
     _tx_timer_created_count--;
-    
+
     /* See if the timer is the only one on the list.  */
     if (_tx_timer_created_count == TX_EMPTY)
     {
@@ -126,7 +125,7 @@ TX_TIMER        *previous_timer;
         /* See if we have to update the created list head pointer.  */
         if (_tx_timer_created_ptr == timer_ptr)
         {
-                    
+
             /* Yes, move the head pointer to the next link. */
             _tx_timer_created_ptr =  next_timer;
         }

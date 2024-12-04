@@ -1,13 +1,12 @@
-/**************************************************************************/
-/*                                                                        */
-/*       Copyright (c) Microsoft Corporation. All rights reserved.        */
-/*                                                                        */
-/*       This software is licensed under the Microsoft Software License   */
-/*       Terms for Microsoft Azure RTOS. Full text of the license can be  */
-/*       found in the LICENSE file at https://aka.ms/AzureRTOS_EULA       */
-/*       and in the root directory of this software.                      */
-/*                                                                        */
-/**************************************************************************/
+/***************************************************************************
+ * Copyright (c) 2024 Microsoft Corporation 
+ * 
+ * This program and the accompanying materials are made available under the
+ * terms of the MIT License which is available at
+ * https://opensource.org/licenses/MIT.
+ * 
+ * SPDX-License-Identifier: MIT
+ **************************************************************************/
 
 
 /**************************************************************************/
@@ -101,7 +100,7 @@ TX_TRACE_OBJECT_ENTRY           *entry_ptr;
             if (entry_ptr -> tx_trace_object_entry_thread_pointer == TX_POINTER_TO_ULONG_CONVERT(object_ptr))
             {
 
-                /* Mark this entry as available, but leave the other information so that old trace entries can 
+                /* Mark this entry as available, but leave the other information so that old trace entries can
                    still find it - if necessary!  */
                 entry_ptr -> tx_trace_object_entry_available =  ((UCHAR) TX_TRUE);
 
@@ -123,7 +122,7 @@ TX_INTERRUPT_SAVE_AREA
     /* Access input arguments just for the sake of lint, MISRA, etc.  */
     if (object_ptr != TX_NULL)
     {
-        
+
         /* NOP code.  */
         TX_DISABLE
         TX_RESTORE

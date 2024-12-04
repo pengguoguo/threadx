@@ -1,19 +1,18 @@
-/**************************************************************************/
-/*                                                                        */
-/*       Copyright (c) Microsoft Corporation. All rights reserved.        */
-/*                                                                        */
-/*       This software is licensed under the Microsoft Software License   */
-/*       Terms for Microsoft Azure RTOS. Full text of the license can be  */
-/*       found in the LICENSE file at https://aka.ms/AzureRTOS_EULA       */
-/*       and in the root directory of this software.                      */
-/*                                                                        */
-/**************************************************************************/
+/***************************************************************************
+ * Copyright (c) 2024 Microsoft Corporation 
+ * 
+ * This program and the accompanying materials are made available under the
+ * terms of the MIT License which is available at
+ * https://opensource.org/licenses/MIT.
+ * 
+ * SPDX-License-Identifier: MIT
+ **************************************************************************/
 
 
 /**************************************************************************/
 /**************************************************************************/
-/**                                                                       */ 
-/** ThreadX Component                                                     */ 
+/**                                                                       */
+/** ThreadX Component                                                     */
 /**                                                                       */
 /**   Mutex                                                               */
 /**                                                                       */
@@ -31,45 +30,47 @@
 #include "tx_mutex.h"
 
 
-/**************************************************************************/ 
-/*                                                                        */ 
-/*  FUNCTION                                               RELEASE        */ 
-/*                                                                        */ 
-/*    _tx_mutex_get                                       PORTABLE C      */ 
+/**************************************************************************/
+/*                                                                        */
+/*  FUNCTION                                               RELEASE        */
+/*                                                                        */
+/*    _tx_mutex_get                                       PORTABLE C      */
 /*                                                           6.1          */
 /*  AUTHOR                                                                */
 /*                                                                        */
 /*    William E. Lamie, Microsoft Corporation                             */
 /*                                                                        */
 /*  DESCRIPTION                                                           */
-/*                                                                        */ 
-/*    This function gets the specified mutex.  If the calling thread      */ 
-/*    already owns the mutex, an ownership count is simply increased.     */ 
-/*                                                                        */ 
-/*  INPUT                                                                 */ 
-/*                                                                        */ 
-/*    mutex_ptr                         Pointer to mutex control block    */ 
-/*    wait_option                       Suspension option                 */ 
-/*                                                                        */ 
-/*  OUTPUT                                                                */ 
-/*                                                                        */ 
-/*    status                            Completion status                 */ 
-/*                                                                        */ 
-/*  CALLS                                                                 */ 
-/*                                                                        */ 
-/*    _tx_thread_system_suspend         Suspend thread service            */ 
-/*    _tx_thread_system_ni_suspend      Non-interruptable suspend thread  */ 
-/*    _tx_mutex_priority_change         Inherit thread priority           */ 
-/*                                                                        */ 
-/*  CALLED BY                                                             */ 
-/*                                                                        */ 
-/*    Application Code                                                    */ 
-/*                                                                        */ 
-/*  RELEASE HISTORY                                                       */ 
-/*                                                                        */ 
+/*                                                                        */
+/*    This function gets the specified mutex.  If the calling thread      */
+/*    already owns the mutex, an ownership count is simply increased.     */
+/*                                                                        */
+/*  INPUT                                                                 */
+/*                                                                        */
+/*    mutex_ptr                         Pointer to mutex control block    */
+/*    wait_option                       Suspension option                 */
+/*                                                                        */
+/*  OUTPUT                                                                */
+/*                                                                        */
+/*    status                            Completion status                 */
+/*                                                                        */
+/*  CALLS                                                                 */
+/*                                                                        */
+/*    _tx_thread_system_suspend         Suspend thread service            */
+/*    _tx_thread_system_ni_suspend      Non-interruptable suspend thread  */
+/*    _tx_mutex_priority_change         Inherit thread priority           */
+/*                                                                        */
+/*  CALLED BY                                                             */
+/*                                                                        */
+/*    Application Code                                                    */
+/*                                                                        */
+/*  RELEASE HISTORY                                                       */
+/*                                                                        */
 /*    DATE              NAME                      DESCRIPTION             */
 /*                                                                        */
-/*  09-30-2020     William E. Lamie         Initial Version 6.1           */
+/*  05-19-2020     William E. Lamie         Initial Version 6.0           */
+/*  09-30-2020     Yuxin Zhou               Modified comment(s),          */
+/*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
 UINT  _tx_mutex_get(TX_MUTEX *mutex_ptr, ULONG wait_option)
@@ -77,7 +78,7 @@ UINT  _tx_mutex_get(TX_MUTEX *mutex_ptr, ULONG wait_option)
 
 TX_INTERRUPT_SAVE_AREA
 
-TX_THREAD       *thread_ptr;            
+TX_THREAD       *thread_ptr;
 TX_MUTEX        *next_mutex;
 TX_MUTEX        *previous_mutex;
 TX_THREAD       *mutex_owner;
@@ -124,7 +125,7 @@ UINT            status;
             /* Determine if priority inheritance is required.  */
             if (mutex_ptr -> tx_mutex_inherit == TX_TRUE)
             {
-         
+
                 /* Remember the current priority of thread.  */
                 mutex_ptr -> tx_mutex_original_priority =   thread_ptr -> tx_thread_priority;
 
@@ -176,7 +177,7 @@ UINT            status;
     else if (mutex_ptr -> tx_mutex_owner == thread_ptr)
     {
 
-        /* The owning thread is requesting the mutex again, just 
+        /* The owning thread is requesting the mutex again, just
            increment the ownership count.  */
         mutex_ptr -> tx_mutex_ownership_count++;
 
@@ -198,7 +199,7 @@ UINT            status;
             {
 
                 /* Restore interrupts.  */
-                TX_RESTORE 
+                TX_RESTORE
 
                 /* Suspension is not allowed if the preempt disable flag is non-zero at this point - return error completion.  */
                 status =  TX_NOT_AVAILABLE;
@@ -277,7 +278,7 @@ UINT            status;
                     previous_thread -> tx_thread_suspended_next =   thread_ptr;
                     next_thread -> tx_thread_suspended_previous =   thread_ptr;
                 }
-            
+
                 /* Increment the suspension count.  */
                 mutex_ptr -> tx_mutex_suspended_count++;
 
@@ -286,7 +287,7 @@ UINT            status;
 
 #ifdef TX_NOT_INTERRUPTABLE
 
-                /* Determine if we need to raise the priority of the thread 
+                /* Determine if we need to raise the priority of the thread
                    owning the mutex.  */
                 if (mutex_ptr -> tx_mutex_inherit == TX_TRUE)
                 {
@@ -302,7 +303,7 @@ UINT            status;
                     /* Determine if we have to update inherit priority level of the mutex owner.  */
                     if (thread_ptr -> tx_thread_priority < mutex_owner -> tx_thread_inherit_priority)
                     {
-                    
+
                         /* Remember the new priority inheritance priority.  */
                         mutex_owner -> tx_thread_inherit_priority =  thread_ptr -> tx_thread_priority;
                     }
@@ -345,7 +346,7 @@ UINT            status;
                 /* Restore interrupts.  */
                 TX_RESTORE
 
-                /* Determine if we need to raise the priority of the thread 
+                /* Determine if we need to raise the priority of the thread
                    owning the mutex.  */
                 if (mutex_ptr -> tx_mutex_inherit == TX_TRUE)
                 {
@@ -361,7 +362,7 @@ UINT            status;
                     /* Determine if we have to update inherit priority level of the mutex owner.  */
                     if (thread_ptr -> tx_thread_priority < mutex_owner -> tx_thread_inherit_priority)
                     {
-                    
+
                         /* Remember the new priority inheritance priority.  */
                         mutex_owner -> tx_thread_inherit_priority =  thread_ptr -> tx_thread_priority;
                     }
@@ -396,7 +397,7 @@ UINT            status;
         {
 
             /* Restore interrupts.  */
-            TX_RESTORE 
+            TX_RESTORE
 
             /* Immediate return, return error completion.  */
             status =  TX_NOT_AVAILABLE;

@@ -1,13 +1,12 @@
-/**************************************************************************/
-/*                                                                        */
-/*       Copyright (c) Microsoft Corporation. All rights reserved.        */
-/*                                                                        */
-/*       This software is licensed under the Microsoft Software License   */
-/*       Terms for Microsoft Azure RTOS. Full text of the license can be  */
-/*       found in the LICENSE file at https://aka.ms/AzureRTOS_EULA       */
-/*       and in the root directory of this software.                      */
-/*                                                                        */
-/**************************************************************************/
+/***************************************************************************
+ * Copyright (c) 2024 Microsoft Corporation 
+ * 
+ * This program and the accompanying materials are made available under the
+ * terms of the MIT License which is available at
+ * https://opensource.org/licenses/MIT.
+ * 
+ * SPDX-License-Identifier: MIT
+ **************************************************************************/
 
 
 /**************************************************************************/
@@ -97,7 +96,7 @@ TX_BLOCK_POOL       *previous_pool;
        an ALIGN_TYPE (typically this is a 32-bit ULONG). This helps guarantee proper alignment.  */
     block_size =  (((block_size + (sizeof(ALIGN_TYPE))) - ((ALIGN_TYPE) 1))/(sizeof(ALIGN_TYPE))) * (sizeof(ALIGN_TYPE));
 
-    /* Round the pool size down to something that is evenly divisible by 
+    /* Round the pool size down to something that is evenly divisible by
        an ALIGN_TYPE (typically this is a 32-bit ULONG).  */
     pool_size =   (pool_size/(sizeof(ALIGN_TYPE))) * (sizeof(ALIGN_TYPE));
 
@@ -106,7 +105,7 @@ TX_BLOCK_POOL       *previous_pool;
     pool_ptr -> tx_block_pool_start =            TX_VOID_TO_UCHAR_POINTER_CONVERT(pool_start);
     pool_ptr -> tx_block_pool_size =             pool_size;
     pool_ptr -> tx_block_pool_block_size =       (UINT) block_size;
-    
+
     /* Calculate the total number of blocks.  */
     total_blocks =  pool_size/(block_size + (sizeof(UCHAR *)));
 
@@ -145,7 +144,7 @@ TX_BLOCK_POOL       *previous_pool;
         /* Set the last block's forward pointer to NULL.  */
         block_link_ptr =  TX_UCHAR_TO_INDIRECT_UCHAR_POINTER_CONVERT(block_ptr);
         *block_link_ptr =  TX_NULL;
-        
+
         /* Setup the starting pool address.  */
         pool_ptr -> tx_block_pool_available_list =  TX_VOID_TO_UCHAR_POINTER_CONVERT(pool_start);
 
@@ -180,7 +179,7 @@ TX_BLOCK_POOL       *previous_pool;
             pool_ptr -> tx_block_pool_created_previous =  previous_pool;
             pool_ptr -> tx_block_pool_created_next =      next_pool;
         }
-        
+
         /* Increment the created count.  */
         _tx_block_pool_created_count++;
 
@@ -208,7 +207,7 @@ TX_BLOCK_POOL       *previous_pool;
         /* Not enough memory for one block, return appropriate error.  */
         status =  TX_SIZE_ERROR;
     }
-    
+
     /* Return completion status.  */
     return(status);
 }

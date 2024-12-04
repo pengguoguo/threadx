@@ -1,13 +1,12 @@
-/**************************************************************************/
-/*                                                                        */
-/*       Copyright (c) Microsoft Corporation. All rights reserved.        */
-/*                                                                        */
-/*       This software is licensed under the Microsoft Software License   */
-/*       Terms for Microsoft Azure RTOS. Full text of the license can be  */
-/*       found in the LICENSE file at https://aka.ms/AzureRTOS_EULA       */
-/*       and in the root directory of this software.                      */
-/*                                                                        */
-/**************************************************************************/
+/***************************************************************************
+ * Copyright (c) 2024 Microsoft Corporation 
+ * 
+ * This program and the accompanying materials are made available under the
+ * terms of the MIT License which is available at
+ * https://opensource.org/licenses/MIT.
+ * 
+ * SPDX-License-Identifier: MIT
+ **************************************************************************/
 
 
 /**************************************************************************/
@@ -149,7 +148,7 @@ TX_THREAD       *thread_ptr;
 
         /* Decrement the preempt disable flag.  */
         _tx_thread_preempt_disable--;
-    
+
         /* Restore interrupts.  */
         TX_RESTORE
 
@@ -175,7 +174,7 @@ TX_THREAD       *thread_ptr;
         {
 
             /* Check for invalid pool size.  */
-            if ((((block_size/(sizeof(void *)))*(sizeof(void *))) + (sizeof(void *))) > 
+            if ((((block_size/(sizeof(void *)))*(sizeof(void *))) + (sizeof(void *))) >
                                             ((pool_size/(sizeof(void *)))*(sizeof(void *))))
             {
 
@@ -202,11 +201,11 @@ TX_THREAD       *thread_ptr;
                 /* Check for interrupt call.  */
                 if (TX_THREAD_GET_SYSTEM_STATE() != ((ULONG) 0))
                 {
-    
+
                     /* Now, make sure the call is from an interrupt and not initialization.  */
                     if (TX_THREAD_GET_SYSTEM_STATE() < TX_INITIALIZE_IN_PROGRESS)
                     {
-        
+
                         /* Invalid caller of this function, return appropriate error code.  */
                         status =  TX_CALLER_ERROR;
                     }

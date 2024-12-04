@@ -1,13 +1,12 @@
-/**************************************************************************/
-/*                                                                        */
-/*       Copyright (c) Microsoft Corporation. All rights reserved.        */
-/*                                                                        */
-/*       This software is licensed under the Microsoft Software License   */
-/*       Terms for Microsoft Azure RTOS. Full text of the license can be  */
-/*       found in the LICENSE file at https://aka.ms/AzureRTOS_EULA       */
-/*       and in the root directory of this software.                      */
-/*                                                                        */
-/**************************************************************************/
+/***************************************************************************
+ * Copyright (c) 2024 Microsoft Corporation 
+ * 
+ * This program and the accompanying materials are made available under the
+ * terms of the MIT License which is available at
+ * https://opensource.org/licenses/MIT.
+ * 
+ * SPDX-License-Identifier: MIT
+ **************************************************************************/
 
 
 /**************************************************************************/
@@ -80,8 +79,8 @@
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT  _txe_event_flags_info_get(TX_EVENT_FLAGS_GROUP *group_ptr, CHAR **name, ULONG *current_flags, 
-                    TX_THREAD **first_suspended, ULONG *suspended_count, 
+UINT  _txe_event_flags_info_get(TX_EVENT_FLAGS_GROUP *group_ptr, CHAR **name, ULONG *current_flags,
+                    TX_THREAD **first_suspended, ULONG *suspended_count,
                     TX_EVENT_FLAGS_GROUP **next_group)
 {
 
@@ -95,7 +94,7 @@ UINT        status;
         /* Event flags group pointer is invalid, return appropriate error code.  */
         status =  TX_GROUP_ERROR;
     }
-    
+
     /* Now check for invalid event flag group ID.  */
     else if (group_ptr -> tx_event_flags_group_id != TX_EVENT_FLAGS_ID)
     {
@@ -107,7 +106,7 @@ UINT        status;
     {
 
         /* Otherwise, call the actual event flags group information get service.  */
-        status =  _tx_event_flags_info_get(group_ptr, name, current_flags, first_suspended, 
+        status =  _tx_event_flags_info_get(group_ptr, name, current_flags, first_suspended,
                                                             suspended_count, next_group);
     }
 

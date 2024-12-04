@@ -1,13 +1,12 @@
-/**************************************************************************/
-/*                                                                        */
-/*       Copyright (c) Microsoft Corporation. All rights reserved.        */
-/*                                                                        */
-/*       This software is licensed under the Microsoft Software License   */
-/*       Terms for Microsoft Azure RTOS. Full text of the license can be  */
-/*       found in the LICENSE file at https://aka.ms/AzureRTOS_EULA       */
-/*       and in the root directory of this software.                      */
-/*                                                                        */
-/**************************************************************************/
+/***************************************************************************
+ * Copyright (c) 2024 Microsoft Corporation 
+ * 
+ * This program and the accompanying materials are made available under the
+ * terms of the MIT License which is available at
+ * https://opensource.org/licenses/MIT.
+ * 
+ * SPDX-License-Identifier: MIT
+ **************************************************************************/
 
 
 /**************************************************************************/
@@ -86,7 +85,7 @@ TX_EVENT_FLAGS_GROUP    *previous_group;
 
     /* Setup the basic event flags group fields.  */
     group_ptr -> tx_event_flags_group_name =             name_ptr;
-    
+
     /* Disable interrupts to put the event flags group on the created list.  */
     TX_DISABLE
 
@@ -121,7 +120,7 @@ TX_EVENT_FLAGS_GROUP    *previous_group;
 
     /* Increment the number of created event flag groups.  */
     _tx_event_flags_created_count++;
-    
+
     /* Optional event flag group create extended processing.  */
     TX_EVENT_FLAGS_GROUP_CREATE_EXTENSION(group_ptr)
 

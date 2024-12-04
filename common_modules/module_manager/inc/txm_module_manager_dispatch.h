@@ -1,13 +1,12 @@
-/**************************************************************************/
-/*                                                                        */
-/*       Copyright (c) Microsoft Corporation. All rights reserved.        */
-/*                                                                        */
-/*       This software is licensed under the Microsoft Software License   */
-/*       Terms for Microsoft Azure RTOS. Full text of the license can be  */
-/*       found in the LICENSE file at https://aka.ms/AzureRTOS_EULA       */
-/*       and in the root directory of this software.                      */
-/*                                                                        */
-/**************************************************************************/
+/***************************************************************************
+ * Copyright (c) 2024 Microsoft Corporation 
+ * 
+ * This program and the accompanying materials are made available under the
+ * terms of the MIT License which is available at
+ * https://opensource.org/licenses/MIT.
+ * 
+ * SPDX-License-Identifier: MIT
+ **************************************************************************/
 
 
 /**************************************************************************/
@@ -20,6 +19,7 @@
 /**************************************************************************/
 /**************************************************************************/
 
+#ifndef TXM_BLOCK_ALLOCATE_CALL_NOT_USED
 /* UINT _txe_block_allocate(
     TX_BLOCK_POOL *pool_ptr, -> param_0
     VOID **block_ptr, -> param_1
@@ -46,7 +46,9 @@ ALIGN_TYPE return_value;
     );
     return(return_value);
 }
+#endif
 
+#ifndef TXM_BLOCK_POOL_CREATE_CALL_NOT_USED
 /* UINT _txe_block_pool_create(
     TX_BLOCK_POOL *pool_ptr, -> param_0
     CHAR *name_ptr, -> param_1
@@ -68,6 +70,9 @@ ALIGN_TYPE return_value;
         if (!TXM_MODULE_MANAGER_PARAM_CHECK_DEREFERENCE_STRING(module_instance, param_1))
             return(TXM_MODULE_INVALID_MEMORY);
 
+        if (!TXM_MODULE_MANAGER_ENSURE_INSIDE_MODULE_DATA(module_instance, (ALIGN_TYPE)extra_parameters, sizeof(ALIGN_TYPE[2])))
+            return(TXM_MODULE_INVALID_MEMORY);
+
         if (!TXM_MODULE_MANAGER_PARAM_CHECK_BUFFER_WRITE(module_instance, extra_parameters[1], extra_parameters[2]))
             return(TXM_MODULE_INVALID_MEMORY);
     }
@@ -82,7 +87,9 @@ ALIGN_TYPE return_value;
     );
     return(return_value);
 }
+#endif
 
+#ifndef TXM_BLOCK_POOL_DELETE_CALL_NOT_USED
 /* UINT _txe_block_pool_delete(
     TX_BLOCK_POOL *pool_ptr -> param_0
    ); */
@@ -108,7 +115,9 @@ ALIGN_TYPE return_value;
     }
     return(return_value);
 }
+#endif
 
+#ifndef TXM_BLOCK_POOL_INFO_GET_CALL_NOT_USED
 /* UINT _txe_block_pool_info_get(
     TX_BLOCK_POOL *pool_ptr, -> param_0
     CHAR **name, -> param_1
@@ -129,6 +138,9 @@ ALIGN_TYPE return_value;
             return(TXM_MODULE_INVALID_MEMORY);
 
         if (!TXM_MODULE_MANAGER_PARAM_CHECK_BUFFER_WRITE(module_instance, param_1, sizeof(CHAR *)))
+            return(TXM_MODULE_INVALID_MEMORY);
+
+        if (!TXM_MODULE_MANAGER_ENSURE_INSIDE_MODULE_DATA(module_instance, (ALIGN_TYPE)extra_parameters, sizeof(ALIGN_TYPE[5])))
             return(TXM_MODULE_INVALID_MEMORY);
 
         if (!TXM_MODULE_MANAGER_PARAM_CHECK_BUFFER_WRITE(module_instance, extra_parameters[0], sizeof(ULONG)))
@@ -158,7 +170,9 @@ ALIGN_TYPE return_value;
     );
     return(return_value);
 }
+#endif
 
+#ifndef TXM_BLOCK_POOL_PERFORMANCE_INFO_GET_CALL_NOT_USED
 /* UINT _tx_block_pool_performance_info_get(
     TX_BLOCK_POOL *pool_ptr, -> param_0
     ULONG *allocates, -> param_1
@@ -177,6 +191,9 @@ ALIGN_TYPE return_value;
             return(TXM_MODULE_INVALID_MEMORY);
 
         if (!TXM_MODULE_MANAGER_PARAM_CHECK_BUFFER_WRITE(module_instance, param_1, sizeof(ULONG)))
+            return(TXM_MODULE_INVALID_MEMORY);
+
+        if (!TXM_MODULE_MANAGER_ENSURE_INSIDE_MODULE_DATA(module_instance, (ALIGN_TYPE)extra_parameters, sizeof(ALIGN_TYPE[3])))
             return(TXM_MODULE_INVALID_MEMORY);
 
         if (!TXM_MODULE_MANAGER_PARAM_CHECK_BUFFER_WRITE(module_instance, extra_parameters[0], sizeof(ULONG)))
@@ -198,7 +215,9 @@ ALIGN_TYPE return_value;
     );
     return(return_value);
 }
+#endif
 
+#ifndef TXM_BLOCK_POOL_PERFORMANCE_SYSTEM_INFO_GET_CALL_NOT_USED
 /* UINT _tx_block_pool_performance_system_info_get(
     ULONG *allocates, -> param_0
     ULONG *releases, -> param_1
@@ -218,6 +237,9 @@ ALIGN_TYPE return_value;
         if (!TXM_MODULE_MANAGER_PARAM_CHECK_BUFFER_WRITE(module_instance, param_1, sizeof(ULONG)))
             return(TXM_MODULE_INVALID_MEMORY);
 
+        if (!TXM_MODULE_MANAGER_ENSURE_INSIDE_MODULE_DATA(module_instance, (ALIGN_TYPE)extra_parameters, sizeof(ALIGN_TYPE[2])))
+            return(TXM_MODULE_INVALID_MEMORY);
+
         if (!TXM_MODULE_MANAGER_PARAM_CHECK_BUFFER_WRITE(module_instance, extra_parameters[0], sizeof(ULONG)))
             return(TXM_MODULE_INVALID_MEMORY);
 
@@ -233,7 +255,9 @@ ALIGN_TYPE return_value;
     );
     return(return_value);
 }
+#endif
 
+#ifndef TXM_BLOCK_POOL_PRIORITIZE_CALL_NOT_USED
 /* UINT _txe_block_pool_prioritize(
     TX_BLOCK_POOL *pool_ptr -> param_0
    ); */
@@ -253,7 +277,9 @@ ALIGN_TYPE return_value;
     );
     return(return_value);
 }
+#endif
 
+#ifndef TXM_BLOCK_RELEASE_CALL_NOT_USED
 /* UINT _txe_block_release(
     VOID *block_ptr -> param_0
    ); */
@@ -292,7 +318,9 @@ ALIGN_TYPE block_header_start;
     );
     return(return_value);
 }
+#endif
 
+#ifndef TXM_BYTE_ALLOCATE_CALL_NOT_USED
 /* UINT _txe_byte_allocate(
     TX_BYTE_POOL *pool_ptr, -> param_0
     VOID **memory_ptr, -> param_1
@@ -311,6 +339,9 @@ ALIGN_TYPE return_value;
 
         if (!TXM_MODULE_MANAGER_PARAM_CHECK_BUFFER_WRITE(module_instance, param_1, sizeof(VOID *)))
             return(TXM_MODULE_INVALID_MEMORY);
+
+        if (!TXM_MODULE_MANAGER_ENSURE_INSIDE_MODULE_DATA(module_instance, (ALIGN_TYPE)extra_parameters, sizeof(ALIGN_TYPE[2])))
+            return(TXM_MODULE_INVALID_MEMORY);
     }
 
     return_value = (ALIGN_TYPE) _txe_byte_allocate(
@@ -321,7 +352,9 @@ ALIGN_TYPE return_value;
     );
     return(return_value);
 }
+#endif
 
+#ifndef TXM_BYTE_POOL_CREATE_CALL_NOT_USED
 /* UINT _txe_byte_pool_create(
     TX_BYTE_POOL *pool_ptr, -> param_0
     CHAR *name_ptr, -> param_1
@@ -342,6 +375,9 @@ ALIGN_TYPE return_value;
         if (!TXM_MODULE_MANAGER_PARAM_CHECK_DEREFERENCE_STRING(module_instance, param_1))
             return(TXM_MODULE_INVALID_MEMORY);
 
+        if (!TXM_MODULE_MANAGER_ENSURE_INSIDE_MODULE_DATA(module_instance, (ALIGN_TYPE)extra_parameters, sizeof(ALIGN_TYPE[3])))
+            return(TXM_MODULE_INVALID_MEMORY);
+
         if (!TXM_MODULE_MANAGER_PARAM_CHECK_BUFFER_WRITE(module_instance, extra_parameters[0], extra_parameters[1]))
             return(TXM_MODULE_INVALID_MEMORY);
     }
@@ -355,7 +391,9 @@ ALIGN_TYPE return_value;
     );
     return(return_value);
 }
+#endif
 
+#ifndef TXM_BYTE_POOL_DELETE_CALL_NOT_USED
 /* UINT _txe_byte_pool_delete(
     TX_BYTE_POOL *pool_ptr -> param_0
    ); */
@@ -381,7 +419,9 @@ ALIGN_TYPE return_value;
     }
     return(return_value);
 }
+#endif
 
+#ifndef TXM_BYTE_POOL_INFO_GET_CALL_NOT_USED
 /* UINT _txe_byte_pool_info_get(
     TX_BYTE_POOL *pool_ptr, -> param_0
     CHAR **name, -> param_1
@@ -402,6 +442,9 @@ ALIGN_TYPE return_value;
             return(TXM_MODULE_INVALID_MEMORY);
 
         if (!TXM_MODULE_MANAGER_PARAM_CHECK_BUFFER_WRITE(module_instance, param_1, sizeof(CHAR *)))
+            return(TXM_MODULE_INVALID_MEMORY);
+
+        if (!TXM_MODULE_MANAGER_ENSURE_INSIDE_MODULE_DATA(module_instance, (ALIGN_TYPE)extra_parameters, sizeof(ALIGN_TYPE[5])))
             return(TXM_MODULE_INVALID_MEMORY);
 
         if (!TXM_MODULE_MANAGER_PARAM_CHECK_BUFFER_WRITE(module_instance, extra_parameters[0], sizeof(ULONG)))
@@ -431,7 +474,9 @@ ALIGN_TYPE return_value;
     );
     return(return_value);
 }
+#endif
 
+#ifndef TXM_BYTE_POOL_PERFORMANCE_INFO_GET_CALL_NOT_USED
 /* UINT _tx_byte_pool_performance_info_get(
     TX_BYTE_POOL *pool_ptr, -> param_0
     ULONG *allocates, -> param_1
@@ -453,6 +498,9 @@ ALIGN_TYPE return_value;
             return(TXM_MODULE_INVALID_MEMORY);
 
         if (!TXM_MODULE_MANAGER_PARAM_CHECK_BUFFER_WRITE(module_instance, param_1, sizeof(ULONG)))
+            return(TXM_MODULE_INVALID_MEMORY);
+
+        if (!TXM_MODULE_MANAGER_ENSURE_INSIDE_MODULE_DATA(module_instance, (ALIGN_TYPE)extra_parameters, sizeof(ALIGN_TYPE[6])))
             return(TXM_MODULE_INVALID_MEMORY);
 
         if (!TXM_MODULE_MANAGER_PARAM_CHECK_BUFFER_WRITE(module_instance, extra_parameters[0], sizeof(ULONG)))
@@ -486,7 +534,9 @@ ALIGN_TYPE return_value;
     );
     return(return_value);
 }
+#endif
 
+#ifndef TXM_BYTE_POOL_PERFORMANCE_SYSTEM_INFO_GET_CALL_NOT_USED
 /* UINT _tx_byte_pool_performance_system_info_get(
     ULONG *allocates, -> param_0
     ULONG *releases, -> param_1
@@ -507,6 +557,9 @@ ALIGN_TYPE return_value;
             return(TXM_MODULE_INVALID_MEMORY);
 
         if (!TXM_MODULE_MANAGER_PARAM_CHECK_BUFFER_WRITE(module_instance, param_1, sizeof(ULONG)))
+            return(TXM_MODULE_INVALID_MEMORY);
+
+        if (!TXM_MODULE_MANAGER_ENSURE_INSIDE_MODULE_DATA(module_instance, (ALIGN_TYPE)extra_parameters, sizeof(ALIGN_TYPE[5])))
             return(TXM_MODULE_INVALID_MEMORY);
 
         if (!TXM_MODULE_MANAGER_PARAM_CHECK_BUFFER_WRITE(module_instance, extra_parameters[0], sizeof(ULONG)))
@@ -536,7 +589,9 @@ ALIGN_TYPE return_value;
     );
     return(return_value);
 }
+#endif
 
+#ifndef TXM_BYTE_POOL_PRIORITIZE_CALL_NOT_USED
 /* UINT _txe_byte_pool_prioritize(
     TX_BYTE_POOL *pool_ptr -> param_0
    ); */
@@ -556,7 +611,9 @@ ALIGN_TYPE return_value;
     );
     return(return_value);
 }
+#endif
 
+#ifndef TXM_BYTE_RELEASE_CALL_NOT_USED
 /* UINT _txe_byte_release(
     VOID *memory_ptr -> param_0
    ); */
@@ -595,7 +652,9 @@ ALIGN_TYPE block_header_start;
     );
     return(return_value);
 }
+#endif
 
+#ifndef TXM_EVENT_FLAGS_CREATE_CALL_NOT_USED
 /* UINT _txe_event_flags_create(
     TX_EVENT_FLAGS_GROUP *group_ptr, -> param_0
     CHAR *name_ptr, -> param_1
@@ -622,7 +681,9 @@ ALIGN_TYPE return_value;
     );
     return(return_value);
 }
+#endif
 
+#ifndef TXM_EVENT_FLAGS_DELETE_CALL_NOT_USED
 /* UINT _txe_event_flags_delete(
     TX_EVENT_FLAGS_GROUP *group_ptr -> param_0
    ); */
@@ -648,7 +709,9 @@ ALIGN_TYPE return_value;
     }
     return(return_value);
 }
+#endif
 
+#ifndef TXM_EVENT_FLAGS_GET_CALL_NOT_USED
 /* UINT _txe_event_flags_get(
     TX_EVENT_FLAGS_GROUP *group_ptr, -> param_0
     ULONG requested_flags, -> param_1
@@ -668,6 +731,9 @@ ALIGN_TYPE return_value;
 
         if (!TXM_MODULE_MANAGER_PARAM_CHECK_BUFFER_WRITE(module_instance, extra_parameters[1], sizeof(ULONG)))
             return(TXM_MODULE_INVALID_MEMORY);
+
+        if (!TXM_MODULE_MANAGER_ENSURE_INSIDE_MODULE_DATA(module_instance, (ALIGN_TYPE)extra_parameters, sizeof(ALIGN_TYPE[3])))
+            return(TXM_MODULE_INVALID_MEMORY);
     }
 
     return_value = (ALIGN_TYPE) _txe_event_flags_get(
@@ -679,7 +745,9 @@ ALIGN_TYPE return_value;
     );
     return(return_value);
 }
+#endif
 
+#ifndef TXM_EVENT_FLAGS_INFO_GET_CALL_NOT_USED
 /* UINT _txe_event_flags_info_get(
     TX_EVENT_FLAGS_GROUP *group_ptr, -> param_0
     CHAR **name, -> param_1
@@ -699,6 +767,9 @@ ALIGN_TYPE return_value;
             return(TXM_MODULE_INVALID_MEMORY);
 
         if (!TXM_MODULE_MANAGER_PARAM_CHECK_BUFFER_WRITE(module_instance, param_1, sizeof(CHAR *)))
+            return(TXM_MODULE_INVALID_MEMORY);
+
+        if (!TXM_MODULE_MANAGER_ENSURE_INSIDE_MODULE_DATA(module_instance, (ALIGN_TYPE)extra_parameters, sizeof(ALIGN_TYPE[4])))
             return(TXM_MODULE_INVALID_MEMORY);
 
         if (!TXM_MODULE_MANAGER_PARAM_CHECK_BUFFER_WRITE(module_instance, extra_parameters[0], sizeof(ULONG)))
@@ -724,7 +795,9 @@ ALIGN_TYPE return_value;
     );
     return(return_value);
 }
+#endif
 
+#ifndef TXM_EVENT_FLAGS_PERFORMANCE_INFO_GET_CALL_NOT_USED
 /* UINT _tx_event_flags_performance_info_get(
     TX_EVENT_FLAGS_GROUP *group_ptr, -> param_0
     ULONG *sets, -> param_1
@@ -743,6 +816,9 @@ ALIGN_TYPE return_value;
             return(TXM_MODULE_INVALID_MEMORY);
 
         if (!TXM_MODULE_MANAGER_PARAM_CHECK_BUFFER_WRITE(module_instance, param_1, sizeof(ULONG)))
+            return(TXM_MODULE_INVALID_MEMORY);
+
+        if (!TXM_MODULE_MANAGER_ENSURE_INSIDE_MODULE_DATA(module_instance, (ALIGN_TYPE)extra_parameters, sizeof(ALIGN_TYPE[3])))
             return(TXM_MODULE_INVALID_MEMORY);
 
         if (!TXM_MODULE_MANAGER_PARAM_CHECK_BUFFER_WRITE(module_instance, extra_parameters[0], sizeof(ULONG)))
@@ -764,7 +840,9 @@ ALIGN_TYPE return_value;
     );
     return(return_value);
 }
+#endif
 
+#ifndef TXM_EVENT_FLAGS_PERFORMANCE_SYSTEM_INFO_GET_CALL_NOT_USED
 /* UINT _tx_event_flags_performance_system_info_get(
     ULONG *sets, -> param_0
     ULONG *gets, -> param_1
@@ -784,6 +862,9 @@ ALIGN_TYPE return_value;
         if (!TXM_MODULE_MANAGER_PARAM_CHECK_BUFFER_WRITE(module_instance, param_1, sizeof(ULONG)))
             return(TXM_MODULE_INVALID_MEMORY);
 
+        if (!TXM_MODULE_MANAGER_ENSURE_INSIDE_MODULE_DATA(module_instance, (ALIGN_TYPE)extra_parameters, sizeof(ALIGN_TYPE[2])))
+            return(TXM_MODULE_INVALID_MEMORY);
+
         if (!TXM_MODULE_MANAGER_PARAM_CHECK_BUFFER_WRITE(module_instance, extra_parameters[0], sizeof(ULONG)))
             return(TXM_MODULE_INVALID_MEMORY);
 
@@ -799,7 +880,9 @@ ALIGN_TYPE return_value;
     );
     return(return_value);
 }
+#endif
 
+#ifndef TXM_EVENT_FLAGS_SET_CALL_NOT_USED
 /* UINT _txe_event_flags_set(
     TX_EVENT_FLAGS_GROUP *group_ptr, -> param_0
     ULONG flags_to_set, -> param_1
@@ -823,7 +906,9 @@ ALIGN_TYPE return_value;
     );
     return(return_value);
 }
+#endif
 
+#ifndef TXM_EVENT_FLAGS_SET_NOTIFY_CALL_NOT_USED
 /* UINT _txe_event_flags_set_notify(
     TX_EVENT_FLAGS_GROUP *group_ptr, -> param_0
     VOID (*events_set_notify)(TX_EVENT_FLAGS_GROUP *) -> param_1
@@ -867,7 +952,9 @@ VOID (*events_set_notify)(TX_EVENT_FLAGS_GROUP *);
     );
     return(return_value);
 }
+#endif
 
+#ifndef TXM_MUTEX_CREATE_CALL_NOT_USED
 /* UINT _txe_mutex_create(
     TX_MUTEX *mutex_ptr, -> param_0
     CHAR *name_ptr, -> param_1
@@ -886,6 +973,9 @@ ALIGN_TYPE return_value;
 
         if (!TXM_MODULE_MANAGER_PARAM_CHECK_DEREFERENCE_STRING(module_instance, param_1))
             return(TXM_MODULE_INVALID_MEMORY);
+
+        if (!TXM_MODULE_MANAGER_ENSURE_INSIDE_MODULE_DATA(module_instance, (ALIGN_TYPE)extra_parameters, sizeof(ALIGN_TYPE[2])))
+            return(TXM_MODULE_INVALID_MEMORY);
     }
 
     return_value = (ALIGN_TYPE) _txe_mutex_create(
@@ -896,7 +986,9 @@ ALIGN_TYPE return_value;
     );
     return(return_value);
 }
+#endif
 
+#ifndef TXM_MUTEX_DELETE_CALL_NOT_USED
 /* UINT _txe_mutex_delete(
     TX_MUTEX *mutex_ptr -> param_0
    ); */
@@ -922,7 +1014,9 @@ ALIGN_TYPE return_value;
     }
     return(return_value);
 }
+#endif
 
+#ifndef TXM_MUTEX_GET_CALL_NOT_USED
 /* UINT _txe_mutex_get(
     TX_MUTEX *mutex_ptr, -> param_0
     ULONG wait_option -> param_1
@@ -944,7 +1038,9 @@ ALIGN_TYPE return_value;
     );
     return(return_value);
 }
+#endif
 
+#ifndef TXM_MUTEX_INFO_GET_CALL_NOT_USED
 /* UINT _txe_mutex_info_get(
     TX_MUTEX *mutex_ptr, -> param_0
     CHAR **name, -> param_1
@@ -965,6 +1061,9 @@ ALIGN_TYPE return_value;
             return(TXM_MODULE_INVALID_MEMORY);
 
         if (!TXM_MODULE_MANAGER_PARAM_CHECK_BUFFER_WRITE(module_instance, param_1, sizeof(CHAR *)))
+            return(TXM_MODULE_INVALID_MEMORY);
+
+        if (!TXM_MODULE_MANAGER_ENSURE_INSIDE_MODULE_DATA(module_instance, (ALIGN_TYPE)extra_parameters, sizeof(ALIGN_TYPE[5])))
             return(TXM_MODULE_INVALID_MEMORY);
 
         if (!TXM_MODULE_MANAGER_PARAM_CHECK_BUFFER_WRITE(module_instance, extra_parameters[0], sizeof(ULONG)))
@@ -994,7 +1093,9 @@ ALIGN_TYPE return_value;
     );
     return(return_value);
 }
+#endif
 
+#ifndef TXM_MUTEX_PERFORMANCE_INFO_GET_CALL_NOT_USED
 /* UINT _tx_mutex_performance_info_get(
     TX_MUTEX *mutex_ptr, -> param_0
     ULONG *puts, -> param_1
@@ -1015,6 +1116,9 @@ ALIGN_TYPE return_value;
             return(TXM_MODULE_INVALID_MEMORY);
 
         if (!TXM_MODULE_MANAGER_PARAM_CHECK_BUFFER_WRITE(module_instance, param_1, sizeof(ULONG)))
+            return(TXM_MODULE_INVALID_MEMORY);
+
+        if (!TXM_MODULE_MANAGER_ENSURE_INSIDE_MODULE_DATA(module_instance, (ALIGN_TYPE)extra_parameters, sizeof(ALIGN_TYPE[5])))
             return(TXM_MODULE_INVALID_MEMORY);
 
         if (!TXM_MODULE_MANAGER_PARAM_CHECK_BUFFER_WRITE(module_instance, extra_parameters[0], sizeof(ULONG)))
@@ -1044,7 +1148,9 @@ ALIGN_TYPE return_value;
     );
     return(return_value);
 }
+#endif
 
+#ifndef TXM_MUTEX_PERFORMANCE_SYSTEM_INFO_GET_CALL_NOT_USED
 /* UINT _tx_mutex_performance_system_info_get(
     ULONG *puts, -> param_0
     ULONG *gets, -> param_1
@@ -1064,6 +1170,9 @@ ALIGN_TYPE return_value;
             return(TXM_MODULE_INVALID_MEMORY);
 
         if (!TXM_MODULE_MANAGER_PARAM_CHECK_BUFFER_WRITE(module_instance, param_1, sizeof(ULONG)))
+            return(TXM_MODULE_INVALID_MEMORY);
+
+        if (!TXM_MODULE_MANAGER_ENSURE_INSIDE_MODULE_DATA(module_instance, (ALIGN_TYPE)extra_parameters, sizeof(ALIGN_TYPE[4])))
             return(TXM_MODULE_INVALID_MEMORY);
 
         if (!TXM_MODULE_MANAGER_PARAM_CHECK_BUFFER_WRITE(module_instance, extra_parameters[0], sizeof(ULONG)))
@@ -1089,7 +1198,9 @@ ALIGN_TYPE return_value;
     );
     return(return_value);
 }
+#endif
 
+#ifndef TXM_MUTEX_PRIORITIZE_CALL_NOT_USED
 /* UINT _txe_mutex_prioritize(
     TX_MUTEX *mutex_ptr -> param_0
    ); */
@@ -1109,7 +1220,9 @@ ALIGN_TYPE return_value;
     );
     return(return_value);
 }
+#endif
 
+#ifndef TXM_MUTEX_PUT_CALL_NOT_USED
 /* UINT _txe_mutex_put(
     TX_MUTEX *mutex_ptr -> param_0
    ); */
@@ -1129,7 +1242,9 @@ ALIGN_TYPE return_value;
     );
     return(return_value);
 }
+#endif
 
+#ifndef TXM_QUEUE_CREATE_CALL_NOT_USED
 /* UINT _txe_queue_create(
     TX_QUEUE *queue_ptr, -> param_0
     CHAR *name_ptr, -> param_1
@@ -1151,6 +1266,9 @@ ALIGN_TYPE return_value;
         if (!TXM_MODULE_MANAGER_PARAM_CHECK_DEREFERENCE_STRING(module_instance, param_1))
             return(TXM_MODULE_INVALID_MEMORY);
 
+        if (!TXM_MODULE_MANAGER_ENSURE_INSIDE_MODULE_DATA(module_instance, (ALIGN_TYPE)extra_parameters, sizeof(ALIGN_TYPE[4])))
+            return(TXM_MODULE_INVALID_MEMORY);
+
         if (!TXM_MODULE_MANAGER_PARAM_CHECK_BUFFER_WRITE(module_instance, extra_parameters[1], extra_parameters[2]))
             return(TXM_MODULE_INVALID_MEMORY);
     }
@@ -1165,7 +1283,9 @@ ALIGN_TYPE return_value;
     );
     return(return_value);
 }
+#endif
 
+#ifndef TXM_QUEUE_DELETE_CALL_NOT_USED
 /* UINT _txe_queue_delete(
     TX_QUEUE *queue_ptr -> param_0
    ); */
@@ -1191,7 +1311,9 @@ ALIGN_TYPE return_value;
     }
     return(return_value);
 }
+#endif
 
+#ifndef TXM_QUEUE_FLUSH_CALL_NOT_USED
 /* UINT _txe_queue_flush(
     TX_QUEUE *queue_ptr -> param_0
    ); */
@@ -1211,7 +1333,9 @@ ALIGN_TYPE return_value;
     );
     return(return_value);
 }
+#endif
 
+#ifndef TXM_QUEUE_FRONT_SEND_CALL_NOT_USED
 /* UINT _txe_queue_front_send(
     TX_QUEUE *queue_ptr, -> param_0
     VOID *source_ptr, -> param_1
@@ -1229,7 +1353,7 @@ TX_QUEUE *queue_ptr;
             return(TXM_MODULE_INVALID_MEMORY);
 
         /* We need to get the size of the message from the queue.  */
-        queue_ptr =  (TX_QUEUE *) param_0; 
+        queue_ptr =  (TX_QUEUE *) param_0;
         if (!TXM_MODULE_MANAGER_PARAM_CHECK_BUFFER_READ(module_instance, param_1, queue_ptr -> tx_queue_message_size))
             return(TXM_MODULE_INVALID_MEMORY);
     }
@@ -1241,7 +1365,9 @@ TX_QUEUE *queue_ptr;
     );
     return(return_value);
 }
+#endif
 
+#ifndef TXM_QUEUE_INFO_GET_CALL_NOT_USED
 /* UINT _txe_queue_info_get(
     TX_QUEUE *queue_ptr, -> param_0
     CHAR **name, -> param_1
@@ -1262,6 +1388,9 @@ ALIGN_TYPE return_value;
             return(TXM_MODULE_INVALID_MEMORY);
 
         if (!TXM_MODULE_MANAGER_PARAM_CHECK_BUFFER_WRITE(module_instance, param_1, sizeof(CHAR *)))
+            return(TXM_MODULE_INVALID_MEMORY);
+
+        if (!TXM_MODULE_MANAGER_ENSURE_INSIDE_MODULE_DATA(module_instance, (ALIGN_TYPE)extra_parameters, sizeof(ALIGN_TYPE[5])))
             return(TXM_MODULE_INVALID_MEMORY);
 
         if (!TXM_MODULE_MANAGER_PARAM_CHECK_BUFFER_WRITE(module_instance, extra_parameters[0], sizeof(ULONG)))
@@ -1291,7 +1420,9 @@ ALIGN_TYPE return_value;
     );
     return(return_value);
 }
+#endif
 
+#ifndef TXM_QUEUE_PERFORMANCE_INFO_GET_CALL_NOT_USED
 /* UINT _tx_queue_performance_info_get(
     TX_QUEUE *queue_ptr, -> param_0
     ULONG *messages_sent, -> param_1
@@ -1312,6 +1443,9 @@ ALIGN_TYPE return_value;
             return(TXM_MODULE_INVALID_MEMORY);
 
         if (!TXM_MODULE_MANAGER_PARAM_CHECK_BUFFER_WRITE(module_instance, param_1, sizeof(ULONG)))
+            return(TXM_MODULE_INVALID_MEMORY);
+
+        if (!TXM_MODULE_MANAGER_ENSURE_INSIDE_MODULE_DATA(module_instance, (ALIGN_TYPE)extra_parameters, sizeof(ALIGN_TYPE[5])))
             return(TXM_MODULE_INVALID_MEMORY);
 
         if (!TXM_MODULE_MANAGER_PARAM_CHECK_BUFFER_WRITE(module_instance, extra_parameters[0], sizeof(ULONG)))
@@ -1341,7 +1475,9 @@ ALIGN_TYPE return_value;
     );
     return(return_value);
 }
+#endif
 
+#ifndef TXM_QUEUE_PERFORMANCE_SYSTEM_INFO_GET_CALL_NOT_USED
 /* UINT _tx_queue_performance_system_info_get(
     ULONG *messages_sent, -> param_0
     ULONG *messages_received, -> param_1
@@ -1361,6 +1497,9 @@ ALIGN_TYPE return_value;
             return(TXM_MODULE_INVALID_MEMORY);
 
         if (!TXM_MODULE_MANAGER_PARAM_CHECK_BUFFER_WRITE(module_instance, param_1, sizeof(ULONG)))
+            return(TXM_MODULE_INVALID_MEMORY);
+
+        if (!TXM_MODULE_MANAGER_ENSURE_INSIDE_MODULE_DATA(module_instance, (ALIGN_TYPE)extra_parameters, sizeof(ALIGN_TYPE[4])))
             return(TXM_MODULE_INVALID_MEMORY);
 
         if (!TXM_MODULE_MANAGER_PARAM_CHECK_BUFFER_WRITE(module_instance, extra_parameters[0], sizeof(ULONG)))
@@ -1386,7 +1525,9 @@ ALIGN_TYPE return_value;
     );
     return(return_value);
 }
+#endif
 
+#ifndef TXM_QUEUE_PRIORITIZE_CALL_NOT_USED
 /* UINT _txe_queue_prioritize(
     TX_QUEUE *queue_ptr -> param_0
    ); */
@@ -1406,7 +1547,9 @@ ALIGN_TYPE return_value;
     );
     return(return_value);
 }
+#endif
 
+#ifndef TXM_QUEUE_RECEIVE_CALL_NOT_USED
 /* UINT _txe_queue_receive(
     TX_QUEUE *queue_ptr, -> param_0
     VOID *destination_ptr, -> param_1
@@ -1424,7 +1567,7 @@ TX_QUEUE *queue_ptr;
             return(TXM_MODULE_INVALID_MEMORY);
 
         /* We need to get the max size of the buffer from the queue.  */
-        queue_ptr =  (TX_QUEUE *) param_0; 
+        queue_ptr =  (TX_QUEUE *) param_0;
         if (!TXM_MODULE_MANAGER_PARAM_CHECK_BUFFER_WRITE(module_instance, param_1, sizeof(ULONG)*queue_ptr -> tx_queue_message_size))
             return(TXM_MODULE_INVALID_MEMORY);
     }
@@ -1436,7 +1579,9 @@ TX_QUEUE *queue_ptr;
     );
     return(return_value);
 }
+#endif
 
+#ifndef TXM_QUEUE_SEND_CALL_NOT_USED
 /* UINT _txe_queue_send(
     TX_QUEUE *queue_ptr, -> param_0
     VOID *source_ptr, -> param_1
@@ -1454,7 +1599,7 @@ TX_QUEUE *queue_ptr;
             return(TXM_MODULE_INVALID_MEMORY);
 
         /* We need to get the size of the message from the queue.  */
-        queue_ptr =  (TX_QUEUE *) param_0; 
+        queue_ptr =  (TX_QUEUE *) param_0;
         if (!TXM_MODULE_MANAGER_PARAM_CHECK_BUFFER_READ(module_instance, param_1, sizeof(ULONG)*queue_ptr -> tx_queue_message_size))
             return(TXM_MODULE_INVALID_MEMORY);
     }
@@ -1466,7 +1611,9 @@ TX_QUEUE *queue_ptr;
     );
     return(return_value);
 }
+#endif
 
+#ifndef TXM_QUEUE_SEND_NOTIFY_CALL_NOT_USED
 /* UINT _txe_queue_send_notify(
     TX_QUEUE *queue_ptr, -> param_0
     VOID (*queue_send_notify)(TX_QUEUE *notify_queue_ptr) -> param_1
@@ -1510,7 +1657,9 @@ VOID (*queue_send_notify)(TX_QUEUE *);
     );
     return(return_value);
 }
+#endif
 
+#ifndef TXM_SEMAPHORE_CEILING_PUT_CALL_NOT_USED
 /* UINT _txe_semaphore_ceiling_put(
     TX_SEMAPHORE *semaphore_ptr, -> param_0
     ULONG ceiling -> param_1
@@ -1532,7 +1681,9 @@ ALIGN_TYPE return_value;
     );
     return(return_value);
 }
+#endif
 
+#ifndef TXM_SEMAPHORE_CREATE_CALL_NOT_USED
 /* UINT _txe_semaphore_create(
     TX_SEMAPHORE *semaphore_ptr, -> param_0
     CHAR *name_ptr, -> param_1
@@ -1551,6 +1702,9 @@ ALIGN_TYPE return_value;
 
         if (!TXM_MODULE_MANAGER_PARAM_CHECK_DEREFERENCE_STRING(module_instance, param_1))
             return(TXM_MODULE_INVALID_MEMORY);
+
+        if (!TXM_MODULE_MANAGER_ENSURE_INSIDE_MODULE_DATA(module_instance, (ALIGN_TYPE)extra_parameters, sizeof(ALIGN_TYPE[2])))
+            return(TXM_MODULE_INVALID_MEMORY);
     }
 
     return_value = (ALIGN_TYPE) _txe_semaphore_create(
@@ -1561,7 +1715,9 @@ ALIGN_TYPE return_value;
     );
     return(return_value);
 }
+#endif
 
+#ifndef TXM_SEMAPHORE_DELETE_CALL_NOT_USED
 /* UINT _txe_semaphore_delete(
     TX_SEMAPHORE *semaphore_ptr -> param_0
    ); */
@@ -1587,7 +1743,9 @@ ALIGN_TYPE return_value;
     }
     return(return_value);
 }
+#endif
 
+#ifndef TXM_SEMAPHORE_GET_CALL_NOT_USED
 /* UINT _txe_semaphore_get(
     TX_SEMAPHORE *semaphore_ptr, -> param_0
     ULONG wait_option -> param_1
@@ -1609,7 +1767,9 @@ ALIGN_TYPE return_value;
     );
     return(return_value);
 }
+#endif
 
+#ifndef TXM_SEMAPHORE_INFO_GET_CALL_NOT_USED
 /* UINT _txe_semaphore_info_get(
     TX_SEMAPHORE *semaphore_ptr, -> param_0
     CHAR **name, -> param_1
@@ -1629,6 +1789,9 @@ ALIGN_TYPE return_value;
             return(TXM_MODULE_INVALID_MEMORY);
 
         if (!TXM_MODULE_MANAGER_PARAM_CHECK_BUFFER_WRITE(module_instance, param_1, sizeof(CHAR *)))
+            return(TXM_MODULE_INVALID_MEMORY);
+
+        if (!TXM_MODULE_MANAGER_ENSURE_INSIDE_MODULE_DATA(module_instance, (ALIGN_TYPE)extra_parameters, sizeof(ALIGN_TYPE[4])))
             return(TXM_MODULE_INVALID_MEMORY);
 
         if (!TXM_MODULE_MANAGER_PARAM_CHECK_BUFFER_WRITE(module_instance, extra_parameters[0], sizeof(ULONG)))
@@ -1654,7 +1817,9 @@ ALIGN_TYPE return_value;
     );
     return(return_value);
 }
+#endif
 
+#ifndef TXM_SEMAPHORE_PERFORMANCE_INFO_GET_CALL_NOT_USED
 /* UINT _tx_semaphore_performance_info_get(
     TX_SEMAPHORE *semaphore_ptr, -> param_0
     ULONG *puts, -> param_1
@@ -1673,6 +1838,9 @@ ALIGN_TYPE return_value;
             return(TXM_MODULE_INVALID_MEMORY);
 
         if (!TXM_MODULE_MANAGER_PARAM_CHECK_BUFFER_WRITE(module_instance, param_1, sizeof(ULONG)))
+            return(TXM_MODULE_INVALID_MEMORY);
+
+        if (!TXM_MODULE_MANAGER_ENSURE_INSIDE_MODULE_DATA(module_instance, (ALIGN_TYPE)extra_parameters, sizeof(ALIGN_TYPE[3])))
             return(TXM_MODULE_INVALID_MEMORY);
 
         if (!TXM_MODULE_MANAGER_PARAM_CHECK_BUFFER_WRITE(module_instance, extra_parameters[0], sizeof(ULONG)))
@@ -1694,7 +1862,9 @@ ALIGN_TYPE return_value;
     );
     return(return_value);
 }
+#endif
 
+#ifndef TXM_SEMAPHORE_PERFORMANCE_SYSTEM_INFO_GET_CALL_NOT_USED
 /* UINT _tx_semaphore_performance_system_info_get(
     ULONG *puts, -> param_0
     ULONG *gets, -> param_1
@@ -1714,6 +1884,9 @@ ALIGN_TYPE return_value;
         if (!TXM_MODULE_MANAGER_PARAM_CHECK_BUFFER_WRITE(module_instance, param_1, sizeof(ULONG)))
             return(TXM_MODULE_INVALID_MEMORY);
 
+        if (!TXM_MODULE_MANAGER_ENSURE_INSIDE_MODULE_DATA(module_instance, (ALIGN_TYPE)extra_parameters, sizeof(ALIGN_TYPE[2])))
+            return(TXM_MODULE_INVALID_MEMORY);
+
         if (!TXM_MODULE_MANAGER_PARAM_CHECK_BUFFER_WRITE(module_instance, extra_parameters[0], sizeof(ULONG)))
             return(TXM_MODULE_INVALID_MEMORY);
 
@@ -1729,7 +1902,9 @@ ALIGN_TYPE return_value;
     );
     return(return_value);
 }
+#endif
 
+#ifndef TXM_SEMAPHORE_PRIORITIZE_CALL_NOT_USED
 /* UINT _txe_semaphore_prioritize(
     TX_SEMAPHORE *semaphore_ptr -> param_0
    ); */
@@ -1749,7 +1924,9 @@ ALIGN_TYPE return_value;
     );
     return(return_value);
 }
+#endif
 
+#ifndef TXM_SEMAPHORE_PUT_CALL_NOT_USED
 /* UINT _txe_semaphore_put(
     TX_SEMAPHORE *semaphore_ptr -> param_0
    ); */
@@ -1769,7 +1946,9 @@ ALIGN_TYPE return_value;
     );
     return(return_value);
 }
+#endif
 
+#ifndef TXM_SEMAPHORE_PUT_NOTIFY_CALL_NOT_USED
 /* UINT _txe_semaphore_put_notify(
     TX_SEMAPHORE *semaphore_ptr, -> param_0
     VOID (*semaphore_put_notify)(TX_SEMAPHORE *notify_semaphore_ptr) -> param_1
@@ -1813,7 +1992,9 @@ VOID (*semaphore_put_notify)(TX_SEMAPHORE *);
     );
     return(return_value);
 }
+#endif
 
+#ifndef TXM_THREAD_CREATE_CALL_NOT_USED
 /* UINT _txe_thread_create(
     TX_THREAD *thread_ptr, -> param_0
     CHAR *name_ptr, -> param_1
@@ -1838,6 +2019,9 @@ ALIGN_TYPE return_value;
             return(TXM_MODULE_INVALID_MEMORY);
 
         if (!TXM_MODULE_MANAGER_PARAM_CHECK_DEREFERENCE_STRING(module_instance, param_1))
+            return(TXM_MODULE_INVALID_MEMORY);
+
+        if (!TXM_MODULE_MANAGER_ENSURE_INSIDE_MODULE_DATA(module_instance, (ALIGN_TYPE)extra_parameters, sizeof(ALIGN_TYPE[9])))
             return(TXM_MODULE_INVALID_MEMORY);
 
         if (!TXM_MODULE_MANAGER_PARAM_CHECK_BUFFER_WRITE(module_instance, extra_parameters[2], extra_parameters[3]))
@@ -1867,7 +2051,9 @@ ALIGN_TYPE return_value;
     );
     return(return_value);
 }
+#endif
 
+#ifndef TXM_THREAD_DELETE_CALL_NOT_USED
 /* UINT _txe_thread_delete(
     TX_THREAD *thread_ptr -> param_0
    ); */
@@ -1893,7 +2079,9 @@ ALIGN_TYPE return_value;
     }
     return(return_value);
 }
+#endif
 
+#ifndef TXM_THREAD_ENTRY_EXIT_NOTIFY_CALL_NOT_USED
 /* UINT _txe_thread_entry_exit_notify(
     TX_THREAD *thread_ptr, -> param_0
     VOID (*thread_entry_exit_notify)(TX_THREAD *notify_thread_ptr, UINT type) -> param_1
@@ -1942,7 +2130,9 @@ VOID (*thread_entry_exit_notify)(TX_THREAD *, UINT);
     );
     return(return_value);
 }
+#endif
 
+#ifndef TXM_THREAD_IDENTIFY_CALL_NOT_USED
 /* TX_THREAD *_tx_thread_identify(); */
 static ALIGN_TYPE _txm_module_manager_tx_thread_identify_dispatch(TXM_MODULE_INSTANCE *module_instance, ALIGN_TYPE param_0, ALIGN_TYPE param_1, ALIGN_TYPE *extra_parameters)
 {
@@ -1952,7 +2142,9 @@ ALIGN_TYPE return_value;
     return_value = (ALIGN_TYPE) _tx_thread_identify();
     return(return_value);
 }
+#endif
 
+#ifndef TXM_THREAD_INFO_GET_CALL_NOT_USED
 /* UINT _txe_thread_info_get(
     TX_THREAD *thread_ptr, -> param_0
     CHAR **name, -> param_1
@@ -1975,6 +2167,9 @@ ALIGN_TYPE return_value;
             return(TXM_MODULE_INVALID_MEMORY);
 
         if (!TXM_MODULE_MANAGER_PARAM_CHECK_BUFFER_WRITE(module_instance, param_1, sizeof(CHAR *)))
+            return(TXM_MODULE_INVALID_MEMORY);
+
+        if (!TXM_MODULE_MANAGER_ENSURE_INSIDE_MODULE_DATA(module_instance, (ALIGN_TYPE)extra_parameters, sizeof(ALIGN_TYPE[7])))
             return(TXM_MODULE_INVALID_MEMORY);
 
         if (!TXM_MODULE_MANAGER_PARAM_CHECK_BUFFER_WRITE(module_instance, extra_parameters[0], sizeof(UINT)))
@@ -2012,7 +2207,9 @@ ALIGN_TYPE return_value;
     );
     return(return_value);
 }
+#endif
 
+#ifndef TXM_THREAD_INTERRUPT_CONTROL_CALL_NOT_USED
 /* UINT _tx_thread_interrupt_control(
     UINT new_posture -> param_0
    ); */
@@ -2029,7 +2226,9 @@ ALIGN_TYPE return_value;
     );
     return(return_value);
 }
+#endif
 
+#ifndef TXM_THREAD_PERFORMANCE_INFO_GET_CALL_NOT_USED
 /* UINT _tx_thread_performance_info_get(
     TX_THREAD *thread_ptr, -> param_0
     ULONG *resumptions, -> param_1
@@ -2054,6 +2253,9 @@ ALIGN_TYPE return_value;
             return(TXM_MODULE_INVALID_MEMORY);
 
         if (!TXM_MODULE_MANAGER_PARAM_CHECK_BUFFER_WRITE(module_instance, param_1, sizeof(ULONG)))
+            return(TXM_MODULE_INVALID_MEMORY);
+
+        if (!TXM_MODULE_MANAGER_ENSURE_INSIDE_MODULE_DATA(module_instance, (ALIGN_TYPE)extra_parameters, sizeof(ALIGN_TYPE[9])))
             return(TXM_MODULE_INVALID_MEMORY);
 
         if (!TXM_MODULE_MANAGER_PARAM_CHECK_BUFFER_WRITE(module_instance, extra_parameters[0], sizeof(ULONG)))
@@ -2099,7 +2301,9 @@ ALIGN_TYPE return_value;
     );
     return(return_value);
 }
+#endif
 
+#ifndef TXM_THREAD_PERFORMANCE_SYSTEM_INFO_GET_CALL_NOT_USED
 /* UINT _tx_thread_performance_system_info_get(
     ULONG *resumptions, -> param_0
     ULONG *suspensions, -> param_1
@@ -2124,6 +2328,9 @@ ALIGN_TYPE return_value;
             return(TXM_MODULE_INVALID_MEMORY);
 
         if (!TXM_MODULE_MANAGER_PARAM_CHECK_BUFFER_WRITE(module_instance, param_1, sizeof(ULONG)))
+            return(TXM_MODULE_INVALID_MEMORY);
+
+        if (!TXM_MODULE_MANAGER_ENSURE_INSIDE_MODULE_DATA(module_instance, (ALIGN_TYPE)extra_parameters, sizeof(ALIGN_TYPE[9])))
             return(TXM_MODULE_INVALID_MEMORY);
 
         if (!TXM_MODULE_MANAGER_PARAM_CHECK_BUFFER_WRITE(module_instance, extra_parameters[0], sizeof(ULONG)))
@@ -2169,7 +2376,9 @@ ALIGN_TYPE return_value;
     );
     return(return_value);
 }
+#endif
 
+#ifndef TXM_THREAD_PREEMPTION_CHANGE_CALL_NOT_USED
 /* UINT _txe_thread_preemption_change(
     TX_THREAD *thread_ptr, -> param_0
     UINT new_threshold, -> param_1
@@ -2196,7 +2405,9 @@ ALIGN_TYPE return_value;
     );
     return(return_value);
 }
+#endif
 
+#ifndef TXM_THREAD_PRIORITY_CHANGE_CALL_NOT_USED
 /* UINT _txe_thread_priority_change(
     TX_THREAD *thread_ptr, -> param_0
     UINT new_priority, -> param_1
@@ -2223,7 +2434,9 @@ ALIGN_TYPE return_value;
     );
     return(return_value);
 }
+#endif
 
+#ifndef TXM_THREAD_RELINQUISH_CALL_NOT_USED
 /* VOID _txe_thread_relinquish(); */
 static ALIGN_TYPE _txm_module_manager_tx_thread_relinquish_dispatch(TXM_MODULE_INSTANCE *module_instance, ALIGN_TYPE param_0, ALIGN_TYPE param_1, ALIGN_TYPE *extra_parameters)
 {
@@ -2231,7 +2444,9 @@ static ALIGN_TYPE _txm_module_manager_tx_thread_relinquish_dispatch(TXM_MODULE_I
     _txe_thread_relinquish();
     return(TX_SUCCESS);
 }
+#endif
 
+#ifndef TXM_THREAD_RESET_CALL_NOT_USED
 /* UINT _txe_thread_reset(
     TX_THREAD *thread_ptr -> param_0
    ); */
@@ -2251,7 +2466,9 @@ ALIGN_TYPE return_value;
     );
     return(return_value);
 }
+#endif
 
+#ifndef TXM_THREAD_RESUME_CALL_NOT_USED
 /* UINT _txe_thread_resume(
     TX_THREAD *thread_ptr -> param_0
    ); */
@@ -2271,7 +2488,9 @@ ALIGN_TYPE return_value;
     );
     return(return_value);
 }
+#endif
 
+#ifndef TXM_THREAD_SLEEP_CALL_NOT_USED
 /* UINT _tx_thread_sleep(
     ULONG timer_ticks -> param_0
    ); */
@@ -2285,7 +2504,9 @@ ALIGN_TYPE return_value;
     );
     return(return_value);
 }
+#endif
 
+#ifndef TXM_THREAD_STACK_ERROR_NOTIFY_CALL_NOT_USED
 /* UINT _tx_thread_stack_error_notify(
     VOID (*stack_error_handler)(TX_THREAD *thread_ptr) -> param_0
    ); */
@@ -2302,7 +2523,9 @@ ALIGN_TYPE return_value;
     );
     return(return_value);
 }
+#endif
 
+#ifndef TXM_THREAD_SUSPEND_CALL_NOT_USED
 /* UINT _txe_thread_suspend(
     TX_THREAD *thread_ptr -> param_0
    ); */
@@ -2322,7 +2545,9 @@ ALIGN_TYPE return_value;
     );
     return(return_value);
 }
+#endif
 
+#ifndef TXM_THREAD_SYSTEM_SUSPEND_CALL_NOT_USED
 /* VOID _tx_thread_system_suspend(
     TX_THREAD *thread_ptr -> param_0
    ); */
@@ -2377,7 +2602,9 @@ TX_THREAD *thread_ptr;
     );
     return(TX_SUCCESS);
 }
+#endif
 
+#ifndef TXM_THREAD_TERMINATE_CALL_NOT_USED
 /* UINT _txe_thread_terminate(
     TX_THREAD *thread_ptr -> param_0
    ); */
@@ -2397,7 +2624,9 @@ ALIGN_TYPE return_value;
     );
     return(return_value);
 }
+#endif
 
+#ifndef TXM_THREAD_TIME_SLICE_CHANGE_CALL_NOT_USED
 /* UINT _txe_thread_time_slice_change(
     TX_THREAD *thread_ptr, -> param_0
     ULONG new_time_slice, -> param_1
@@ -2424,7 +2653,9 @@ ALIGN_TYPE return_value;
     );
     return(return_value);
 }
+#endif
 
+#ifndef TXM_THREAD_WAIT_ABORT_CALL_NOT_USED
 /* UINT _txe_thread_wait_abort(
     TX_THREAD *thread_ptr -> param_0
    ); */
@@ -2444,7 +2675,9 @@ ALIGN_TYPE return_value;
     );
     return(return_value);
 }
+#endif
 
+#ifndef TXM_TIME_GET_CALL_NOT_USED
 /* ULONG _tx_time_get(); */
 static ALIGN_TYPE _txm_module_manager_tx_time_get_dispatch(TXM_MODULE_INSTANCE *module_instance, ALIGN_TYPE param_0, ALIGN_TYPE param_1, ALIGN_TYPE *extra_parameters)
 {
@@ -2454,7 +2687,9 @@ ALIGN_TYPE return_value;
     return_value = (ALIGN_TYPE) _tx_time_get();
     return(return_value);
 }
+#endif
 
+#ifndef TXM_TIME_SET_CALL_NOT_USED
 /* VOID _tx_time_set(
     ULONG new_time -> param_0
    ); */
@@ -2466,7 +2701,9 @@ static ALIGN_TYPE _txm_module_manager_tx_time_set_dispatch(TXM_MODULE_INSTANCE *
     );
     return(TX_SUCCESS);
 }
+#endif
 
+#ifndef TXM_TIMER_ACTIVATE_CALL_NOT_USED
 /* UINT _txe_timer_activate(
     TX_TIMER *timer_ptr -> param_0
    ); */
@@ -2486,7 +2723,9 @@ ALIGN_TYPE return_value;
     );
     return(return_value);
 }
+#endif
 
+#ifndef TXM_TIMER_CHANGE_CALL_NOT_USED
 /* UINT _txe_timer_change(
     TX_TIMER *timer_ptr, -> param_0
     ULONG initial_ticks, -> param_1
@@ -2510,7 +2749,9 @@ ALIGN_TYPE return_value;
     );
     return(return_value);
 }
+#endif
 
+#ifndef TXM_TIMER_CREATE_CALL_NOT_USED
 /* UINT _txe_timer_create(
     TX_TIMER *timer_ptr, -> param_0
     CHAR *name_ptr, -> param_1
@@ -2534,6 +2775,9 @@ VOID (*expiration_function)(ULONG);
             return(TXM_MODULE_INVALID_MEMORY);
 
         if (!TXM_MODULE_MANAGER_PARAM_CHECK_DEREFERENCE_STRING(module_instance, param_1))
+            return(TXM_MODULE_INVALID_MEMORY);
+
+        if (!TXM_MODULE_MANAGER_ENSURE_INSIDE_MODULE_DATA(module_instance, (ALIGN_TYPE)extra_parameters, sizeof(ALIGN_TYPE[6])))
             return(TXM_MODULE_INVALID_MEMORY);
     }
 
@@ -2578,7 +2822,9 @@ VOID (*expiration_function)(ULONG);
     }
     return(return_value);
 }
+#endif
 
+#ifndef TXM_TIMER_DEACTIVATE_CALL_NOT_USED
 /* UINT _txe_timer_deactivate(
     TX_TIMER *timer_ptr -> param_0
    ); */
@@ -2598,7 +2844,9 @@ ALIGN_TYPE return_value;
     );
     return(return_value);
 }
+#endif
 
+#ifndef TXM_TIMER_DELETE_CALL_NOT_USED
 /* UINT _txe_timer_delete(
     TX_TIMER *timer_ptr -> param_0
    ); */
@@ -2624,7 +2872,9 @@ ALIGN_TYPE return_value;
     }
     return(return_value);
 }
+#endif
 
+#ifndef TXM_TIMER_INFO_GET_CALL_NOT_USED
 /* UINT _txe_timer_info_get(
     TX_TIMER *timer_ptr, -> param_0
     CHAR **name, -> param_1
@@ -2644,6 +2894,9 @@ ALIGN_TYPE return_value;
             return(TXM_MODULE_INVALID_MEMORY);
 
         if (!TXM_MODULE_MANAGER_PARAM_CHECK_BUFFER_WRITE(module_instance, param_1, sizeof(CHAR *)))
+            return(TXM_MODULE_INVALID_MEMORY);
+
+        if (!TXM_MODULE_MANAGER_ENSURE_INSIDE_MODULE_DATA(module_instance, (ALIGN_TYPE)extra_parameters, sizeof(ALIGN_TYPE[4])))
             return(TXM_MODULE_INVALID_MEMORY);
 
         if (!TXM_MODULE_MANAGER_PARAM_CHECK_BUFFER_WRITE(module_instance, extra_parameters[0], sizeof(UINT)))
@@ -2669,7 +2922,9 @@ ALIGN_TYPE return_value;
     );
     return(return_value);
 }
+#endif
 
+#ifndef TXM_TIMER_PERFORMANCE_INFO_GET_CALL_NOT_USED
 /* UINT _tx_timer_performance_info_get(
     TX_TIMER *timer_ptr, -> param_0
     ULONG *activates, -> param_1
@@ -2689,6 +2944,9 @@ ALIGN_TYPE return_value;
             return(TXM_MODULE_INVALID_MEMORY);
 
         if (!TXM_MODULE_MANAGER_PARAM_CHECK_BUFFER_WRITE(module_instance, param_1, sizeof(ULONG)))
+            return(TXM_MODULE_INVALID_MEMORY);
+
+        if (!TXM_MODULE_MANAGER_ENSURE_INSIDE_MODULE_DATA(module_instance, (ALIGN_TYPE)extra_parameters, sizeof(ALIGN_TYPE[4])))
             return(TXM_MODULE_INVALID_MEMORY);
 
         if (!TXM_MODULE_MANAGER_PARAM_CHECK_BUFFER_WRITE(module_instance, extra_parameters[0], sizeof(ULONG)))
@@ -2714,7 +2972,9 @@ ALIGN_TYPE return_value;
     );
     return(return_value);
 }
+#endif
 
+#ifndef TXM_TIMER_PERFORMANCE_SYSTEM_INFO_GET_CALL_NOT_USED
 /* UINT _tx_timer_performance_system_info_get(
     ULONG *activates, -> param_0
     ULONG *reactivates, -> param_1
@@ -2733,6 +2993,9 @@ ALIGN_TYPE return_value;
             return(TXM_MODULE_INVALID_MEMORY);
 
         if (!TXM_MODULE_MANAGER_PARAM_CHECK_BUFFER_WRITE(module_instance, param_1, sizeof(ULONG)))
+            return(TXM_MODULE_INVALID_MEMORY);
+
+        if (!TXM_MODULE_MANAGER_ENSURE_INSIDE_MODULE_DATA(module_instance, (ALIGN_TYPE)extra_parameters, sizeof(ALIGN_TYPE[3])))
             return(TXM_MODULE_INVALID_MEMORY);
 
         if (!TXM_MODULE_MANAGER_PARAM_CHECK_BUFFER_WRITE(module_instance, extra_parameters[0], sizeof(ULONG)))
@@ -2754,7 +3017,9 @@ ALIGN_TYPE return_value;
     );
     return(return_value);
 }
+#endif
 
+#ifndef TXM_TRACE_BUFFER_FULL_NOTIFY_CALL_NOT_USED
 /* UINT _tx_trace_buffer_full_notify(
     VOID (*full_buffer_callback)(VOID *buffer) -> param_0
    ); */
@@ -2768,7 +3033,9 @@ ALIGN_TYPE return_value;
     );
     return(return_value);
 }
+#endif
 
+#ifndef TXM_TRACE_DISABLE_CALL_NOT_USED
 /* UINT _tx_trace_disable(); */
 static ALIGN_TYPE _txm_module_manager_tx_trace_disable_dispatch(TXM_MODULE_INSTANCE *module_instance, ALIGN_TYPE param_0, ALIGN_TYPE param_1, ALIGN_TYPE *extra_parameters)
 {
@@ -2781,7 +3048,9 @@ ALIGN_TYPE return_value;
     return_value = (ALIGN_TYPE) _tx_trace_disable();
     return(return_value);
 }
+#endif
 
+#ifndef TXM_TRACE_ENABLE_CALL_NOT_USED
 /* UINT _tx_trace_enable(
     VOID *trace_buffer_start, -> param_0
     ULONG trace_buffer_size, -> param_1
@@ -2802,7 +3071,9 @@ ALIGN_TYPE return_value;
     );
     return(return_value);
 }
+#endif
 
+#ifndef TXM_TRACE_EVENT_FILTER_CALL_NOT_USED
 /* UINT _tx_trace_event_filter(
     ULONG event_filter_bits -> param_0
    ); */
@@ -2816,7 +3087,9 @@ ALIGN_TYPE return_value;
     );
     return(return_value);
 }
+#endif
 
+#ifndef TXM_TRACE_EVENT_UNFILTER_CALL_NOT_USED
 /* UINT _tx_trace_event_unfilter(
     ULONG event_unfilter_bits -> param_0
    ); */
@@ -2830,7 +3103,9 @@ ALIGN_TYPE return_value;
     );
     return(return_value);
 }
+#endif
 
+#ifndef TXM_TRACE_INTERRUPT_CONTROL_CALL_NOT_USED
 /* UINT _tx_trace_interrupt_control(
     UINT new_posture -> param_0
    ); */
@@ -2847,7 +3122,9 @@ ALIGN_TYPE return_value;
     );
     return(return_value);
 }
+#endif
 
+#ifndef TXM_TRACE_ISR_ENTER_INSERT_CALL_NOT_USED
 /* VOID _tx_trace_isr_enter_insert(
     ULONG isr_id -> param_0
    ); */
@@ -2862,7 +3139,9 @@ static ALIGN_TYPE _txm_module_manager_tx_trace_isr_enter_insert_dispatch(TXM_MOD
     );
     return(TX_SUCCESS);
 }
+#endif
 
+#ifndef TXM_TRACE_ISR_EXIT_INSERT_CALL_NOT_USED
 /* VOID _tx_trace_isr_exit_insert(
     ULONG isr_id -> param_0
    ); */
@@ -2877,7 +3156,9 @@ static ALIGN_TYPE _txm_module_manager_tx_trace_isr_exit_insert_dispatch(TXM_MODU
     );
     return(TX_SUCCESS);
 }
+#endif
 
+#ifndef TXM_TRACE_USER_EVENT_INSERT_CALL_NOT_USED
 /* UINT _tx_trace_user_event_insert(
     ULONG event_id, -> param_0
     ULONG info_field_1, -> param_1
@@ -2890,6 +3171,12 @@ static ALIGN_TYPE _txm_module_manager_tx_trace_user_event_insert_dispatch(TXM_MO
 
 ALIGN_TYPE return_value;
 
+    if (module_instance -> txm_module_instance_property_flags & TXM_MODULE_MEMORY_PROTECTION)
+    {
+        if (!TXM_MODULE_MANAGER_ENSURE_INSIDE_MODULE_DATA(module_instance, (ALIGN_TYPE)extra_parameters, sizeof(ALIGN_TYPE[3])))
+            return(TXM_MODULE_INVALID_MEMORY);
+    }
+
     return_value = (ALIGN_TYPE) _tx_trace_user_event_insert(
         (ULONG) param_0,
         (ULONG) param_1,
@@ -2899,7 +3186,9 @@ ALIGN_TYPE return_value;
     );
     return(return_value);
 }
+#endif
 
+#ifndef TXM_MODULE_OBJECT_ALLOCATE_CALL_NOT_USED
 /* UINT _txm_module_object_allocate(
     VOID **object_ptr, -> param_0
     ULONG object_size -> param_1
@@ -2922,7 +3211,9 @@ ALIGN_TYPE return_value;
     );
     return(return_value);
 }
+#endif
 
+#ifndef TXM_MODULE_OBJECT_DEALLOCATE_CALL_NOT_USED
 /* UINT _txm_module_object_deallocate(
     VOID *object_ptr -> param_0
    ); */
@@ -2971,7 +3262,9 @@ ALIGN_TYPE object_pool_end;
     );
     return(return_value);
 }
+#endif
 
+#ifndef TXM_MODULE_OBJECT_POINTER_GET_CALL_NOT_USED
 /* UINT _txm_module_object_pointer_get(
     UINT object_type, -> param_0
     CHAR *name, -> param_1
@@ -2998,7 +3291,9 @@ ALIGN_TYPE return_value;
     );
     return(return_value);
 }
+#endif
 
+#ifndef TXM_MODULE_OBJECT_POINTER_GET_EXTENDED_CALL_NOT_USED
 /* UINT _txm_module_object_pointer_get_extended(
     UINT object_type, -> param_0
     CHAR *name, -> param_1
@@ -3015,6 +3310,9 @@ ALIGN_TYPE return_value;
         if (!TXM_MODULE_MANAGER_PARAM_CHECK_DEREFERENCE_STRING(module_instance, param_1))
             return(TXM_MODULE_INVALID_MEMORY);
 
+        if (!TXM_MODULE_MANAGER_ENSURE_INSIDE_MODULE_DATA(module_instance, (ALIGN_TYPE)extra_parameters, sizeof(ALIGN_TYPE[2])))
+            return(TXM_MODULE_INVALID_MEMORY);
+
         if (!TXM_MODULE_MANAGER_PARAM_CHECK_BUFFER_WRITE(module_instance, extra_parameters[1], sizeof(VOID *)))
             return(TXM_MODULE_INVALID_MEMORY);
     }
@@ -3027,3 +3325,4 @@ ALIGN_TYPE return_value;
     );
     return(return_value);
 }
+#endif

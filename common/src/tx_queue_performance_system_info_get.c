@@ -1,13 +1,12 @@
-/**************************************************************************/
-/*                                                                        */
-/*       Copyright (c) Microsoft Corporation. All rights reserved.        */
-/*                                                                        */
-/*       This software is licensed under the Microsoft Software License   */
-/*       Terms for Microsoft Azure RTOS. Full text of the license can be  */
-/*       found in the LICENSE file at https://aka.ms/AzureRTOS_EULA       */
-/*       and in the root directory of this software.                      */
-/*                                                                        */
-/**************************************************************************/
+/***************************************************************************
+ * Copyright (c) 2024 Microsoft Corporation 
+ * 
+ * This program and the accompanying materials are made available under the
+ * terms of the MIT License which is available at
+ * https://opensource.org/licenses/MIT.
+ * 
+ * SPDX-License-Identifier: MIT
+ **************************************************************************/
 
 
 /**************************************************************************/
@@ -106,51 +105,51 @@ TX_INTERRUPT_SAVE_AREA
     /* Retrieve the total number of queue messages sent.  */
     if (messages_sent != TX_NULL)
     {
-    
+
         *messages_sent =  _tx_queue_performance_messages_sent_count;
     }
-    
+
     /* Retrieve the total number of queue messages received.  */
     if (messages_received != TX_NULL)
     {
-    
+
         *messages_received =  _tx_queue_performance__messages_received_count;
     }
-    
+
     /* Retrieve the total number of empty queue suspensions.  */
     if (empty_suspensions != TX_NULL)
     {
-    
+
         *empty_suspensions =  _tx_queue_performance_empty_suspension_count;
     }
-    
+
     /* Retrieve the total number of full queue suspensions.  */
     if (full_suspensions != TX_NULL)
     {
-    
+
         *full_suspensions =  _tx_queue_performance_full_suspension_count;
     }
-    
+
     /* Retrieve the total number of full errors.  */
     if (full_errors != TX_NULL)
     {
-    
+
         *full_errors =  _tx_queue_performance_full_error_count;
     }
-    
+
     /* Retrieve the total number of queue timeouts.  */
     if (timeouts != TX_NULL)
     {
-    
+
         *timeouts =  _tx_queue_performance_timeout_count;
     }
-    
+
     /* Restore interrupts.  */
     TX_RESTORE
 
     /* Return completion status.  */
     return(TX_SUCCESS);
-    
+
 #else
 
 UINT        status;

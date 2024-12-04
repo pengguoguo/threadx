@@ -1,13 +1,12 @@
-/**************************************************************************/
-/*                                                                        */
-/*       Copyright (c) Microsoft Corporation. All rights reserved.        */
-/*                                                                        */
-/*       This software is licensed under the Microsoft Software License   */
-/*       Terms for Microsoft Azure RTOS. Full text of the license can be  */
-/*       found in the LICENSE file at https://aka.ms/AzureRTOS_EULA       */
-/*       and in the root directory of this software.                      */
-/*                                                                        */
-/**************************************************************************/
+/***************************************************************************
+ * Copyright (c) 2024 Microsoft Corporation 
+ * 
+ * This program and the accompanying materials are made available under the
+ * terms of the MIT License which is available at
+ * https://opensource.org/licenses/MIT.
+ * 
+ * SPDX-License-Identifier: MIT
+ **************************************************************************/
 
 
 /**************************************************************************/
@@ -19,18 +18,9 @@
 /**                                                                       */
 /**************************************************************************/
 /**************************************************************************/
-
-
-/* #define TX_SOURCE_CODE  */
-
-
-/* Include necessary system files.  */
-
-/*
-#include "tx_api.h"
-#include "tx_thread.h"
-#include "tx_timer.h"
-*/
+#ifdef TX_INCLUDE_USER_DEFINE_FILE
+#include "tx_user.h"
+#endif
 
     .text
     .align 3
@@ -38,8 +28,8 @@
 /*                                                                        */
 /*  FUNCTION                                               RELEASE        */
 /*                                                                        */
-/*    _tx_thread_schedule                              Cortex-A35-SMP/GNU */
-/*                                                           6.1          */
+/*    _tx_thread_schedule                                ARMv8-A-SMP      */
+/*                                                           6.3.0        */
 /*  AUTHOR                                                                */
 /*                                                                        */
 /*    William E. Lamie, Microsoft Corporation                             */
@@ -73,10 +63,17 @@
 /*    DATE              NAME                      DESCRIPTION             */
 /*                                                                        */
 /*  09-30-2020     William E. Lamie         Initial Version 6.1           */
+/*  01-31-2022     Andres Mlinar            Updated comments,             */
+/*                                            added ARMv8.2-A support,    */
+/*                                            resulting in version 6.1.10 */
+/*  10-31-2023     Tiejun Zhou              Modified comment(s), added    */
+/*                                            #include tx_user.h,         */
+/*                                            added memory barrier,       */
+/*                                            resulting in version 6.3.0  */
 /*                                                                        */
 /**************************************************************************/
-/* VOID   _tx_thread_schedule(VOID)
-{ */
+// VOID   _tx_thread_schedule(VOID)
+// {
     .global _tx_thread_schedule
     .type   _tx_thread_schedule, @function
 _tx_thread_schedule:
@@ -88,17 +85,24 @@ _tx_thread_schedule:
     /* Pickup the CPU ID.   */
 
     MRS     x20, MPIDR_EL1                      // Pickup the core ID
+#ifdef TX_ARMV8_2
+#if TX_THREAD_SMP_CLUSTERS > 1
+    UBFX    x1, x20, #16, #8                    // Isolate cluster ID
+#endif
+    UBFX    x20, x20, #8, #8                    // Isolate core ID
+#else
 #if TX_THREAD_SMP_CLUSTERS > 1
     UBFX    x1, x20, #8, #8                     // Isolate cluster ID
 #endif
     UBFX    x20, x20, #0, #8                    // Isolate core ID
+#endif
 #if TX_THREAD_SMP_CLUSTERS > 1
     ADDS    x20, x20, x1, LSL #2                // Calculate CPU ID
 #endif
 
     /* Wait for a thread to execute.  */
-    /* do
-    { */
+    // do
+    // {
 
     LDR     x1, =_tx_thread_execute_ptr         // Address of thread execute ptr
 
@@ -119,8 +123,8 @@ _tx_thread_schedule_thread:
     BEQ     _tx_thread_schedule                 // Keep looking for a thread
 #endif
 
-    /* }
-    while(_tx_thread_execute_ptr == TX_NULL);  */
+    // }
+    // while(_tx_thread_execute_ptr == TX_NULL);
 
     /* Get the lock for accessing the thread's ready bit.  */
 
@@ -162,11 +166,11 @@ _tx_thread_ready_for_execution:
     DMB     ISH
 
     /* Setup the current thread pointer.  */
-    /* _tx_thread_current_ptr =  _tx_thread_execute_ptr;  */
+    // _tx_thread_current_ptr =  _tx_thread_execute_ptr;
 
     LDR     x2, =_tx_thread_current_ptr         // Pickup address of current thread
     STR     x0, [x2, x20, LSL #3]               // Setup current thread pointer
-
+    DMB     ISH
     LDR     x1, [x1, x20, LSL #3]               // Reload the execute pointer
     CMP     w0, w1                              // Did it change?
     BEQ     _execute_pointer_did_not_change     // If not, skip handling
@@ -190,7 +194,7 @@ _tx_thread_ready_for_execution:
 
 _execute_pointer_did_not_change:
     /* Increment the run count for this thread.  */
-    /* _tx_thread_current_ptr -> tx_thread_run_count++;  */
+    // _tx_thread_current_ptr -> tx_thread_run_count++;
 
     LDR     w2, [x0, #4]                        // Pickup run counter
     LDR     w3, [x0, #36]                       // Pickup time-slice for this thread
@@ -198,7 +202,7 @@ _execute_pointer_did_not_change:
     STR     w2, [x0, #4]                        // Store the new run counter
 
     /* Setup time-slice, if present.  */
-    /* _tx_timer_time_slice =  _tx_thread_current_ptr -> tx_thread_time_slice;  */
+    // _tx_timer_time_slice =  _tx_thread_current_ptr -> tx_thread_time_slice;
 
     LDR     x2, =_tx_timer_time_slice           // Pickup address of time slice
                                                 //   variable
@@ -206,7 +210,7 @@ _execute_pointer_did_not_change:
     MOV     sp, x4                              //
     STR     w3, [x2, x20, LSL #2]               // Setup time-slice
 
-#ifdef TX_ENABLE_EXECUTION_CHANGE_NOTIFY
+#if (defined(TX_ENABLE_EXECUTION_CHANGE_NOTIFY) || defined(TX_EXECUTION_PROFILE_ENABLE))
 
     /* Call the thread entry function to indicate the thread is executing.  */
 
@@ -216,7 +220,7 @@ _execute_pointer_did_not_change:
 #endif
 
     /* Switch to the thread's stack.  */
-    /* sp =  _tx_thread_execute_ptr -> tx_thread_stack_ptr;  */
+    // sp =  _tx_thread_execute_ptr -> tx_thread_stack_ptr;
 
     /* Determine if an interrupt frame or a synchronous task suspension frame
        is present.  */
@@ -302,6 +306,4 @@ _skip_solicited_fp_restore:
     LDP     x29, x30, [sp], #16                 // Recover x29, x30
     MSR     DAIF, x4                            // Recover DAIF
     RET                                         // Return to caller
-/* } */
-
-
+// }

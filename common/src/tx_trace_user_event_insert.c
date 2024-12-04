@@ -1,13 +1,12 @@
-/**************************************************************************/
-/*                                                                        */
-/*       Copyright (c) Microsoft Corporation. All rights reserved.        */
-/*                                                                        */
-/*       This software is licensed under the Microsoft Software License   */
-/*       Terms for Microsoft Azure RTOS. Full text of the license can be  */
-/*       found in the LICENSE file at https://aka.ms/AzureRTOS_EULA       */
-/*       and in the root directory of this software.                      */
-/*                                                                        */
-/**************************************************************************/
+/***************************************************************************
+ * Copyright (c) 2024 Microsoft Corporation 
+ * 
+ * This program and the accompanying materials are made available under the
+ * terms of the MIT License which is available at
+ * https://opensource.org/licenses/MIT.
+ * 
+ * SPDX-License-Identifier: MIT
+ **************************************************************************/
 
 
 /**************************************************************************/
@@ -88,7 +87,7 @@ UINT            status;
     /* Determine if trace is disabled.  */
     if (_tx_trace_buffer_current_ptr == TX_NULL)
     {
-    
+
         /* Yes, trace is already disabled.  */
         status =  TX_NOT_DONE;
     }
@@ -101,7 +100,7 @@ UINT            status;
 #else
         TX_TRACE_IN_LINE_INSERT(event_id, info_field_1, info_field_2, info_field_3, info_field_4, TX_TRACE_USER_EVENTS)
 #endif
-        
+
         /* Return successful status.  */
         status =  TX_SUCCESS;
     }
@@ -111,7 +110,7 @@ UINT            status;
 
     /* Return completion status.  */
     return(status);
-    
+
 #else
 
 UINT        status;

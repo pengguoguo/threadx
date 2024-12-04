@@ -1,13 +1,12 @@
-;/**************************************************************************/
-;/*                                                                        */
-;/*       Copyright (c) Microsoft Corporation. All rights reserved.        */
-;/*                                                                        */
-;/*       This software is licensed under the Microsoft Software License   */
-;/*       Terms for Microsoft Azure RTOS. Full text of the license can be  */
-;/*       found in the LICENSE file at https://aka.ms/AzureRTOS_EULA       */
-;/*       and in the root directory of this software.                      */
-;/*                                                                        */
-;/**************************************************************************/
+;/***************************************************************************
+; * Copyright (c) 2024 Microsoft Corporation 
+; * 
+; * This program and the accompanying materials are made available under the
+; * terms of the MIT License which is available at
+; * https://opensource.org/licenses/MIT.
+; * 
+; * SPDX-License-Identifier: MIT
+; **************************************************************************/
 ;
 ;
 ;/**************************************************************************/
@@ -21,9 +20,9 @@
 ;/**************************************************************************/
 ;
 ;
-    IF :DEF:TX_ENABLE_EXECUTION_CHANGE_NOTIFY
+#if (defined(TX_ENABLE_EXECUTION_CHANGE_NOTIFY) || defined(TX_EXECUTION_PROFILE_ENABLE))           
     IMPORT  _tx_execution_isr_enter
-    ENDIF
+#endif
 ;
 ;
     AREA    ||.text||, CODE, READONLY
@@ -73,7 +72,7 @@
 ;{
     EXPORT  _tx_thread_context_save
 _tx_thread_context_save
-    IF :DEF:TX_ENABLE_EXECUTION_CHANGE_NOTIFY
+#if (defined(TX_ENABLE_EXECUTION_CHANGE_NOTIFY) || defined(TX_EXECUTION_PROFILE_ENABLE))           
 ;
 ;    /* Call the ISR enter function to indicate an ISR is executing.  */
 ;
@@ -81,7 +80,7 @@ _tx_thread_context_save
     BL      _tx_execution_isr_enter             ; Call the ISR enter function
     POP     {r0, r1}                            ; Recover ISR lr
     MOV     lr, r1
-    ENDIF
+#endif
 ;
 ;    /* Return to interrupt processing.  */
 ;

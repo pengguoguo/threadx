@@ -1,13 +1,12 @@
-/**************************************************************************/
-/*                                                                        */
-/*       Copyright (c) Microsoft Corporation. All rights reserved.        */
-/*                                                                        */
-/*       This software is licensed under the Microsoft Software License   */
-/*       Terms for Microsoft Azure RTOS. Full text of the license can be  */
-/*       found in the LICENSE file at https://aka.ms/AzureRTOS_EULA       */
-/*       and in the root directory of this software.                      */
-/*                                                                        */
-/**************************************************************************/
+/***************************************************************************
+ * Copyright (c) 2024 Microsoft Corporation 
+ * 
+ * This program and the accompanying materials are made available under the
+ * terms of the MIT License which is available at
+ * https://opensource.org/licenses/MIT.
+ * 
+ * SPDX-License-Identifier: MIT
+ **************************************************************************/
 
 
 /**************************************************************************/
@@ -77,7 +76,7 @@ UINT  _tx_semaphore_get(TX_SEMAPHORE *semaphore_ptr, ULONG wait_option)
 {
 
 TX_INTERRUPT_SAVE_AREA
-            
+
 TX_THREAD       *thread_ptr;
 TX_THREAD       *next_thread;
 TX_THREAD       *previous_thread;
@@ -123,7 +122,7 @@ UINT            status;
         /* Determine if the preempt disable flag is non-zero.  */
         if (_tx_thread_preempt_disable != ((UINT) 0))
         {
-    
+
             /* Restore interrupts.  */
             TX_RESTORE
 
@@ -143,7 +142,7 @@ UINT            status;
             /* Increment the number of suspensions on this semaphore.  */
             semaphore_ptr -> tx_semaphore_performance_suspension_count++;
 #endif
-            
+
             /* Pickup thread pointer.  */
             TX_THREAD_GET_CURRENT(thread_ptr)
 

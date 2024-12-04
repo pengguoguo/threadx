@@ -1,13 +1,12 @@
-/**************************************************************************/
-/*                                                                        */
-/*       Copyright (c) Microsoft Corporation. All rights reserved.        */
-/*                                                                        */
-/*       This software is licensed under the Microsoft Software License   */
-/*       Terms for Microsoft Azure RTOS. Full text of the license can be  */
-/*       found in the LICENSE file at https://aka.ms/AzureRTOS_EULA       */
-/*       and in the root directory of this software.                      */
-/*                                                                        */
-/**************************************************************************/
+/***************************************************************************
+ * Copyright (c) 2024 Microsoft Corporation 
+ * 
+ * This program and the accompanying materials are made available under the
+ * terms of the MIT License which is available at
+ * https://opensource.org/licenses/MIT.
+ * 
+ * SPDX-License-Identifier: MIT
+ **************************************************************************/
 
 
 /**************************************************************************/
@@ -44,9 +43,9 @@
 #include "tx_byte_pool.h"
 
 
-/* Define the unused memory pointer.  The value of the first available 
+/* Define the unused memory pointer.  The value of the first available
    memory address is placed in this variable in the low-level
-   initialization function.  The content of this variable is passed 
+   initialization function.  The content of this variable is passed
    to the application's system definition function.  */
 
 VOID     *_tx_initialize_unused_memory;

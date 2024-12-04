@@ -1,13 +1,12 @@
-/**************************************************************************/
-/*                                                                        */
-/*       Copyright (c) Microsoft Corporation. All rights reserved.        */
-/*                                                                        */
-/*       This software is licensed under the Microsoft Software License   */
-/*       Terms for Microsoft Azure RTOS. Full text of the license can be  */
-/*       found in the LICENSE file at https://aka.ms/AzureRTOS_EULA       */
-/*       and in the root directory of this software.                      */
-/*                                                                        */
-/**************************************************************************/
+/***************************************************************************
+ * Copyright (c) 2024 Microsoft Corporation 
+ * 
+ * This program and the accompanying materials are made available under the
+ * terms of the MIT License which is available at
+ * https://opensource.org/licenses/MIT.
+ * 
+ * SPDX-License-Identifier: MIT
+ **************************************************************************/
 
 
 /**************************************************************************/
@@ -95,15 +94,15 @@ UINT                    status;
     /* Determine if this is a legal request.  */
     if (queue_ptr == TX_NULL)
     {
-        
+
         /* Queue pointer is illegal, return error.  */
         status =  TX_PTR_ERROR;
     }
-    
+
     /* Determine if the queue ID is invalid.  */
     else if (queue_ptr -> tx_queue_id != TX_QUEUE_ID)
     {
-        
+
         /* Queue pointer is illegal, return error.  */
         status =  TX_PTR_ERROR;
     }
@@ -125,45 +124,45 @@ UINT                    status;
         /* Retrieve the number of messages sent to this queue.  */
         if (messages_sent != TX_NULL)
         {
-    
+
             *messages_sent =  queue_ptr -> tx_queue_performance_messages_sent_count;
         }
-    
+
         /* Retrieve the number of messages received from this queue.  */
         if (messages_received != TX_NULL)
         {
-    
+
             *messages_received =  queue_ptr -> tx_queue_performance_messages_received_count;
         }
-    
+
         /* Retrieve the number of empty queue suspensions on this queue.  */
         if (empty_suspensions != TX_NULL)
         {
-    
+
             *empty_suspensions =  queue_ptr -> tx_queue_performance_empty_suspension_count;
         }
-    
+
         /* Retrieve the number of full queue suspensions on this queue.  */
         if (full_suspensions != TX_NULL)
         {
-    
+
             *full_suspensions =  queue_ptr -> tx_queue_performance_full_suspension_count;
         }
-    
+
         /* Retrieve the number of full errors (no suspension!) on this queue.  */
         if (full_errors != TX_NULL)
         {
-    
+
             *full_errors =  queue_ptr -> tx_queue_performance_full_error_count;
         }
-    
+
         /* Retrieve the number of timeouts on this queue.  */
         if (timeouts != TX_NULL)
         {
-    
+
             *timeouts =  queue_ptr -> tx_queue_performance_timeout_count;
         }
-    
+
         /* Restore interrupts.  */
         TX_RESTORE
 

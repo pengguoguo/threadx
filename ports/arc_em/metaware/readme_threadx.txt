@@ -1,11 +1,11 @@
-                     Microsoft's Azure RTOS ThreadX for ARC EM
+                     Eclipse ThreadX RTOS for ARC EM
 
                              Using the MetaWare Tools
 
-1. Open the Azure RTOS Workspace 
+1. Open the Eclipse ThreadX RTOS Workspace 
 
 In order to build the ThreadX library and the ThreadX demonstration first load 
-the Azure RTOS Workspace, which is located inside the "example_build" directory. 
+the Eclipse ThreadX RTOS Workspace, which is located inside the "example_build" directory. 
 
 
 2. Building the ThreadX run-time Library
@@ -160,7 +160,7 @@ _tx_interrupt_x:
     b       _tx_thread_context_restore      ; Restore interrupt context
 
 
-The application handle interrupts directly, which necessitates all register 
+The application handles interrupts directly, which necessitates all register 
 preservation by the application's ISR. ISRs that do not use the ThreadX
 _tx_thread_context_save and _tx_thread_context_restore routines are not
 allowed access to the ThreadX API. In addition, custom application ISRs
@@ -209,11 +209,23 @@ For generic code revision information, please refer to the readme_threadx_generi
 file, which is included in your distribution. The following details the revision
 information associated with this specific port of ThreadX:
 
+04-02-2021  Release 6.1.6 changes:
+            tx_port.h                           Updated macro definition
+            tx_initialize_low_level.s           Modified comments
+            tx_thread_context_restore.s         r25/r30 are caller saved
+            tx_thread_context_save.s            r25/r30 are caller saved
+            tx_thread_interrupt_control.s       Modified comments
+            tx_thread_schedule.s                fixed interrupt priority overwritting bug, 
+                                                and fixed hardware stack checker disable and reenable logic
+            tx_thread_stack_build.s             Modified comments
+            tx_thread_system_return.s           Modified comments
+            tx_timer_interrupt.s                remove unneeded load of _tx_thread_preempt_disable
+            
 09-30-2020  Initial ThreadX 6.1 for ARCv2 EM using MetaWare tools.
 
 
-Copyright(c) 1996-2020 Microsoft Corporation
+Copyright(c) 1996-2021 Microsoft Corporation
 
 
-https://azure.com/rtos
+https://threadx.io/
 

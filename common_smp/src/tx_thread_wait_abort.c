@@ -1,19 +1,18 @@
-/**************************************************************************/
-/*                                                                        */
-/*       Copyright (c) Microsoft Corporation. All rights reserved.        */
-/*                                                                        */
-/*       This software is licensed under the Microsoft Software License   */
-/*       Terms for Microsoft Azure RTOS. Full text of the license can be  */
-/*       found in the LICENSE file at https://aka.ms/AzureRTOS_EULA       */
-/*       and in the root directory of this software.                      */
-/*                                                                        */
-/**************************************************************************/
+/***************************************************************************
+ * Copyright (c) 2024 Microsoft Corporation 
+ * 
+ * This program and the accompanying materials are made available under the
+ * terms of the MIT License which is available at
+ * https://opensource.org/licenses/MIT.
+ * 
+ * SPDX-License-Identifier: MIT
+ **************************************************************************/
 
 
 /**************************************************************************/
 /**************************************************************************/
-/**                                                                       */ 
-/** ThreadX Component                                                     */ 
+/**                                                                       */
+/** ThreadX Component                                                     */
 /**                                                                       */
 /**   Thread                                                              */
 /**                                                                       */
@@ -30,45 +29,50 @@
 #include "tx_thread.h"
 
 
-/**************************************************************************/ 
-/*                                                                        */ 
-/*  FUNCTION                                               RELEASE        */ 
-/*                                                                        */ 
-/*    _tx_thread_wait_abort                               PORTABLE C      */ 
-/*                                                           6.1          */
+/**************************************************************************/
+/*                                                                        */
+/*  FUNCTION                                               RELEASE        */
+/*                                                                        */
+/*    _tx_thread_wait_abort                               PORTABLE C      */
+/*                                                           6.2.1        */
 /*  AUTHOR                                                                */
 /*                                                                        */
 /*    William E. Lamie, Microsoft Corporation                             */
 /*                                                                        */
 /*  DESCRIPTION                                                           */
-/*                                                                        */ 
-/*    This function aborts the wait condition that the specified thread   */ 
-/*    is in - regardless of what object the thread is waiting on - and    */ 
-/*    returns a TX_WAIT_ABORTED status to the specified thread.           */ 
-/*                                                                        */ 
-/*  INPUT                                                                 */ 
-/*                                                                        */ 
-/*    thread_ptr                            Thread to abort the wait on   */ 
-/*                                                                        */ 
-/*  OUTPUT                                                                */ 
-/*                                                                        */ 
-/*    status                                Return completion status      */ 
-/*                                                                        */ 
-/*  CALLS                                                                 */ 
-/*                                                                        */ 
-/*    Suspension Cleanup Functions                                        */ 
-/*    _tx_thread_system_resume                                            */ 
-/*    _tx_thread_system_ni_resume       Non-interruptable resume thread   */ 
-/*                                                                        */ 
-/*  CALLED BY                                                             */ 
-/*                                                                        */ 
-/*    Application code                                                    */ 
-/*                                                                        */ 
-/*  RELEASE HISTORY                                                       */ 
-/*                                                                        */ 
+/*                                                                        */
+/*    This function aborts the wait condition that the specified thread   */
+/*    is in - regardless of what object the thread is waiting on - and    */
+/*    returns a TX_WAIT_ABORTED status to the specified thread.           */
+/*                                                                        */
+/*  INPUT                                                                 */
+/*                                                                        */
+/*    thread_ptr                            Thread to abort the wait on   */
+/*                                                                        */
+/*  OUTPUT                                                                */
+/*                                                                        */
+/*    status                                Return completion status      */
+/*                                                                        */
+/*  CALLS                                                                 */
+/*                                                                        */
+/*    Suspension Cleanup Functions                                        */
+/*    _tx_thread_system_resume                                            */
+/*    _tx_thread_system_ni_resume       Non-interruptable resume thread   */
+/*                                                                        */
+/*  CALLED BY                                                             */
+/*                                                                        */
+/*    Application code                                                    */
+/*                                                                        */
+/*  RELEASE HISTORY                                                       */
+/*                                                                        */
 /*    DATE              NAME                      DESCRIPTION             */
 /*                                                                        */
-/*  09-30-2020     William E. Lamie         Initial Version 6.1           */
+/*  05-19-2020      William E. Lamie        Initial Version 6.0           */
+/*  09-30-2020      Yuxin Zhou              Modified comment(s),          */
+/*                                            resulting in version 6.1    */
+/*  03-08-2023      Scott Larson            Check if thread is coming out */
+/*                                            of suspension elsewhere,    */
+/*                                            resulting in version 6.2.1  */
 /*                                                                        */
 /**************************************************************************/
 UINT  _tx_thread_wait_abort(TX_THREAD  *thread_ptr)
@@ -93,17 +97,17 @@ ULONG           suspension_sequence;
     /* Determine if the thread is currently suspended.  */
     if (thread_ptr -> tx_thread_state < TX_SLEEP)
     {
-    
-        /* Thread is either ready, completed, terminated, or in a pure 
+
+        /* Thread is either ready, completed, terminated, or in a pure
            suspension condition.  */
 
         /* Restore interrupts.  */
         TX_RESTORE
 
-        /* Just return with an error message to indicate that 
+        /* Just return with an error message to indicate that
            nothing was done.  */
         status =  TX_WAIT_ABORT_ERROR;
-    }    
+    }
     else
     {
 
@@ -130,11 +134,23 @@ ULONG           suspension_sequence;
             TX_RESTORE
 #endif
         }
+        else if(thread_ptr -> tx_thread_suspend_cleanup == TX_NULL)
+        {
+            /* Thread is coming out of suspension elsewhere.  */
+
+#ifndef TX_NOT_INTERRUPTABLE
+            /* Increment the disable preemption flag.  */
+            _tx_thread_preempt_disable++;
+
+            /* Restore interrupts.  */
+            TX_RESTORE
+#endif
+        }
         else
         {
 
             /* Process all other suspension timeouts.  */
-    
+
             /* Set the state to suspended.  */
             thread_ptr -> tx_thread_state =    TX_SUSPENDED;
 
@@ -165,13 +181,8 @@ ULONG           suspension_sequence;
             TX_RESTORE
 #endif
 
-            /* Call any cleanup routines.  */
-            if (suspend_cleanup != TX_NULL)
-            {
-
-                /* Yes, there is a function to call.  */
-                (suspend_cleanup)(thread_ptr, suspension_sequence);
-            }
+            /* Call cleanup routine.  */
+            (suspend_cleanup)(thread_ptr, suspension_sequence);
         }
 
         /* If the abort of the thread wait was successful, if so resume the thread.  */
@@ -211,11 +222,11 @@ ULONG           suspension_sequence;
             /* Restore interrupts.  */
             TX_RESTORE
 
-#else 
+#else
 
             /* Disable interrupts.  */
             TX_DISABLE
-        
+
             /* Decrement the disable preemption flag.  */
             _tx_thread_preempt_disable--;
 
@@ -223,7 +234,7 @@ ULONG           suspension_sequence;
             TX_RESTORE
 #endif
 
-            /* Return with an error message to indicate that 
+            /* Return with an error message to indicate that
                nothing was done.  */
             status =  TX_WAIT_ABORT_ERROR;
         }

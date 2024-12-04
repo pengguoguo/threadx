@@ -1,13 +1,12 @@
-/**************************************************************************/
-/*                                                                        */
-/*       Copyright (c) Microsoft Corporation. All rights reserved.        */
-/*                                                                        */
-/*       This software is licensed under the Microsoft Software License   */
-/*       Terms for Microsoft Azure RTOS. Full text of the license can be  */
-/*       found in the LICENSE file at https://aka.ms/AzureRTOS_EULA       */
-/*       and in the root directory of this software.                      */
-/*                                                                        */
-/**************************************************************************/
+/***************************************************************************
+ * Copyright (c) 2024 Microsoft Corporation 
+ * 
+ * This program and the accompanying materials are made available under the
+ * terms of the MIT License which is available at
+ * https://opensource.org/licenses/MIT.
+ * 
+ * SPDX-License-Identifier: MIT
+ **************************************************************************/
 
 
 /**************************************************************************/
@@ -101,37 +100,37 @@ TX_INTERRUPT_SAVE_AREA
     /* Retrieve the total number of semaphore puts.  */
     if (puts != TX_NULL)
     {
-    
+
         *puts =  _tx_semaphore_performance_put_count;
     }
-    
+
     /* Retrieve the total number of semaphore gets.  */
     if (gets != TX_NULL)
     {
-    
+
         *gets =  _tx_semaphore_performance_get_count;
     }
-    
+
     /* Retrieve the total number of semaphore suspensions.  */
     if (suspensions != TX_NULL)
     {
-    
+
         *suspensions =  _tx_semaphore_performance_suspension_count;
     }
-    
+
     /* Retrieve the total number of semaphore timeouts.  */
     if (timeouts != TX_NULL)
     {
-    
+
         *timeouts =  _tx_semaphore_performance_timeout_count;
     }
-    
+
     /* Restore interrupts.  */
     TX_RESTORE
 
     /* Return completion status.  */
     return(TX_SUCCESS);
-    
+
 #else
 
 UINT        status;
@@ -140,31 +139,31 @@ UINT        status;
     /* Access input arguments just for the sake of lint, MISRA, etc.  */
     if (puts != TX_NULL)
     {
-    
+
         /* Not enabled, return error.  */
         status =  TX_FEATURE_NOT_ENABLED;
     }
     else if (gets != TX_NULL)
     {
-    
+
         /* Not enabled, return error.  */
         status =  TX_FEATURE_NOT_ENABLED;
     }
     else if (suspensions != TX_NULL)
     {
-    
+
         /* Not enabled, return error.  */
         status =  TX_FEATURE_NOT_ENABLED;
     }
     else if (timeouts != TX_NULL)
     {
-    
+
         /* Not enabled, return error.  */
         status =  TX_FEATURE_NOT_ENABLED;
     }
     else
     {
-    
+
         /* Not enabled, return error.  */
         status =  TX_FEATURE_NOT_ENABLED;
     }

@@ -1,13 +1,12 @@
-/**************************************************************************/
-/*                                                                        */
-/*       Copyright (c) Microsoft Corporation. All rights reserved.        */
-/*                                                                        */
-/*       This software is licensed under the Microsoft Software License   */
-/*       Terms for Microsoft Azure RTOS. Full text of the license can be  */
-/*       found in the LICENSE file at https://aka.ms/AzureRTOS_EULA       */
-/*       and in the root directory of this software.                      */
-/*                                                                        */
-/**************************************************************************/
+/***************************************************************************
+ * Copyright (c) 2024 Microsoft Corporation 
+ * 
+ * This program and the accompanying materials are made available under the
+ * terms of the MIT License which is available at
+ * https://opensource.org/licenses/MIT.
+ * 
+ * SPDX-License-Identifier: MIT
+ **************************************************************************/
 
 
 /**************************************************************************/
@@ -67,15 +66,15 @@ VOID        _tx_initialize_low_level(VOID);
 
 /* Define the macro for adding additional port-specific global data. This macro is defined
    as white space, unless defined by tx_port.h.  */
-   
+
 #ifndef TX_PORT_SPECIFIC_DATA
 #define TX_PORT_SPECIFIC_DATA
 #endif
 
 
-/* Define the macro for adding additional port-specific pre and post initialization processing. 
+/* Define the macro for adding additional port-specific pre and post initialization processing.
    These macros is defined as white space, unless defined by tx_port.h.  */
-   
+
 #ifndef TX_PORT_SPECIFIC_PRE_INITIALIZATION
 #define TX_PORT_SPECIFIC_PRE_INITIALIZATION
 #endif
@@ -102,9 +101,9 @@ VOID        _tx_initialize_low_level(VOID);
 #endif
 
 
-/* Define the unused memory pointer.  The value of the first available 
+/* Define the unused memory pointer.  The value of the first available
    memory address is placed in this variable in the low-level
-   initialization function.  The content of this variable is passed 
+   initialization function.  The content of this variable is passed
    to the application's system definition function.  */
 
 INITIALIZE_DECLARE VOID     *_tx_initialize_unused_memory;

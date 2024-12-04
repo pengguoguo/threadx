@@ -1,19 +1,18 @@
-/**************************************************************************/
-/*                                                                        */
-/*       Copyright (c) Microsoft Corporation. All rights reserved.        */
-/*                                                                        */
-/*       This software is licensed under the Microsoft Software License   */
-/*       Terms for Microsoft Azure RTOS. Full text of the license can be  */
-/*       found in the LICENSE file at https://aka.ms/AzureRTOS_EULA       */
-/*       and in the root directory of this software.                      */
-/*                                                                        */
-/**************************************************************************/
+/***************************************************************************
+ * Copyright (c) 2024 Microsoft Corporation 
+ * 
+ * This program and the accompanying materials are made available under the
+ * terms of the MIT License which is available at
+ * https://opensource.org/licenses/MIT.
+ * 
+ * SPDX-License-Identifier: MIT
+ **************************************************************************/
 
 
 /**************************************************************************/
 /**************************************************************************/
-/**                                                                       */ 
-/** ThreadX Component                                                     */ 
+/**                                                                       */
+/** ThreadX Component                                                     */
 /**                                                                       */
 /**   Byte Memory                                                         */
 /**                                                                       */
@@ -31,56 +30,58 @@
 #include "tx_trace.h"
 #endif
 
-/**************************************************************************/ 
-/*                                                                        */ 
-/*  FUNCTION                                               RELEASE        */ 
-/*                                                                        */ 
-/*    _tx_byte_pool_performance_system_info_get           PORTABLE C      */ 
+/**************************************************************************/
+/*                                                                        */
+/*  FUNCTION                                               RELEASE        */
+/*                                                                        */
+/*    _tx_byte_pool_performance_system_info_get           PORTABLE C      */
 /*                                                           6.1          */
 /*  AUTHOR                                                                */
 /*                                                                        */
 /*    William E. Lamie, Microsoft Corporation                             */
 /*                                                                        */
 /*  DESCRIPTION                                                           */
-/*                                                                        */ 
-/*    This function retrieves byte pool performance information.          */ 
-/*                                                                        */ 
-/*  INPUT                                                                 */ 
-/*                                                                        */ 
-/*    allocates                         Destination for total number of   */ 
-/*                                        allocates                       */ 
-/*    releases                          Destination for total number of   */ 
-/*                                        releases                        */ 
-/*    fragments_searched                Destination for total number of   */ 
-/*                                        fragments searched during       */ 
-/*                                        allocation                      */ 
-/*    merges                            Destination for total number of   */ 
-/*                                        adjacent free fragments merged  */ 
-/*    splits                            Destination for total number of   */ 
-/*                                        fragments split during          */ 
-/*                                        allocation                      */ 
-/*    suspensions                       Destination for total number of   */ 
+/*                                                                        */
+/*    This function retrieves byte pool performance information.          */
+/*                                                                        */
+/*  INPUT                                                                 */
+/*                                                                        */
+/*    allocates                         Destination for total number of   */
+/*                                        allocates                       */
+/*    releases                          Destination for total number of   */
+/*                                        releases                        */
+/*    fragments_searched                Destination for total number of   */
+/*                                        fragments searched during       */
+/*                                        allocation                      */
+/*    merges                            Destination for total number of   */
+/*                                        adjacent free fragments merged  */
+/*    splits                            Destination for total number of   */
+/*                                        fragments split during          */
+/*                                        allocation                      */
+/*    suspensions                       Destination for total number of   */
 /*                                        suspensions                     */
-/*    timeouts                          Destination for total number of   */ 
-/*                                        timeouts                        */ 
-/*                                                                        */ 
-/*  OUTPUT                                                                */ 
-/*                                                                        */ 
-/*    status                            Completion status                 */ 
-/*                                                                        */ 
-/*  CALLS                                                                 */ 
-/*                                                                        */ 
-/*    None                                                                */ 
-/*                                                                        */ 
-/*  CALLED BY                                                             */ 
-/*                                                                        */ 
-/*    Application Code                                                    */ 
-/*                                                                        */ 
-/*  RELEASE HISTORY                                                       */ 
-/*                                                                        */ 
+/*    timeouts                          Destination for total number of   */
+/*                                        timeouts                        */
+/*                                                                        */
+/*  OUTPUT                                                                */
+/*                                                                        */
+/*    status                            Completion status                 */
+/*                                                                        */
+/*  CALLS                                                                 */
+/*                                                                        */
+/*    None                                                                */
+/*                                                                        */
+/*  CALLED BY                                                             */
+/*                                                                        */
+/*    Application Code                                                    */
+/*                                                                        */
+/*  RELEASE HISTORY                                                       */
+/*                                                                        */
 /*    DATE              NAME                      DESCRIPTION             */
 /*                                                                        */
-/*  09-30-2020     William E. Lamie         Initial Version 6.1           */
+/*  05-19-2020     William E. Lamie         Initial Version 6.0           */
+/*  09-30-2020     Yuxin Zhou               Modified comment(s),          */
+/*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
 UINT  _tx_byte_pool_performance_system_info_get(ULONG *allocates, ULONG *releases,
@@ -107,58 +108,58 @@ TX_INTERRUPT_SAVE_AREA
     /* Retrieve the total number of byte pool allocates.  */
     if (allocates != TX_NULL)
     {
-    
+
         *allocates =  _tx_byte_pool_performance_allocate_count;
     }
 
     /* Retrieve the total number of byte pool releases.  */
     if (releases != TX_NULL)
     {
-    
+
         *releases =  _tx_byte_pool_performance_release_count;
     }
 
     /* Retrieve the total number of byte pool fragments searched.  */
     if (fragments_searched != TX_NULL)
     {
-    
+
         *fragments_searched =  _tx_byte_pool_performance_search_count;
     }
 
     /* Retrieve the total number of byte pool fragments merged.  */
     if (merges != TX_NULL)
     {
-    
+
         *merges =  _tx_byte_pool_performance_merge_count;
     }
 
     /* Retrieve the total number of byte pool fragment splits.  */
     if (splits != TX_NULL)
     {
-    
+
         *splits =  _tx_byte_pool_performance_split_count;
     }
 
     /* Retrieve the total number of byte pool suspensions.  */
     if (suspensions != TX_NULL)
     {
-    
+
         *suspensions =  _tx_byte_pool_performance_suspension_count;
     }
-    
+
     /* Retrieve the total number of byte pool timeouts.  */
     if (timeouts != TX_NULL)
     {
-    
+
         *timeouts =  _tx_byte_pool_performance_timeout_count;
     }
-    
+
     /* Restore interrupts.  */
     TX_RESTORE
 
     /* Return completion status.  */
     return(TX_SUCCESS);
-    
+
 #else
 
 UINT        status;
@@ -213,7 +214,7 @@ UINT        status;
         /* Not enabled, return error.  */
         status =  TX_FEATURE_NOT_ENABLED;
     }
-    
+
     /* Return completion status.  */
     return(status);
 #endif

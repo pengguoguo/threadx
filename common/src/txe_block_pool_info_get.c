@@ -1,13 +1,12 @@
-/**************************************************************************/
-/*                                                                        */
-/*       Copyright (c) Microsoft Corporation. All rights reserved.        */
-/*                                                                        */
-/*       This software is licensed under the Microsoft Software License   */
-/*       Terms for Microsoft Azure RTOS. Full text of the license can be  */
-/*       found in the LICENSE file at https://aka.ms/AzureRTOS_EULA       */
-/*       and in the root directory of this software.                      */
-/*                                                                        */
-/**************************************************************************/
+/***************************************************************************
+ * Copyright (c) 2024 Microsoft Corporation 
+ * 
+ * This program and the accompanying materials are made available under the
+ * terms of the MIT License which is available at
+ * https://opensource.org/licenses/MIT.
+ * 
+ * SPDX-License-Identifier: MIT
+ **************************************************************************/
 
 
 /**************************************************************************/
@@ -78,8 +77,8 @@
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT  _txe_block_pool_info_get(TX_BLOCK_POOL *pool_ptr, CHAR **name, ULONG *available_blocks, 
-                    ULONG *total_blocks, TX_THREAD **first_suspended, 
+UINT  _txe_block_pool_info_get(TX_BLOCK_POOL *pool_ptr, CHAR **name, ULONG *available_blocks,
+                    ULONG *total_blocks, TX_THREAD **first_suspended,
                     ULONG *suspended_count, TX_BLOCK_POOL **next_pool)
 {
 
@@ -106,7 +105,7 @@ UINT    status;
     {
 
         /* Otherwise, call the actual block pool information get service.  */
-        status =  _tx_block_pool_info_get(pool_ptr, name, available_blocks, 
+        status =  _tx_block_pool_info_get(pool_ptr, name, available_blocks,
                         total_blocks, first_suspended, suspended_count, next_pool);
     }
 

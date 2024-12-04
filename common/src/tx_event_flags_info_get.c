@@ -1,13 +1,12 @@
-/**************************************************************************/
-/*                                                                        */
-/*       Copyright (c) Microsoft Corporation. All rights reserved.        */
-/*                                                                        */
-/*       This software is licensed under the Microsoft Software License   */
-/*       Terms for Microsoft Azure RTOS. Full text of the license can be  */
-/*       found in the LICENSE file at https://aka.ms/AzureRTOS_EULA       */
-/*       and in the root directory of this software.                      */
-/*                                                                        */
-/**************************************************************************/
+/***************************************************************************
+ * Copyright (c) 2024 Microsoft Corporation 
+ * 
+ * This program and the accompanying materials are made available under the
+ * terms of the MIT License which is available at
+ * https://opensource.org/licenses/MIT.
+ * 
+ * SPDX-License-Identifier: MIT
+ **************************************************************************/
 
 
 /**************************************************************************/
@@ -79,8 +78,8 @@
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT  _tx_event_flags_info_get(TX_EVENT_FLAGS_GROUP *group_ptr, CHAR **name, ULONG *current_flags, 
-                    TX_THREAD **first_suspended, ULONG *suspended_count, 
+UINT  _tx_event_flags_info_get(TX_EVENT_FLAGS_GROUP *group_ptr, CHAR **name, ULONG *current_flags,
+                    TX_THREAD **first_suspended, ULONG *suspended_count,
                     TX_EVENT_FLAGS_GROUP **next_group)
 {
 
@@ -102,7 +101,7 @@ TX_INTERRUPT_SAVE_AREA
     /* Retrieve the name of the event flag group.  */
     if (name != TX_NULL)
     {
-    
+
         *name =  group_ptr -> tx_event_flags_group_name;
     }
 
@@ -111,31 +110,31 @@ TX_INTERRUPT_SAVE_AREA
     {
 
         /* Pickup the current flags and apply delayed clearing.  */
-        *current_flags =  group_ptr -> tx_event_flags_group_current & 
+        *current_flags =  group_ptr -> tx_event_flags_group_current &
                                                         ~group_ptr -> tx_event_flags_group_delayed_clear;
     }
 
     /* Retrieve the first thread suspended on this event flag group.  */
     if (first_suspended != TX_NULL)
     {
-    
+
         *first_suspended =  group_ptr -> tx_event_flags_group_suspension_list;
     }
 
     /* Retrieve the number of threads suspended on this event flag group.  */
     if (suspended_count != TX_NULL)
     {
-    
+
         *suspended_count =  (ULONG) group_ptr -> tx_event_flags_group_suspended_count;
     }
-    
+
     /* Retrieve the pointer to the next event flag group created.  */
     if (next_group != TX_NULL)
     {
-    
+
         *next_group =  group_ptr -> tx_event_flags_group_created_next;
     }
-    
+
     /* Restore interrupts.  */
     TX_RESTORE
 

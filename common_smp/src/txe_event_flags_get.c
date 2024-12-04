@@ -1,19 +1,18 @@
-/**************************************************************************/
-/*                                                                        */
-/*       Copyright (c) Microsoft Corporation. All rights reserved.        */
-/*                                                                        */
-/*       This software is licensed under the Microsoft Software License   */
-/*       Terms for Microsoft Azure RTOS. Full text of the license can be  */
-/*       found in the LICENSE file at https://aka.ms/AzureRTOS_EULA       */
-/*       and in the root directory of this software.                      */
-/*                                                                        */
-/**************************************************************************/
+/***************************************************************************
+ * Copyright (c) 2024 Microsoft Corporation 
+ * 
+ * This program and the accompanying materials are made available under the
+ * terms of the MIT License which is available at
+ * https://opensource.org/licenses/MIT.
+ * 
+ * SPDX-License-Identifier: MIT
+ **************************************************************************/
 
 
 /**************************************************************************/
 /**************************************************************************/
-/**                                                                       */ 
-/** ThreadX Component                                                     */ 
+/**                                                                       */
+/** ThreadX Component                                                     */
 /**                                                                       */
 /**   Event Flags                                                         */
 /**                                                                       */
@@ -31,59 +30,61 @@
 #include "tx_event_flags.h"
 
 
-/**************************************************************************/ 
-/*                                                                        */ 
-/*  FUNCTION                                               RELEASE        */ 
-/*                                                                        */ 
-/*    _txe_event_flags_get                                PORTABLE C      */ 
+/**************************************************************************/
+/*                                                                        */
+/*  FUNCTION                                               RELEASE        */
+/*                                                                        */
+/*    _txe_event_flags_get                                PORTABLE C      */
 /*                                                           6.1          */
 /*  AUTHOR                                                                */
 /*                                                                        */
 /*    William E. Lamie, Microsoft Corporation                             */
 /*                                                                        */
 /*  DESCRIPTION                                                           */
-/*                                                                        */ 
-/*    This function checks for errors in the event flags get function     */ 
-/*    call.                                                               */ 
-/*                                                                        */ 
-/*  INPUT                                                                 */ 
-/*                                                                        */ 
-/*    group_ptr                         Pointer to group control block    */ 
-/*    requested_event_flags             Event flags requested             */ 
-/*    get_option                        Specifies and/or and clear options*/ 
-/*    actual_flags_ptr                  Pointer to place the actual flags */ 
-/*                                        the service retrieved           */ 
-/*    wait_option                       Suspension option                 */ 
-/*                                                                        */ 
-/*  OUTPUT                                                                */ 
-/*                                                                        */ 
-/*    TX_GROUP_ERROR                    Invalid event flags group pointer */ 
-/*    TX_PTR_ERROR                      Invalid actual flags pointer      */ 
-/*    TX_WAIT_ERROR                     Invalid wait option               */ 
-/*    TX_OPTION_ERROR                   Invalid get option                */ 
-/*    TX_CALLER_ERROR                   Invalid caller of this function   */ 
-/*    status                            Actual completion status          */ 
-/*                                                                        */ 
-/*  CALLS                                                                 */ 
-/*                                                                        */ 
-/*    _tx_event_flags_get               Actual event flags get function   */ 
-/*                                                                        */ 
-/*  CALLED BY                                                             */ 
-/*                                                                        */ 
-/*    Application Code                                                    */ 
-/*                                                                        */ 
-/*  RELEASE HISTORY                                                       */ 
-/*                                                                        */ 
+/*                                                                        */
+/*    This function checks for errors in the event flags get function     */
+/*    call.                                                               */
+/*                                                                        */
+/*  INPUT                                                                 */
+/*                                                                        */
+/*    group_ptr                         Pointer to group control block    */
+/*    requested_event_flags             Event flags requested             */
+/*    get_option                        Specifies and/or and clear options*/
+/*    actual_flags_ptr                  Pointer to place the actual flags */
+/*                                        the service retrieved           */
+/*    wait_option                       Suspension option                 */
+/*                                                                        */
+/*  OUTPUT                                                                */
+/*                                                                        */
+/*    TX_GROUP_ERROR                    Invalid event flags group pointer */
+/*    TX_PTR_ERROR                      Invalid actual flags pointer      */
+/*    TX_WAIT_ERROR                     Invalid wait option               */
+/*    TX_OPTION_ERROR                   Invalid get option                */
+/*    TX_CALLER_ERROR                   Invalid caller of this function   */
+/*    status                            Actual completion status          */
+/*                                                                        */
+/*  CALLS                                                                 */
+/*                                                                        */
+/*    _tx_event_flags_get               Actual event flags get function   */
+/*                                                                        */
+/*  CALLED BY                                                             */
+/*                                                                        */
+/*    Application Code                                                    */
+/*                                                                        */
+/*  RELEASE HISTORY                                                       */
+/*                                                                        */
 /*    DATE              NAME                      DESCRIPTION             */
 /*                                                                        */
-/*  09-30-2020     William E. Lamie         Initial Version 6.1           */
+/*  05-19-2020     William E. Lamie         Initial Version 6.0           */
+/*  09-30-2020     Yuxin Zhou               Modified comment(s),          */
+/*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
 UINT  _txe_event_flags_get(TX_EVENT_FLAGS_GROUP *group_ptr, ULONG requested_flags,
                     UINT get_option, ULONG *actual_flags_ptr, ULONG wait_option)
 {
 
-UINT            status;                 
+UINT            status;
 
 #ifndef TX_TIMER_PROCESS_IN_ISR
 TX_THREAD       *current_thread;
@@ -100,7 +101,7 @@ TX_THREAD       *current_thread;
         /* Event flags group pointer is invalid, return appropriate error code.  */
         status =  TX_GROUP_ERROR;
     }
-    
+
     /* Now check for invalid event group ID.  */
     else if (group_ptr -> tx_event_flags_group_id != TX_EVENT_FLAGS_ID)
     {
@@ -119,7 +120,7 @@ TX_THREAD       *current_thread;
     else
     {
 
-        /* Check for a wait option error.  Only threads are allowed any form of 
+        /* Check for a wait option error.  Only threads are allowed any form of
            suspension.  */
         if (wait_option != TX_NO_WAIT)
         {
@@ -134,7 +135,7 @@ TX_THREAD       *current_thread;
 #ifndef TX_TIMER_PROCESS_IN_ISR
             else
             {
-            
+
                 /* Pickup thread pointer.  */
                 TX_THREAD_GET_CURRENT(current_thread)
 
@@ -153,7 +154,7 @@ TX_THREAD       *current_thread;
     /* Is everything still okay?  */
     if (status == TX_SUCCESS)
     {
-    
+
         /* Check for invalid get option.  */
         if (get_option > TX_AND_CLEAR)
         {

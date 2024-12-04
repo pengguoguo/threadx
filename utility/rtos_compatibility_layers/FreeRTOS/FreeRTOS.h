@@ -1,13 +1,12 @@
-/**************************************************************************/
-/*                                                                        */
-/*       Copyright (c) Microsoft Corporation. All rights reserved.        */
-/*                                                                        */
-/*       This software is licensed under the Microsoft Software License   */
-/*       Terms for Microsoft Azure RTOS. Full text of the license can be  */
-/*       found in the LICENSE file at https://aka.ms/AzureRTOS_EULA       */
-/*       and in the root directory of this software.                      */
-/*                                                                        */
-/**************************************************************************/
+/***************************************************************************
+ * Copyright (c) 2024 Microsoft Corporation 
+ * 
+ * This program and the accompanying materials are made available under the
+ * terms of the MIT License which is available at
+ * https://opensource.org/licenses/MIT.
+ * 
+ * SPDX-License-Identifier: MIT
+ **************************************************************************/
 
 /**************************************************************************/
 /**************************************************************************/
@@ -23,7 +22,9 @@
 /*    DATE              NAME                      DESCRIPTION             */
 /*                                                                        */
 /*  09-30-2020     William E. Lamie         Initial Version 6.1           */
-/*                                                                        */
+/*  03-02-2021     Andres Mlinar            Modified comment(s), fixed    */
+/*                                             interrupt macros,          */
+/*                                             resulting in version 6.1.5 */
 /**************************************************************************/
 
 #ifndef FREERTOS_H
@@ -290,11 +291,29 @@ void vPortExitCritical(void);
 #endif
 
 #ifndef portDISABLE_INTERRUPTS
+#if defined(__IAR_SYSTEMS_ICC__)
 #define portDISABLE_INTERRUPTS() __disable_interrupt()
+#elif defined(__GNUC__ )
+#define portDISABLE_INTERRUPTS() __disable_interrupts()
+#elif defined(__ARMCC_VERSION)
+#define portDISABLE_INTERRUPTS() __disable_irq()
+#else
+UINT _tx_thread_interrupt_disable(VOID);
+#define portDISABLE_INTERRUPTS() _tx_thread_interrupt_disable()
+#endif
 #endif
 
 #ifndef portENABLE_INTERRUPTS
+#if defined(__IAR_SYSTEMS_ICC__)
 #define portENABLE_INTERRUPTS() __enable_interrupt()
+#elif defined(__GNUC__ )
+#define portENABLE_INTERRUPTS() __enable_interrupts()
+#elif defined(__ARMCC_VERSION)
+#define portENABLE_INTERRUPTS() __enable_irq()
+#else
+VOID _tx_thread_interrupt_restore(UINT previous_posture);     
+#define portENABLE_INTERRUPTS() _tx_thread_interrupt_restore(TX_INT_ENABLE)
+#endif
 #endif
 
 #define taskENTER_CRITICAL() portENTER_CRITICAL()

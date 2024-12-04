@@ -1,13 +1,12 @@
-/**************************************************************************/
-/*                                                                        */
-/*       Copyright (c) Microsoft Corporation. All rights reserved.        */
-/*                                                                        */
-/*       This software is licensed under the Microsoft Software License   */
-/*       Terms for Microsoft Azure RTOS. Full text of the license can be  */
-/*       found in the LICENSE file at https://aka.ms/AzureRTOS_EULA       */
-/*       and in the root directory of this software.                      */
-/*                                                                        */
-/**************************************************************************/
+/***************************************************************************
+ * Copyright (c) 2024 Microsoft Corporation 
+ * 
+ * This program and the accompanying materials are made available under the
+ * terms of the MIT License which is available at
+ * https://opensource.org/licenses/MIT.
+ * 
+ * SPDX-License-Identifier: MIT
+ **************************************************************************/
 
 
 /**************************************************************************/
@@ -80,7 +79,7 @@
 /*                                                                        */
 /**************************************************************************/
 UINT  _txe_mutex_info_get(TX_MUTEX *mutex_ptr, CHAR **name, ULONG *count, TX_THREAD **owner,
-                    TX_THREAD **first_suspended, ULONG *suspended_count, 
+                    TX_THREAD **first_suspended, ULONG *suspended_count,
                     TX_MUTEX **next_mutex)
 {
 
@@ -94,7 +93,7 @@ UINT        status;
         /* Mutex pointer is invalid, return appropriate error code.  */
         status =  TX_MUTEX_ERROR;
     }
-    
+
     /* Now check for invalid mutex ID.  */
     else if (mutex_ptr -> tx_mutex_id != TX_MUTEX_ID)
     {
@@ -106,7 +105,7 @@ UINT        status;
     {
 
         /* Otherwise, call the actual mutex information get service.  */
-        status =  _tx_mutex_info_get(mutex_ptr, name, count, owner, first_suspended, 
+        status =  _tx_mutex_info_get(mutex_ptr, name, count, owner, first_suspended,
                                                             suspended_count, next_mutex);
     }
 

@@ -1,13 +1,12 @@
-/**************************************************************************/
-/*                                                                        */
-/*       Copyright (c) Microsoft Corporation. All rights reserved.        */
-/*                                                                        */
-/*       This software is licensed under the Microsoft Software License   */
-/*       Terms for Microsoft Azure RTOS. Full text of the license can be  */
-/*       found in the LICENSE file at https://aka.ms/AzureRTOS_EULA       */
-/*       and in the root directory of this software.                      */
-/*                                                                        */
-/**************************************************************************/
+/***************************************************************************
+ * Copyright (c) 2024 Microsoft Corporation 
+ * 
+ * This program and the accompanying materials are made available under the
+ * terms of the MIT License which is available at
+ * https://opensource.org/licenses/MIT.
+ * 
+ * SPDX-License-Identifier: MIT
+ **************************************************************************/
 
 
 /**************************************************************************/
@@ -126,7 +125,7 @@ TX_SEMAPHORE    *previous_semaphore;
         /* See if we have to update the created list head pointer.  */
         if (_tx_semaphore_created_ptr == semaphore_ptr)
         {
-                    
+
             /* Yes, move the head pointer to the next link. */
             _tx_semaphore_created_ptr =  next_semaphore;
         }
@@ -148,14 +147,14 @@ TX_SEMAPHORE    *previous_semaphore;
        on this semaphore.  */
     while (suspended_count != TX_NO_SUSPENSIONS)
     {
-    
+
         /* Decrement the suspension count.  */
         suspended_count--;
 
         /* Lockout interrupts.  */
         TX_DISABLE
 
-        /* Clear the cleanup pointer, this prevents the timeout from doing 
+        /* Clear the cleanup pointer, this prevents the timeout from doing
            anything.  */
         thread_ptr -> tx_thread_suspend_cleanup =  TX_NULL;
 
@@ -179,7 +178,7 @@ TX_SEMAPHORE    *previous_semaphore;
 
         /* Restore interrupts.  */
         TX_RESTORE
-    
+
         /* Resume the thread.  */
         _tx_thread_system_resume(thread_ptr);
 #endif

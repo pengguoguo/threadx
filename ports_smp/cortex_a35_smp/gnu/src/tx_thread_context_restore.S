@@ -1,84 +1,81 @@
-/**************************************************************************/
-/*                                                                        */
-/*       Copyright (c) Microsoft Corporation. All rights reserved.        */
-/*                                                                        */
-/*       This software is licensed under the Microsoft Software License   */
-/*       Terms for Microsoft Azure RTOS. Full text of the license can be  */
-/*       found in the LICENSE file at https://aka.ms/AzureRTOS_EULA       */
-/*       and in the root directory of this software.                      */
-/*                                                                        */
-/**************************************************************************/
+/***************************************************************************
+ * Copyright (c) 2024 Microsoft Corporation 
+ * 
+ * This program and the accompanying materials are made available under the
+ * terms of the MIT License which is available at
+ * https://opensource.org/licenses/MIT.
+ * 
+ * SPDX-License-Identifier: MIT
+ **************************************************************************/
 
 
 /**************************************************************************/
 /**************************************************************************/
-/**                                                                       */ 
-/** ThreadX Component                                                     */ 
+/**                                                                       */
+/** ThreadX Component                                                     */
 /**                                                                       */
 /**   Thread                                                              */
 /**                                                                       */
 /**************************************************************************/
 /**************************************************************************/
-
-
-/* #define TX_SOURCE_CODE  */
-
-
-/* Include necessary system files.  */
-
-/* 
-#include "tx_api.h"
-#include "tx_thread.h"
-#include "tx_timer.h"
-*/
-
-/* Include macros for modifying the wait list.  */
-#include "tx_thread_smp_protection_wait_list_macros.h"
+#ifdef TX_INCLUDE_USER_DEFINE_FILE
+#include "tx_user.h"
+#endif
 
     .text
     .align 3
-/**************************************************************************/ 
-/*                                                                        */ 
-/*  FUNCTION                                               RELEASE        */ 
-/*                                                                        */ 
-/*    _tx_thread_context_restore                       Cortex-A35-SMP/GNU */ 
-/*                                                           6.1          */
+/**************************************************************************/
+/*                                                                        */
+/*  FUNCTION                                               RELEASE        */
+/*                                                                        */
+/*    _tx_thread_context_restore                         ARMv8-A-SMP      */
+/*                                                           6.3.0        */
 /*  AUTHOR                                                                */
 /*                                                                        */
 /*    William E. Lamie, Microsoft Corporation                             */
 /*                                                                        */
-/*  DESCRIPTION                                                           */ 
-/*                                                                        */ 
-/*    This function restores the interrupt context if it is processing a  */ 
-/*    nested interrupt.  If not, it returns to the interrupt thread if no */ 
-/*    preemption is necessary.  Otherwise, if preemption is necessary or  */ 
-/*    if no thread was running, the function returns to the scheduler.    */ 
-/*                                                                        */ 
-/*  INPUT                                                                 */ 
-/*                                                                        */ 
-/*    None                                                                */ 
-/*                                                                        */ 
-/*  OUTPUT                                                                */ 
-/*                                                                        */ 
-/*    None                                                                */ 
-/*                                                                        */ 
-/*  CALLS                                                                 */ 
-/*                                                                        */ 
-/*    _tx_thread_schedule                   Thread scheduling routine     */ 
-/*                                                                        */ 
-/*  CALLED BY                                                             */ 
-/*                                                                        */ 
-/*    ISRs                                  Interrupt Service Routines    */ 
-/*                                                                        */ 
-/*  RELEASE HISTORY                                                       */ 
-/*                                                                        */ 
+/*  DESCRIPTION                                                           */
+/*                                                                        */
+/*    This function restores the interrupt context if it is processing a  */
+/*    nested interrupt.  If not, it returns to the interrupt thread if no */
+/*    preemption is necessary.  Otherwise, if preemption is necessary or  */
+/*    if no thread was running, the function returns to the scheduler.    */
+/*                                                                        */
+/*  INPUT                                                                 */
+/*                                                                        */
+/*    None                                                                */
+/*                                                                        */
+/*  OUTPUT                                                                */
+/*                                                                        */
+/*    None                                                                */
+/*                                                                        */
+/*  CALLS                                                                 */
+/*                                                                        */
+/*    _tx_thread_schedule                   Thread scheduling routine     */
+/*                                                                        */
+/*  CALLED BY                                                             */
+/*                                                                        */
+/*    ISRs                                  Interrupt Service Routines    */
+/*                                                                        */
+/*  RELEASE HISTORY                                                       */
+/*                                                                        */
 /*    DATE              NAME                      DESCRIPTION             */
 /*                                                                        */
-/*  09-30-2020     William E. Lamie         Initial Version 6.1           */
+/*  09-30-2020      William E. Lamie        Initial Version 6.1           */
+/*  01-31-2022      Andres Mlinar           Updated comments,             */
+/*                                            added ARMv8.2-A support,    */
+/*                                            resulting in version 6.1.10 */
+/*  04-25-2022      William E. Lamie        Modified comments, removed    */
+/*                                            FIFO queueing,              */
+/*                                            resulting in version 6.1.11 */
+/*  10-31-2023     Tiejun Zhou              Modified comment(s), added    */
+/*                                            #include tx_user.h, added   */
+/*                                            memory barrier,             */
+/*                                            resulting in version 6.3.0  */
 /*                                                                        */
 /**************************************************************************/
-/* VOID   _tx_thread_context_restore(VOID)
-{ */
+// VOID   _tx_thread_context_restore(VOID)
+// {
     .global _tx_thread_context_restore
     .type   _tx_thread_context_restore, @function
 _tx_thread_context_restore:
@@ -87,7 +84,7 @@ _tx_thread_context_restore:
 
     MSR     DAIFSet, 0x3                        // Lockout interrupts
 
-#ifdef TX_ENABLE_EXECUTION_CHANGE_NOTIFY
+#if (defined(TX_ENABLE_EXECUTION_CHANGE_NOTIFY) || defined(TX_EXECUTION_PROFILE_ENABLE))
 
     /* Call the ISR exit function to indicate an ISR is complete.  */
 
@@ -97,28 +94,35 @@ _tx_thread_context_restore:
     /* Pickup the CPU ID.   */
 
     MRS     x8, MPIDR_EL1                       // Pickup the core ID
+#ifdef TX_ARMV8_2
+#if TX_THREAD_SMP_CLUSTERS > 1
+    UBFX    x2, x8, #16, #8                     // Isolate cluster ID
+#endif
+    UBFX    x8, x8, #8, #8                      // Isolate core ID
+#else
 #if TX_THREAD_SMP_CLUSTERS > 1
     UBFX    x2, x8, #8, #8                      // Isolate cluster ID
 #endif
     UBFX    x8, x8, #0, #8                      // Isolate core ID
+#endif
 #if TX_THREAD_SMP_CLUSTERS > 1
     ADDS    x8, x8, x2, LSL #2                  // Calculate CPU ID
 #endif
 
     /* Determine if interrupts are nested.  */
-    /* if (--_tx_thread_system_state)
-    { */
+    // if (--_tx_thread_system_state)
+    // {
 
     LDR     x3, =_tx_thread_system_state        // Pickup address of system state var
     LDR     w2, [x3, x8, LSL #2]                // Pickup system state
     SUB     w2, w2, #1                          // Decrement the counter
-    STR     w2, [x3, x8, LSL #2]                // Store the counter 
+    STR     w2, [x3, x8, LSL #2]                // Store the counter
     CMP     w2, #0                              // Was this the first interrupt?
     BEQ     __tx_thread_not_nested_restore      // If so, not a nested restore
 
     /* Interrupts are nested.  */
 
-    /* Just recover the saved registers and return to the point of 
+    /* Just recover the saved registers and return to the point of
        interrupt.  */
 
     LDP     x4, x5, [sp], #16                   // Pickup saved SPSR/DAIF and ELR_EL
@@ -147,13 +151,13 @@ _tx_thread_context_restore:
     LDP     x29, x30, [sp], #16                 // Recover x29, x30
     ERET                                        // Return to point of interrupt
 
-    /* }  */
+    // }
 __tx_thread_not_nested_restore:
 
     /* Determine if a thread was interrupted and no preemption is required.  */
-    /* else if (((_tx_thread_current_ptr) && (_tx_thread_current_ptr == _tx_thread_execute_ptr) 
-               || (_tx_thread_preempt_disable))
-    { */
+    // else if (((_tx_thread_current_ptr) && (_tx_thread_current_ptr == _tx_thread_execute_ptr)
+    //           || (_tx_thread_preempt_disable))
+    // {
 
     LDR     x1, =_tx_thread_current_ptr         // Pickup address of current thread ptr
     LDR     x0, [x1, x8, LSL #3]                // Pickup actual current thread pointer
@@ -162,7 +166,7 @@ __tx_thread_not_nested_restore:
     LDR     x3, =_tx_thread_execute_ptr         // Pickup address of execute thread ptr
     LDR     x2, [x3, x8, LSL #3]                // Pickup actual execute thread pointer
     CMP     x0, x2                              // Is the same thread highest priority?
-    BEQ     __tx_thread_no_preempt_restore      // Same thread in the execute list, 
+    BEQ     __tx_thread_no_preempt_restore      // Same thread in the execute list,
                                                 //   no preemption needs to happen
     LDR     x3, =_tx_thread_smp_protection      // Build address to protection structure
     LDR     w3, [x3, #4]                        // Pickup the owning core
@@ -179,7 +183,7 @@ __tx_thread_no_preempt_restore:
     /* Restore interrupted thread or ISR.  */
 
     /* Pickup the saved stack pointer.  */
-    /* sp =  _tx_thread_current_ptr -> tx_thread_stack_ptr;  */
+    // sp =  _tx_thread_current_ptr -> tx_thread_stack_ptr;
 
     LDR     x4, [x0, #8]                        // Switch to thread stack pointer
     MOV     sp, x4                              //
@@ -212,79 +216,11 @@ __tx_thread_no_preempt_restore:
     LDP     x29, x30, [sp], #16                 // Recover x29, x30
     ERET                                        // Return to point of interrupt
 
-    /* }
-    else
-    { */
+    // }
+    // else
+    // {
 __tx_thread_preempt_restore:
 
-    /* Was the thread being preempted waiting for the lock?  */
-    /* if (_tx_thread_smp_protect_wait_counts[this_core] != 0)
-    { */
-
-    LDR     x2, =_tx_thread_smp_protect_wait_counts // Load waiting count list
-    LDR     w3, [x2, x8, LSL #2]                // Load waiting value for this core
-    CMP     w3, #0
-    BEQ     _nobody_waiting_for_lock            // Is the core waiting for the lock?
-
-    /* Do we not have the lock? This means the ISR never got the inter-core lock.  */
-    /* if (_tx_thread_smp_protection.tx_thread_smp_protect_owned != this_core)
-    { */
-
-    LDR     x2, =_tx_thread_smp_protection      // Load address of protection structure
-    LDR     w3, [x2, #4]                        // Pickup the owning core
-    CMP     w8, w3                              // Compare our core to the owning core
-    BEQ     _this_core_has_lock                 // Do we have the lock?
-
-    /* We don't have the lock. This core should be in the list. Remove it.  */
-    /* _tx_thread_smp_protect_wait_list_remove(this_core); */
-
-    _tx_thread_smp_protect_wait_list_remove     // Call macro to remove core from the list
-    B       _nobody_waiting_for_lock            // Leave
-
-    /* }
-    else
-    { */
-    /* We have the lock. This means the ISR got the inter-core lock, but
-       never released it because it saw that there was someone waiting.
-       Note this core is not in the list.  */
-
-_this_core_has_lock:
-
-    /* We're no longer waiting. Note that this should be zero since this happens during thread preemption.  */
-    /* _tx_thread_smp_protect_wait_counts[core]--; */
-
-    LDR     x2, =_tx_thread_smp_protect_wait_counts // Load waiting count list
-    LDR     w3, [x2, x8, LSL #2]                // Load waiting value for this core
-    SUB     w3, w3, #1                          // Decrement waiting value. Should be zero now
-    STR     w3, [x2, x8, LSL #2]                // Store new waiting value
-
-    /* Now release the inter-core lock.  */
-
-    /* Set protected core as invalid.  */
-    /* _tx_thread_smp_protection.tx_thread_smp_protect_core = 0xFFFFFFFF; */
-
-    LDR     x2, =_tx_thread_smp_protection      // Load address of protection structure
-    MOV     w3, #0xFFFFFFFF                     // Build invalid value
-    STR     w3, [x2, #4]                        // Mark the protected core as invalid
-    DMB     ISH                                 // Ensure that accesses to shared resource have completed
-
-    /* Release protection.  */
-    /* _tx_thread_smp_protection.tx_thread_smp_protect_in_force = 0; */
-
-    MOV     w3, #0                              // Build release protection value
-    STR     w3, [x2, #0]                        // Release the protection
-    DSB     ISH                                 // To ensure update of the protection occurs before other CPUs awake
-
-    /* Wake up waiting processors. Note interrupts are already enabled.  */
-
-#ifdef TX_ENABLE_WFE
-    SEV                                         // Send event to other CPUs
-#endif
-
-    /* }
-       } */
-
-_nobody_waiting_for_lock:
 
     LDR     x4, [x0, #8]                        // Switch to thread stack pointer
     MOV     sp, x4                              //
@@ -331,41 +267,42 @@ _skip_fp_save:
 
 
     /* Save the remaining time-slice and disable it.  */
-    /* if (_tx_timer_time_slice)
-    {  */
+    // if (_tx_timer_time_slice)
+    // {
 
     LDR     x3, =_tx_timer_time_slice           // Pickup time-slice variable address
     LDR     w2, [x3, x8, LSL #2]                // Pickup time-slice
     CMP     w2, #0                              // Is it active?
     BEQ     __tx_thread_dont_save_ts            // No, don't save it
 
-        /* _tx_thread_current_ptr -> tx_thread_time_slice =  _tx_timer_time_slice;
-        _tx_timer_time_slice =  0;  */
+        // _tx_thread_current_ptr -> tx_thread_time_slice =  _tx_timer_time_slice;
+        // _tx_timer_time_slice =  0;
 
     STR     w2, [x0, #36]                       // Save thread's time-slice
     MOV     w2, #0                              // Clear value
     STR     w2, [x3, x8, LSL #2]                // Disable global time-slice flag
 
-    /* } */
+    // }
 __tx_thread_dont_save_ts:
 
 
     /* Clear the current task pointer.  */
-    /* _tx_thread_current_ptr =  TX_NULL;  */
+    // _tx_thread_current_ptr =  TX_NULL;
 
     MOV     x2, #0                              // NULL value
     STR     x2, [x1, x8, LSL #3]                // Clear current thread pointer
 
     /* Set bit indicating this thread is ready for execution.  */
 
+    DMB     ISH                                 // Ensure that accesses to shared resource have completed
     MOV     x2, #1                              // Build ready flag
     STR     w2, [x0, #260]                      // Set thread's ready flag
     DMB     ISH                                 // Ensure that accesses to shared resource have completed
 
     /* Return to the scheduler.  */
-    /* _tx_thread_schedule();  */
+    // _tx_thread_schedule();
 
-    /* }  */
+    // }
 
 __tx_thread_idle_system_restore:
 
@@ -388,6 +325,4 @@ __tx_thread_idle_system_restore:
 #endif
 #endif
     ERET                                        // Return to scheduler
-/* }  */
-
-
+// }
